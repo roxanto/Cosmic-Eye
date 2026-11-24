@@ -1,0 +1,2360 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#04060f">
+    <title>L'Occhio del Cosmo - Mens Sana in Corpore Sano</title>
+    <style>
+        /* ==========================================================================
+           1. RESET, VARIABILI TEMA COSMICO & TIPOGRAFIA AUTONOMA
+           ========================================================================== */
+        :root {
+            --bg-deep: #04060f;
+            --bg-nebula-1: #0b1126;
+            --bg-nebula-2: #120929;
+            --panel-bg: rgba(11, 18, 38, 0.78);
+            --panel-border: rgba(56, 189, 248, 0.28);
+            --cyan-glow: #00f3ff;
+            --cyan-dim: #0284c7;
+            --emerald-glow: #00ff88;
+            --emerald-bg: rgba(6, 78, 59, 0.75);
+            --amber-glow: #ffbe0b;
+            --amber-bg: rgba(120, 53, 15, 0.75);
+            --crimson-glow: #ff2a5f;
+            --fuchsia-glow: #e879f9;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            width: 100%;
+            min-height: 100dvh;
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            overflow-x: hidden;
+            user-select: none;
+        }
+
+        body {
+            background-image:
+                radial-gradient(circle at 18% 12%, rgba(0, 243, 255, 0.12) 0%, transparent 42%),
+                radial-gradient(circle at 82% 85%, rgba(168, 85, 247, 0.14) 0%, transparent 45%),
+                linear-gradient(160deg, var(--bg-deep) 0%, var(--bg-nebula-1) 52%, var(--bg-nebula-2) 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Canvas stellato di sfondo */
+        #starfield-canvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ==========================================================================
+           2. LAYOUT PRINCIPALE & PANNELLI GLASSMORPHISM
+           ========================================================================== */
+        .app-shell {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 540px;
+            min-height: 100dvh;
+            padding: 10px 12px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .glass-panel {
+            background: var(--panel-bg);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid var(--panel-border);
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* ==========================================================================
+           3. HEADER & PULSANTI ICONA
+           ========================================================================== */
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            gap: 8px;
+        }
+
+        .brand-group {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .brand-title {
+            font-size: 0.95rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, #ffffff, var(--cyan-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-subtitle {
+            font-size: 0.68rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--cyan-glow);
+            opacity: 0.85;
+            font-weight: 600;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .icon-btn {
+            height: 36px;
+            min-width: 36px;
+            padding: 0 9px;
+            border-radius: 11px;
+            border: 1px solid rgba(56, 189, 248, 0.32);
+            background: rgba(15, 23, 42, 0.85);
+            color: var(--text-main);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.15s ease, border-color 0.2s ease, background 0.2s ease;
+        }
+
+        .icon-btn:hover {
+            border-color: var(--cyan-glow);
+            background: rgba(14, 116, 144, 0.35);
+        }
+
+        .icon-btn:active {
+            transform: scale(0.93);
+        }
+
+        /* ==========================================================================
+           4. L'OCCHIO DEL COSMO (SVG INTERATTIVO)
+           ========================================================================== */
+        .eye-stage {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 10px 6px;
+            position: relative;
+        }
+
+        .eye-wrapper {
+            width: 146px;
+            height: 82px;
+            position: relative;
+            cursor: pointer;
+            filter: drop-shadow(0 0 16px var(--eye-glow, rgba(0, 243, 255, 0.55)));
+            transition: filter 0.45s ease;
+        }
+
+        .eye-svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        .eye-ring-spin {
+            transform-origin: 110px 60px;
+            animation: spinSlow 18s linear infinite;
+        }
+
+        .eye-ring-spin-rev {
+            transform-origin: 110px 60px;
+            animation: spinSlowRev 12s linear infinite;
+        }
+
+        @keyframes spinSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes spinSlowRev {
+            from { transform: rotate(360deg); }
+            to { transform: rotate(0deg); }
+        }
+
+        .eye-eyelid {
+            transition: transform 0.16s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: 110px 60px;
+        }
+
+        .eye-wrapper.blinking .eye-eyelid-top {
+            transform: translateY(48px);
+        }
+
+        .eye-wrapper.blinking .eye-eyelid-bottom {
+            transform: translateY(-48px);
+        }
+
+        .eye-status-pill {
+            margin-top: 4px;
+            padding: 3px 12px;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            color: var(--cyan-glow);
+            text-align: center;
+            transition: color 0.3s ease, border-color 0.3s ease;
+        }
+
+        /* ==========================================================================
+           5. SCHERMATA MENU PRINCIPALE & PROFILO ESPLORATORE
+           ========================================================================== */
+        .menu-screen {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 16px;
+        }
+
+        .section-label {
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--cyan-glow);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+        }
+
+        .profile-box {
+            background: rgba(7, 11, 25, 0.72);
+            border: 1px solid rgba(56, 189, 248, 0.22);
+            border-radius: 13px;
+            padding: 10px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .profile-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .profile-input {
+            flex: 1;
+            height: 36px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(56, 189, 248, 0.32);
+            border-radius: 10px;
+            padding: 0 11px;
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            font-size: 0.84rem;
+            font-weight: 700;
+            outline: none;
+            user-select: text;
+        }
+
+        .profile-input:focus {
+            border-color: var(--cyan-glow);
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.25);
+        }
+
+        .sync-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .sync-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--amber-glow);
+        }
+
+        .sync-dot.online {
+            background: var(--emerald-glow);
+            box-shadow: 0 0 8px var(--emerald-glow);
+        }
+
+        .mode-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .mode-card {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 14px;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.92), rgba(23, 37, 84, 0.65));
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            text-align: left;
+            transition: transform 0.16s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .mode-card:hover {
+            border-color: var(--cyan-glow);
+            box-shadow: 0 0 18px rgba(0, 243, 255, 0.22);
+            transform: translateY(-1px);
+        }
+
+        .mode-card:active {
+            transform: scale(0.98);
+        }
+
+        .mode-card.word-card {
+            border-color: rgba(232, 121, 249, 0.42);
+            background: linear-gradient(135deg, rgba(46, 16, 101, 0.82), rgba(15, 23, 42, 0.92));
+        }
+
+        .mode-card.word-card:hover {
+            border-color: var(--fuchsia-glow);
+            box-shadow: 0 0 18px rgba(232, 121, 249, 0.25);
+        }
+
+        .mode-title {
+            font-size: 0.92rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+        }
+
+        .mode-desc {
+            font-size: 0.74rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .mult-badge {
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            font-weight: 800;
+            background: rgba(0, 243, 255, 0.14);
+            border: 1px solid rgba(0, 243, 255, 0.4);
+            color: var(--cyan-glow);
+            white-space: nowrap;
+        }
+
+        .word-card .mult-badge {
+            background: rgba(232, 121, 249, 0.16);
+            border-color: rgba(232, 121, 249, 0.45);
+            color: var(--fuchsia-glow);
+        }
+
+        .records-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .record-item {
+            background: rgba(7, 11, 25, 0.72);
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            border-radius: 12px;
+            padding: 8px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.74rem;
+        }
+
+        .record-val {
+            font-family: var(--font-mono);
+            font-weight: 800;
+            color: var(--emerald-glow);
+        }
+
+        .rules-box {
+            background: rgba(7, 11, 25, 0.6);
+            border: 1px solid rgba(56, 189, 248, 0.16);
+            border-radius: 12px;
+            padding: 10px 12px;
+            font-size: 0.74rem;
+            color: var(--text-muted);
+            line-height: 1.45;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        /* ==========================================================================
+           6. SCHERMATA DI GIOCO: HUD, BOARD 7 TENTATIVI & INPUT
+           ========================================================================== */
+        .game-screen {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .hud-bar {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr 1fr;
+            gap: 6px;
+            padding: 8px 10px;
+            align-items: center;
+        }
+
+        .hud-cell {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(6, 10, 24, 0.65);
+            border: 1px solid rgba(56, 189, 248, 0.18);
+            border-radius: 11px;
+            padding: 5px 6px;
+        }
+
+        .hud-cell.left {
+            align-items: flex-start;
+            padding-left: 10px;
+        }
+
+        .hud-lbl {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+        }
+
+        .hud-val {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .hud-val.cyan { color: var(--cyan-glow); }
+        .hud-val.amber { color: var(--amber-glow); }
+
+        /* Board dei 7 tentativi */
+        .board-panel {
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .attempt-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            padding: 5px 8px;
+            border-radius: 13px;
+            background: rgba(7, 12, 28, 0.55);
+            border: 1px solid rgba(148, 163, 184, 0.14);
+            transition: all 0.25s ease;
+        }
+
+        .attempt-row.active {
+            background: rgba(14, 28, 62, 0.88);
+            border-color: var(--cyan-glow);
+            box-shadow: 0 0 14px rgba(0, 243, 255, 0.2);
+        }
+
+        .attempt-row.future {
+            opacity: 0.42;
+        }
+
+        .row-index {
+            width: 20px;
+            font-family: var(--font-mono);
+            font-size: 0.74rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .attempt-row.active .row-index {
+            color: var(--cyan-glow);
+        }
+
+        .slots-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            flex: 1;
+        }
+
+        .slot-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 11px;
+            border: 2px solid rgba(148, 163, 184, 0.28);
+            background: rgba(15, 23, 42, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            font-weight: 800;
+            font-size: 1.05rem;
+            transition: transform 0.15s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        @media (max-width: 390px) {
+            .slot-box {
+                width: 35px;
+                height: 35px;
+                border-radius: 9px;
+                font-size: 0.95rem;
+            }
+            .slots-container {
+                gap: 4px;
+            }
+        }
+
+        .slot-box.selectable {
+            cursor: pointer;
+        }
+
+        .slot-box.selected {
+            border-color: #ffffff;
+            box-shadow: 0 0 12px rgba(0, 243, 255, 0.75);
+            transform: scale(1.06);
+        }
+
+        .slot-box.status-green {
+            border-color: var(--emerald-glow) !important;
+            box-shadow: 0 0 12px rgba(0, 255, 136, 0.45);
+        }
+
+        .slot-box.status-yellow {
+            border-color: var(--amber-glow) !important;
+            box-shadow: 0 0 10px rgba(255, 190, 11, 0.38);
+        }
+
+        .slot-box.status-none {
+            border-color: rgba(100, 116, 139, 0.45);
+        }
+
+        .slot-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            font-size: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
+        }
+
+        .slot-badge.green {
+            background: var(--emerald-glow);
+            color: #022c22;
+        }
+
+        .slot-badge.yellow {
+            background: var(--amber-glow);
+            color: #271500;
+        }
+
+        /* Indicatori riepilogo a destra della riga */
+        .row-leds {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            min-width: 58px;
+            justify-content: flex-end;
+            flex-shrink: 0;
+        }
+
+        .led-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            padding: 2px 6px;
+            border-radius: 999px;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 800;
+        }
+
+        .led-pill.green {
+            background: rgba(0, 255, 136, 0.16);
+            border: 1px solid rgba(0, 255, 136, 0.5);
+            color: var(--emerald-glow);
+        }
+
+        .led-pill.yellow {
+            background: rgba(255, 190, 11, 0.16);
+            border: 1px solid rgba(255, 190, 11, 0.5);
+            color: var(--amber-glow);
+        }
+
+        /* ==========================================================================
+           7. PANNELLO INPUT (15/20/25 COLORI O TASTIERA QWERTY) & CONTROLLI
+           ========================================================================== */
+        .input-panel {
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 5px;
+        }
+
+        .color-btn {
+            height: 40px;
+            border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.26);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: 800;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            transition: transform 0.12s ease, opacity 0.2s ease, border-color 0.2s ease;
+        }
+
+        .color-btn.compact-25 {
+            height: 36px;
+            border-radius: 9px;
+        }
+
+        .color-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            border-color: #ffffff;
+        }
+
+        .color-btn:active:not(:disabled) {
+            transform: scale(0.94);
+        }
+
+        .color-btn:disabled {
+            opacity: 0.24;
+            cursor: not-allowed;
+        }
+
+        .color-symbol {
+            font-size: 0.9rem;
+            line-height: 1;
+        }
+
+        .color-btn.compact-25 .color-symbol {
+            font-size: 0.82rem;
+        }
+
+        .color-name {
+            font-size: 0.52rem;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            margin-top: 2px;
+        }
+
+        .color-btn.compact-25 .color-name {
+            font-size: 0.48rem;
+            margin-top: 1px;
+        }
+
+        /* Tastiera QWERTY Italiana */
+        .qwerty-container {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .qwerty-row {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .key-btn {
+            flex: 1;
+            max-width: 38px;
+            height: 42px;
+            border-radius: 9px;
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            background: rgba(15, 23, 42, 0.95);
+            color: var(--text-main);
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.1s ease, background 0.2s ease, border-color 0.2s ease;
+        }
+
+        .key-btn:active:not(:disabled) {
+            transform: scale(0.92);
+        }
+
+        .key-btn.key-green {
+            background: var(--emerald-bg);
+            border-color: var(--emerald-glow);
+            color: var(--emerald-glow);
+            box-shadow: 0 0 8px rgba(0, 255, 136, 0.28);
+        }
+
+        .key-btn.key-yellow {
+            background: var(--amber-bg);
+            border-color: var(--amber-glow);
+            color: var(--amber-glow);
+        }
+
+        .key-btn.key-none {
+            background: rgba(9, 13, 26, 0.65);
+            border-color: rgba(71, 85, 105, 0.3);
+            color: #475569;
+        }
+
+        .action-bar {
+            display: grid;
+            grid-template-columns: 1fr 1.6fr;
+            gap: 8px;
+        }
+
+        .action-btn {
+            height: 44px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: transform 0.14s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .action-btn:active:not(:disabled) {
+            transform: scale(0.96);
+        }
+
+        .action-btn:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+
+        .btn-clear {
+            background: rgba(255, 42, 95, 0.14);
+            border-color: rgba(255, 42, 95, 0.45);
+            color: #fda4af;
+        }
+
+        .btn-submit {
+            background: linear-gradient(90deg, #00f3ff, #0284c7);
+            color: #020617;
+            box-shadow: 0 4px 16px rgba(0, 243, 255, 0.32);
+        }
+
+        /* ==========================================================================
+           8. MODALI (CLASSIFICA GLOBALE, STORICO, FINE PARTITA & CONFERMA RESET)
+           ========================================================================== */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(2, 6, 23, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .modal-box {
+            width: 100%;
+            max-width: 440px;
+            max-height: 88dvh;
+            overflow-y: auto;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .modal-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-size: 1rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--cyan-glow);
+        }
+
+        .solution-strip {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px;
+            border-radius: 14px;
+            background: rgba(4, 6, 15, 0.72);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .stat-box {
+            background: rgba(6, 10, 24, 0.78);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 12px;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .stat-num {
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--emerald-glow);
+        }
+
+        .stat-lbl {
+            font-size: 0.62rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .filter-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .filter-tab {
+            padding: 5px 9px;
+            border-radius: 8px;
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            background: rgba(15, 23, 42, 0.8);
+            color: var(--text-muted);
+            font-size: 0.68rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .filter-tab.active {
+            border-color: var(--cyan-glow);
+            background: rgba(0, 243, 255, 0.16);
+            color: var(--cyan-glow);
+        }
+
+        .history-scroll {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-height: 260px;
+            overflow-y: auto;
+            padding-right: 2px;
+        }
+
+        .history-card {
+            background: rgba(6, 10, 24, 0.8);
+            border: 1px solid rgba(148, 163, 184, 0.16);
+            border-radius: 12px;
+            padding: 8px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            font-size: 0.75rem;
+        }
+
+        .history-card.win { border-left: 3px solid var(--emerald-glow); }
+        .history-card.loss { border-left: 3px solid var(--crimson-glow); }
+
+        .rank-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            font-weight: 800;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            color: var(--text-main);
+            flex-shrink: 0;
+        }
+
+        .rank-pill.r1 { border-color: #fbbf24; color: #fbbf24; background: rgba(251, 191, 36, 0.18); }
+        .rank-pill.r2 { border-color: #e2e8f0; color: #e2e8f0; background: rgba(226, 232, 240, 0.15); }
+        .rank-pill.r3 { border-color: #f59e0b; color: #f59e0b; background: rgba(245, 158, 11, 0.16); }
+
+        .toast-banner {
+            position: fixed;
+            top: 14px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-80px);
+            background: rgba(11, 18, 38, 0.96);
+            border: 1px solid var(--cyan-glow);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            z-index: 100;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.65);
+            transition: transform 0.25s ease;
+            pointer-events: none;
+        }
+
+        .toast-banner.visible {
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="starfield-canvas"></canvas>
+<div id="toast" class="toast-banner"></div>
+
+<div class="app-shell">
+    <!-- TOP BAR -->
+    <header class="glass-panel top-bar">
+        <div class="brand-group" id="brand-home" title="Torna alla Home">
+            <span class="brand-title">L'Occhio del Cosmo</span>
+            <span class="brand-subtitle">Mens Sana in Corpore Sano</span>
+        </div>
+        <div class="header-actions">
+            <button id="btn-leaderboard" class="icon-btn" title="Classifica Globale">🌐</button>
+            <button id="btn-history" class="icon-btn" title="Archivio Storico Punteggi">🏆 <span id="top-best-score">0</span></button>
+            <button id="btn-sound" class="icon-btn" title="Audio">🔊</button>
+            <button id="btn-home" class="icon-btn hidden" title="Torna alla Home" aria-label="Torna alla Home">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 10.5L12 3l9 7.5"></path>
+                    <path d="M5 9.5V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.5"></path>
+                    <path d="M9 21v-7h6v7"></path>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- COSMIC EYE STAGE -->
+    <section class="glass-panel eye-stage">
+        <div class="eye-wrapper" id="eye-wrapper" title="L'Occhio del Cosmo ti osserva">
+            <svg class="eye-svg" viewBox="0 0 220 120">
+                <defs>
+                    <radialGradient id="irisGrad" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" stop-color="#ffffff" />
+                        <stop offset="35%" stop-color="#00f3ff" id="iris-stop-1" />
+                        <stop offset="85%" stop-color="#0284c7" id="iris-stop-2" />
+                        <stop offset="100%" stop-color="#04060f" />
+                    </radialGradient>
+                    <clipPath id="eyeClip">
+                        <path d="M 22 60 Q 110 -12 198 60 Q 110 132 22 60 Z" />
+                    </clipPath>
+                </defs>
+
+                <!-- Anelli orbitali esterni -->
+                <circle class="eye-ring-spin" cx="110" cy="60" r="54" fill="none" stroke="rgba(0, 243, 255, 0.35)" stroke-width="1.5" stroke-dasharray="8 6" />
+                <circle class="eye-ring-spin-rev" cx="110" cy="60" r="46" fill="none" stroke="rgba(232, 121, 249, 0.35)" stroke-width="1.2" stroke-dasharray="4 8" />
+
+                <!-- Sclera cosmica -->
+                <path d="M 22 60 Q 110 -12 198 60 Q 110 132 22 60 Z" fill="#060b19" stroke="#00f3ff" stroke-width="2.5" id="eye-outline" />
+
+                <!-- Gruppo Iride + Pupilla ritagliato -->
+                <g clip-path="url(#eyeClip)">
+                    <g id="eye-iris-group">
+                        <circle cx="110" cy="60" r="28" fill="url(#irisGrad)" />
+                        <circle cx="110" cy="60" r="22" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1" stroke-dasharray="3 3" />
+                        <circle cx="110" cy="60" r="11" fill="#03050c" />
+                        <circle cx="104" cy="54" r="3.5" fill="rgba(255,255,255,0.85)" />
+                    </g>
+                    <!-- Palpebre animabili -->
+                    <rect class="eye-eyelid eye-eyelid-top" x="15" y="-48" width="190" height="58" fill="#091026" />
+                    <rect class="eye-eyelid eye-eyelid-bottom" x="15" y="110" width="190" height="58" fill="#091026" />
+                </g>
+            </svg>
+        </div>
+        <div class="eye-status-pill" id="eye-status">Scegli una sfida neurale</div>
+    </section>
+
+    <!-- SCHERMATA 1: MENU PRINCIPALE -->
+    <main id="menu-screen" class="glass-panel menu-screen">
+        <div>
+            <div class="section-label">
+                <span>◈ Profilo Esploratore</span>
+                <span class="sync-status"><span class="sync-dot" id="sync-dot"></span><span id="sync-text">Connessione...</span></span>
+            </div>
+            <div class="profile-box">
+                <div class="profile-row">
+                    <input type="text" id="username-input" class="profile-input" maxlength="18" placeholder="Il tuo Username..." />
+                    <button id="btn-save-user" class="icon-btn" style="padding:0 12px; color:var(--cyan-glow);">Salva</button>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="section-label"><span>◈ Modalità Colori (7 Tentativi)</span></div>
+            <div class="mode-grid">
+                <button class="mode-card" data-mode="color-easy">
+                    <div>
+                        <div class="mode-title">Colori - Facile</div>
+                        <div class="mode-desc">4 caselle · 15 colori</div>
+                    </div>
+                    <span class="mult-badge">1.0x</span>
+                </button>
+                <button class="mode-card" data-mode="color-medium">
+                    <div>
+                        <div class="mode-title">Colori - Medio</div>
+                        <div class="mode-desc">5 caselle · 20 colori</div>
+                    </div>
+                    <span class="mult-badge">1.5x</span>
+                </button>
+                <button class="mode-card" data-mode="color-hard">
+                    <div>
+                        <div class="mode-title">Colori - Difficile</div>
+                        <div class="mode-desc">6 caselle · 25 colori</div>
+                    </div>
+                    <span class="mult-badge">2.0x</span>
+                </button>
+            </div>
+        </div>
+
+        <div>
+            <div class="section-label"><span>◈ Modalità Lessicale (7 Tentativi)</span></div>
+            <div class="mode-grid">
+                <button class="mode-card word-card" data-mode="word">
+                    <div>
+                        <div class="mode-title">Parola Italiana - 6 Lettere</div>
+                        <div class="mode-desc">Dizionario italiano • Tastiera QWERTY</div>
+                    </div>
+                    <span class="mult-badge">1.8x</span>
+                </button>
+            </div>
+        </div>
+
+        <div>
+            <div class="section-label">
+                <span>◈ Record Personali (Salvati in Automatico)</span>
+            </div>
+            <div class="records-grid" id="records-grid"></div>
+        </div>
+
+        <div class="rules-box">
+            <div>🟢 <strong>Luce Verde:</strong> elemento e posizione esatti: resta <strong>bloccato</strong> nei tentativi successivi.</div>
+            <div>🟡 <strong>Lucina Gialla:</strong> elemento presente nella combinazione ma in posizione diversa.</div>
+        </div>
+    </main>
+
+    <!-- SCHERMATA 2: AREA DI GIOCO -->
+    <main id="game-screen" class="game-screen hidden">
+        <!-- HUD -->
+        <div class="glass-panel hud-bar">
+            <div class="hud-cell left">
+                <span class="hud-lbl">Modalità</span>
+                <span class="hud-val cyan" id="hud-mode">Colori 4</span>
+            </div>
+            <div class="hud-cell">
+                <span class="hud-lbl">Tentativi</span>
+                <span class="hud-val" id="hud-attempts">7 / 7</span>
+            </div>
+            <div class="hud-cell">
+                <span class="hud-lbl">Tempo</span>
+                <span class="hud-val amber" id="hud-timer">00:00</span>
+            </div>
+        </div>
+
+        <!-- BOARD 7 TENTATIVI -->
+        <div class="glass-panel board-panel" id="board-panel"></div>
+
+        <!-- PANNELLO INPUT -->
+        <div class="glass-panel input-panel">
+            <div id="color-input-grid" class="color-grid"></div>
+            <div id="qwerty-input-grid" class="qwerty-container hidden"></div>
+            <div class="action-bar">
+                <button id="btn-clear" class="action-btn btn-clear">⌫ Cancella</button>
+                <button id="btn-submit" class="action-btn btn-submit" disabled>Verifica</button>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- MODALE CLASSIFICA GLOBALE -->
+<div id="leaderboard-modal" class="modal-backdrop hidden">
+    <div class="glass-panel modal-box">
+        <div class="modal-head">
+            <span class="modal-title">🌐 Classifica Globale</span>
+            <button id="btn-close-lb" class="icon-btn">✕</button>
+        </div>
+        <div class="filter-tabs" id="lb-tabs">
+            <button class="filter-tab active" data-filter="ALL">Tutte</button>
+            <button class="filter-tab" data-filter="Colori - Facile">Facile</button>
+            <button class="filter-tab" data-filter="Colori - Medio">Medio</button>
+            <button class="filter-tab" data-filter="Colori - Difficile">Difficile</button>
+            <button class="filter-tab" data-filter="Parole Italiane">Parole 6L</button>
+        </div>
+        <div class="history-scroll" id="leaderboard-list">
+            <div style="text-align:center; padding:18px; font-size:0.78rem; color:var(--text-muted);">Caricamento classifica...</div>
+        </div>
+    </div>
+</div>
+
+<!-- MODALE STORICO PUNTEGGI -->
+<div id="history-modal" class="modal-backdrop hidden">
+    <div class="glass-panel modal-box">
+        <div class="modal-head">
+            <span class="modal-title">🏆 Storico Partite</span>
+            <button id="btn-close-history" class="icon-btn">✕</button>
+        </div>
+        <div class="stats-row" id="history-summary"></div>
+        <div class="history-scroll" id="history-list"></div>
+        <div style="display:flex; gap:8px;">
+            <button id="btn-export" class="icon-btn" style="flex:1;">💾 Esporta Backup</button>
+            <button id="btn-reset-history" class="icon-btn" style="border-color:rgba(255,42,95,0.45); color:#fda4af;">🗑️ Azzera</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODALE CONFERMA RESET -->
+<div id="confirm-reset-modal" class="modal-backdrop hidden">
+    <div class="glass-panel modal-box" style="max-width:360px;">
+        <div class="modal-head">
+            <span class="modal-title" style="color:var(--crimson-glow);">⚠️ Conferma Azzeramento</span>
+            <button id="btn-cancel-reset-x" class="icon-btn">✕</button>
+        </div>
+        <p style="font-size:0.82rem; color:var(--text-muted); line-height:1.45;">
+            Vuoi davvero cancellare in modo definitivo tutti i record personali e la cronologia delle partite salvate?
+        </p>
+        <div style="display:flex; gap:8px; margin-top:4px;">
+            <button id="btn-cancel-reset" class="action-btn btn-clear" style="flex:1; border-color:rgba(148,163,184,0.4); background:rgba(15,23,42,0.9); color:var(--text-main);">Annulla</button>
+            <button id="btn-confirm-reset" class="action-btn btn-submit" style="flex:1; background:linear-gradient(90deg, #ff2a5f, #be123c); color:#ffffff; box-shadow:0 4px 16px rgba(255,42,95,0.35);">Azzera Tutto</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODALE FINE PARTITA -->
+<div id="end-modal" class="modal-backdrop hidden">
+    <div class="glass-panel modal-box">
+        <div class="modal-head">
+            <span class="modal-title" id="end-title">Esito Sfida</span>
+            <button id="btn-close-end" class="icon-btn">✕</button>
+        </div>
+        <p id="end-desc" style="font-size:0.82rem; color:var(--text-muted); line-height:1.45;"></p>
+        <div class="solution-strip" id="end-solution"></div>
+        <div class="stats-row" id="end-stats"></div>
+        <div style="display:flex; gap:8px; margin-top:4px;">
+            <button id="btn-end-lb" class="action-btn btn-clear" style="flex:1; border-color:rgba(56,189,248,0.4); background:rgba(15,23,42,0.9); color:var(--cyan-glow);">🌐 Classifica</button>
+            <button id="btn-replay" class="action-btn btn-submit" style="flex:1.6;">↻ Gioca Ancora</button>
+        </div>
+    </div>
+</div>
+
+<!-- Firebase SDK (Classifica Globale Online) -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+    import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+    import { getFirestore, collection, addDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+
+    const CUSTOM_FIREBASE_CONFIG = {
+        apiKey: "AIzaSyDctdxiEzKSMrxaBLIWmwtgam4OLsung6I",
+        authDomain: "cosmic-eye-3570f.firebaseapp.com",
+        projectId: "cosmic-eye-3570f",
+        storageBucket: "cosmic-eye-3570f.firebasestorage.app",
+        messagingSenderId: "1007209621250",
+        appId: "1:1007209621250:web:ac98ad5209e8d720d6c41b"
+    };
+
+    let db = null;
+    let currentUser = null;
+    const COLLECTION_PATH = ["artifacts", "occhio-del-cosmo-prod", "public", "data", "leaderboard"];
+
+    async function initCloud() {
+        const dot = document.getElementById("sync-dot");
+        const txt = document.getElementById("sync-text");
+        try {
+            const app = initializeApp(CUSTOM_FIREBASE_CONFIG);
+            const auth = getAuth(app);
+            db = getFirestore(app);
+
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    currentUser = user;
+                    dot.classList.add("online");
+                    txt.textContent = "Classifica Online Attiva";
+                    window.refreshLeaderboardData();
+                }
+            });
+
+            await signInAnonymously(auth);
+        } catch (err) {
+            console.warn("Firebase offline:", err);
+            txt.textContent = "Modalità Locale Offline";
+        }
+    }
+
+    window.pushScoreToCloud = async function(entry) {
+        if (!db || !currentUser) return;
+        try {
+            await addDoc(collection(db, ...COLLECTION_PATH), {
+                uid: currentUser.uid,
+                username: entry.username,
+                mode: entry.mode,
+                score: entry.score,
+                attempts: entry.attempts,
+                seconds: entry.elapsed,
+                createdAt: serverTimestamp()
+            });
+            window.refreshLeaderboardData();
+        } catch (e) {
+            console.error("Errore salvataggio punteggio:", e);
+        }
+    };
+
+    window.refreshLeaderboardData = async function() {
+        if (!db || !currentUser) return;
+        try {
+            const snap = await getDocs(collection(db, ...COLLECTION_PATH));
+            const items = [];
+            snap.forEach((doc) => items.push(doc.data()));
+            items.sort((a, b) => b.score - a.score || a.attempts - b.attempts || a.seconds - b.seconds);
+            window.cachedCloudLeaderboard = items;
+            if (window.renderLeaderboardList) window.renderLeaderboardList();
+        } catch (e) {
+            console.error("Errore lettura classifica:", e);
+        }
+    };
+
+    initCloud();
+</script>
+
+<script>
+(() => {
+    "use strict";
+
+    /* ==========================================================================
+       1. PALETTE 25 COLORI AD ALTISSIMO CONTRASTO PERCETTIVO (ZERO SOMIGLIANZE)
+       ========================================================================== */
+    const COLOR_PALETTE = [
+        // 15 Base (Facile): spettro primario/secondario puro + 5 toni terziari netti
+        { id: 0,  name: "Rosso",    bg: "#e60026", fg: "#ffffff", sym: "▲" },
+        { id: 1,  name: "Blu",      bg: "#0055ff", fg: "#ffffff", sym: "▼" },
+        { id: 2,  name: "Verde",    bg: "#00b33c", fg: "#ffffff", sym: "■" },
+        { id: 3,  name: "Giallo",   bg: "#ffe600", fg: "#04060f", sym: "◆" },
+        { id: 4,  name: "Viola",    bg: "#7b00ff", fg: "#ffffff", sym: "★" },
+        { id: 5,  name: "Arancio",  bg: "#ff6600", fg: "#ffffff", sym: "⬟" },
+        { id: 6,  name: "Ciano",    bg: "#00e5ff", fg: "#04060f", sym: "●" },
+        { id: 7,  name: "Magenta",  bg: "#ff00aa", fg: "#ffffff", sym: "✚" },
+        { id: 8,  name: "Bianco",   bg: "#ffffff", fg: "#04060f", sym: "◎" },
+        { id: 9,  name: "Nero",     bg: "#161b26", fg: "#f8fafc", sym: "✦" },
+        { id: 10, name: "Marrone",  bg: "#7a3b10", fg: "#ffffff", sym: "⬢" },
+        { id: 11, name: "Lime",     bg: "#9dff00", fg: "#04060f", sym: "❖" },
+        { id: 12, name: "Rosa",     bg: "#ff99cc", fg: "#04060f", sym: "♥" },
+        { id: 13, name: "Ottanio",  bg: "#005f6b", fg: "#ffffff", sym: "◈" },
+        { id: 14, name: "Lilla",    bg: "#c792ea", fg: "#04060f", sym: "✧" },
+        // +5 Medio (20 totali): bordeaux cupo, oliva militare, celeste cielo, sabbia, grigio acciaio
+        { id: 15, name: "Bordeaux", bg: "#590016", fg: "#ffffff", sym: "♠" },
+        { id: 16, name: "Oliva",    bg: "#556b2f", fg: "#ffffff", sym: "♣" },
+        { id: 17, name: "Celeste",  bg: "#7cc8ff", fg: "#04060f", sym: "☀" },
+        { id: 18, name: "Sabbia",   bg: "#d9b382", fg: "#04060f", sym: "◐" },
+        { id: 19, name: "Grigio",   bg: "#64748b", fg: "#ffffff", sym: "⬣" },
+        // +5 Difficile (25 totali): indaco profondo, menta chiara, corallo caldo, ocra scuro, prugna
+        { id: 20, name: "Indaco",   bg: "#1e1b6b", fg: "#ffffff", sym: "⬡" },
+        { id: 21, name: "Menta",    bg: "#7fffd4", fg: "#04060f", sym: "✿" },
+        { id: 22, name: "Corallo",  bg: "#ff7f66", fg: "#04060f", sym: "✸" },
+        { id: 23, name: "Ocra",     bg: "#b8860b", fg: "#ffffff", sym: "▣" },
+        { id: 24, name: "Prugna",   bg: "#4a0e4e", fg: "#ffffff", sym: "✪" }
+    ];
+
+    /* ==========================================================================
+       2. DIZIONARIO DI OLTRE 500 PAROLE ITALIANE REALI DA 6 LETTERE
+       ========================================================================== */
+    const RAW_ITALIAN_WORDS = [
+        "ABBAIO","ABISSO","ABORTO","ACANTO","ACCESA","ACCESO","ACCIAI","ACCOLI","ACCONO","ADAGIO",
+        "ADATTO","ADDOME","ADESSO","ADOLFO","ADORNO","ADOTTA","ADULTO","AFFARE","AFFIDA","AFFILA",
+        "AFFINE","AFFINI","AFFOGA","AGENDA","AGENTE","AGENTI","AGGIRA","AGISCE","AGISCO","AGITAI",
+        "AGOGNA","AGONIA","AGRARI","AGRUMI","AIUTAI","ALACRE","ALBERI","ALBERO","ALBINO","ALBUMI",
+        "ALCOOL","ALCUNI","ALCUNO","ALGIDO","ALIENA","ALIENO","ALLEGA","ALLENA","ALLORO","ALLUDE",
+        "ALMENO","ALPINO","ALTARE","ALUNNI","ALUNNO","AMANTE","AMANTI","AMAZZO","AMBITO","AMICHE",
+        "AMMALO","AMMIRA","AMMODO","ANANAS","ANATRA","ANCORA","ANDARE","ANDATA","ANDATO","ANDAVA",
+        "ANELLI","ANELLO","ANGELI","ANGELO","ANGOLO","ANIMAI","ANNATA","ANNEGA","ANNODA","ANNOIA",
+        "ANSIMA","ANTENA","ANTICO","APERTO","APERTA","APOGEO","APPAGA","APPARE","APPARI","APPENA",
+        "APPESO","APRILE","APRIRE","AQUILA","ARABIA","ARALDO","ARANCI","ARATRO","ARCADE","ARCANO",
+        "ARCATA","ARDERE","ARDITO","ARDORE","ARGINE","ARIETE","ARINGA","ARMADI","ARMATA","ARMATO",
+        "ARREDA","ARRESA","ARRIVA","ARRIVO","ARSURA","ARTICO","ASCESA","ASCESO","ATTESA","ATTESO",
+        "ATTIMO","ATTIRA","ATTIVO","ATTORE","AUDACE","AUGURI","AURORA","AUTORE","AVANTI","AVANZO",
+        "AVERSO","AVOLTO","AVVISO","AZALEA","AZIONE","AZIONI","BACINO","BADARE","BADILE","BALENA",
+        "BANALE","BANANA","BANCHE","BARCHE","BARILE","BARONE","BASARE","BATTAG","BELARE","BESTIA",
+        "BEVUTO","BIANCA","BIANCO","BIBBIA","BIBITA","BIDONE","BINARI","BIONDA","BIONDO","BISCIA",
+        "BITUME","BLANDO","BLOCCO","BOBINA","BOCCHE","BOCCIA","BOLGIA","BOTOLA","BOVINO","BRACCI",
+        "BRACIA","BRANCO","BRANDA","BRECCE","BREZZA","BRILLA","BROCCA","BRONZO","BRULLO","BRUSCO",
+        "BRUTTO","BUCATO","BUCCIA","BUFERA","CABINA","CACCIA","CADERE","CADUTA","CADUTO","CAGGIO",
+        "CALARE","CALCIO","CALICE","CALORE","CAMBIO","CAMERA","CAMICE","CAMICI","CAMINO","CAMION",
+        "CAMMEO","CANALE","CANAPA","CANCRO","CAPACE","CAPITA","CARATE","CARENA","CARICA","CARICO",
+        "CARITA","CAROTA","CASALE","CASINO","CATENA","CATINO","CEDERE","CELARE","CENERE","CENTRO",
+        "CHIAVE","CHIEDE","CHIESA","CHIODO","CHIOMA","CHIUDE","CHIUSO","CIALDA","CIARLA","CICALA",
+        "CIGLIO","CIMICE","CINEMA","CINQUE","CIOCCO","CITARE","CIUFFO","CIVILE","CLASSE","COCCIO",
+        "CODICE","COFANO","COGLIE","COLARE","COLERA","COLORE","COMETA","COMICO","COMODO","COMUNE",
+        "CONTEA","CONTRO","COPPIA","CORONA","CORSIA","CORTEO","COSCIA","COTONE","COVARE","CRANIO",
+        "CREARE","CREATO","CRESTA","CRIPTA","CROLLA","CROLLO","CROSTA","CUCINA","CUCIRE","CUFFIA",
+        "CUGINO","CUMULO","CUPOLA","CURARE","DEBITO","DEBOLE","DECIDE","DECIMA","DECIMO","DECORO",
+        "DEDICA","DELFIN","DELUDE","DELUSO","DEMONE","DENARO","DENTRO","DERIVA","DESIGN","DESTRA",
+        "DESTRO","DIARIO","DIFESA","DIGIUN","DIMORA","DIVANO","DIVINO","DIVISA","DIVISO","DOCCIA",
+        "DOCILE","DODICI","DOGANA","DOLERE","DOLORE","DOMANI","DOMARE","DONARE","DOPPIO","DORARE",
+        "DORATO","DOVERE","DRAMMA","DRAPPO","DRITTO","DUBBIO","DUELLO","DUNQUE","DURARE","DURATA",
+        "EBBENE","ECCEDE","EGUALE","ELENCO","ELETTA","ELETTO","ELISIR","ELOGIO","EMERGE","ENFASI",
+        "ENIGMA","ENORME","ENTITA","ENTRATA","EPPURE","EREDIT","ERGERE","EROICO","ERRARE","ERRORE",
+        "ESATTO","ESCLUD","ESEGUI","ESIGUO","ESILIO","ESISTE","ESTASI","ESTATE","ESTERO","ESTESO",
+        "ESTIMA","ESTIVO","ETERNO","ETNICO","EUREKA","EVENTO","FABBRO","FACILE","FAGGIO","FALCON",
+        "FAMOSO","FARINA","FASCIA","FATICA","FAVOLA","FAVORE","FEBBRE","FEDELE","FELICE","FERIRE",
+        "FERITA","FERITO","FEROCE","FESTA","FIACCO","FIAMMA","FIANCO","FIASCO","FIBBIA","FIDARE",
+        "FIGLIA","FIGLIO","FIGURA","FILARE","FILTRO","FINALE","FINIRE","FINITO","FIOCCO","FISICO",
+        "FLAUTO","FLOTTA","FLUIDO","FLUSSO","FODERA","FOGLIA","FOGLIO","FOLLA","FORCHE","FRANCO",
+        "FREDDO","FREGIO","FRESCO","FRETTA","FRITTO","FRONTE","FRUTTA","FRUTTO","FUMARE","FURORE",
+        "FUTURO","GABBIA","GALERA","GELATO","GELOSO","GENER","GENTIL","GESSO","GIACCA","GIALLO",
+        "GIOCAR","GIORNO","GIRARE","GIUGNO","GIUNCO","GIUNTO","GIUSTO","GLORIA","GOCCIA","GODERE",
+        "GOMITO","GONFIA","GRANDE","GRASSO","GRATIS","GRAZIA","GRIGIO","GROSSO","GROTTA","GRUPPO",
+        "GUANTO","GUERRA","GUSCIO","IDOLO","IGIENE","IGNARO","IGNOTO","ILLUDE","ILLUSO","IMMUNE",
+        "IMPARA","IMPERO","INCISO","INCUBO","INDAGA","INDICE","INDICO","INERME","INGLES","INIZIO",
+        "INSALA","INTESA","INTESO","INTIMO","INVANO","INVASO","ISOLA","ITALIA","LABBRO","LADRO",
+        "LAGUNA","LANCIA","LANCIO","LAPIDE","LARGO","LAVARE","LAVORO","LEALE","LEGALE","LEGARE",
+        "LEGGER","LENTO","LEONE","LETTER","LEVARE","LIBERO","LIBRO","LICEO","LIETO","LIEVE",
+        "LIMITE","LIMONE","LINEA","LINGUA","LISCIO","LISTA","LITIGA","LOCALE","LODARE","LOGICA",
+        "LONTAN","LOTTA","LUCIDO","LUGLIO","LUMACA","LUNEDI","LUNGO","LUOGO","LUSSO","MADRE",
+        "MAGGIO","MAGICO","MAGLIA","MAGRO","MALATO","MAMMA","MANCIA","MANICA","MANICO","MARCIA",
+        "MARINA","MARITO","MARMO","MARTE","MASSA","MATITA","MATURO","MAZZO","MEDICO","MEGLIO",
+        "MENTE","MERCE","MERITA","METODO","METRO","MEZZO","MIELE","MIGLIO","MINERA","MINIMO",
+        "MINORE","MINUTO","MISURA","MOBILE","MODO","MOGLIE","MOLLE","MOLTO","MONDO","MONETA",
+        "MONTE","MORIRE","MORTE","MORTO","MOSCA","MOSTRA","MOTIVO","MOTORE","MUCCA","MURARE",
+        "MUSEO","MUSICA","MUTARE","NASCER","NATALE","NATURA","NEBBIA","NEMICO","NERVO","NESSUN",
+        "NIENTE","NIPOTE","NOBILE","NOIOSO","NONNA","NONNO","NOTARE","NOTTE","NUCLEO","NULLA",
+        "NUMERO","NUOVO","NUVOLA","OCCHIO","OCEANO","ODIARE","ODORE","OGGI","OGNUNO","OMBRA",
+        "ONESTO","ONORE","OPERA","OPPURE","ORARIO","ORFANO","ORGANO","ORSO","OSARE","OSCURO",
+        "OSPITE","OVEST","PACCO","PADRE","PAESE","PAGARE","PAGINA","PALCO","PALLA","PALMA",
+        "PANCIA","PANICO","PANNO","PAOLO","PARCO","PARERE","PARETE","PAROLA","PARTE","PASSO",
+        "PASTA","PATATA","PAURA","PAUSA","PAZZO","PECORA","PEGGIO","PELLE","PENNA","PERCHE",
+        "PERDER","PERDON","PERLA","PERSO","PESARE","PESCA","PESCE","PETTO","PEZZO","PIANET",
+        "PIANO","PIANTA","PIATTO","PIAZZA","PIEDE","PIEGA","PIENO","PIETRA","PIGRO","PIOMBO",
+        "PIUMA","POCHE","POESIA","POETA","POLLO","PONTE","POPOLO","PORCO","PORTA","PORTO",
+        "POSARE","POSTA","POSTO","POTERE","POVERO","PRANZO","PRATO","PREGIO","PREMIO","PRESTO",
+        "PRETE","PREZZO","PRIMA","PRIMO","PRIVO","PROVA","PULIRE","PULITO","PUNTA","PUNTO",
+        "QUADRO","QUALE","QUANDO","QUANTO","QUARTO","QUASI","QUELLO","QUESTO","QUIETE","QUINDI",
+        "RADICE","RAGGIO","RAPIDO","RARO","REALE","REALTA","REGALO","REGINA","REGNO","REGOLA",
+        "RESTO","RICCO","RIDERE","RIFIUT","RIGA","RIVA","ROCCIA","ROSSO","ROTTO","RUBARE",
+        "RUMORE","RUOTA","SABBIA","SACCO","SACRO","SAGGIO","SALIRE","SALUTE","SANGUE","SANTO",
+        "SAPERE","SAPONE","SAPORE","SCALA","SCARPA","SCELTA","SCENA","SCONTO","SCOPO","SCORSO",
+        "SCUOLA","SCUSA","SECOLO","SEDERE","SEDIA","SEGNO","SEME","SEMPRE","SENSO","SENZA",
+        "SERENO","SERIE","SERIO","SESSO","SEVERO","SFORZO","SICURO","SILENZ","SIMILE","SINCER",
+        "SMETTE","SOAVE","SOGNO","SOLDO","SOLIDO","SOLITO","SOMMA","SONNO","SOPRA","SORTE",
+        "SOTTO","SPADA","SPALLA","SPAZIO","SPECIE","SPERAR","SPESA","SPESSO","SPORCO","SPORT",
+        "SPOSO","STAMPA","STANCO","STANZA","STARE","STATO","STELLA","STESSO","STILE","STIMA",
+        "STORIA","STRADA","STRANO","STUDIO","SUBITO","SUONO","TACERE","TAGLIA","TANTO","TARDI",
+        "TASCA","TAVOLA","TAVOLO","TEATRO","TEMERE","TEMPO","TENDA","TENERE","TEORIA","TERRA",
+        "TERZO","TESORO","TESTA","TIMIDO","TIRARE","TITOLO","TORRE","TORTA","TOTALE","TRANNE",
+        "TRATTO","TRENO","TRIBU","TRISTE","TROPPO","TUTTO","UDIRE","UGUALE","ULTIMO","UMANO",
+        "UMIDO","UMILE","UNICO","UNIONE","UNIRE","UOMO","UOVO","URLARE","USARE","USCIRE",
+        "USCITA","UTILE","VALERE","VALLE","VALORE","VANTO","VARIO","VEDERE","VELOCE","VENIRE",
+        "VENTO","VERDE","VERITA","VERSO","VETRO","VICINO","VIGILE","VILLA","VISITA","VISTA",
+        "VIVERE","VOGLIA","VOLARE","VOLERE","VOLTA","VOLTO","VUOTO","ZAINO","ZAMPA","ZITTO"
+    ];
+
+    const WORDS_6 = Array.from(new Set(
+        RAW_ITALIAN_WORDS
+            .map(w => w.trim().toUpperCase())
+            .filter(w => /^[A-Z]{6}$/.test(w))
+    ));
+
+    /* ==========================================================================
+       3. GESTIONE STORAGE PERSISTENTE (RECORD, PROFILO & STORICO AUTOMATICO)
+       ========================================================================== */
+    const STORAGE_KEY = "occhio_cosmo_data_v3";
+    const MAX_ATTEMPTS = 7;
+
+    const MODE_CONFIG = {
+        "color-easy":   { label: "Colori - Facile",    short: "Colori 4",  type: "color", len: 4, colors: 15, mult: 1.0 },
+        "color-medium": { label: "Colori - Medio",     short: "Colori 5",  type: "color", len: 5, colors: 20, mult: 1.5 },
+        "color-hard":   { label: "Colori - Difficile", short: "Colori 6",  type: "color", len: 6, colors: 25, mult: 2.0 },
+        "word":         { label: "Parole Italiane",    short: "Parola 6L", type: "word",  len: 6, colors: 0,  mult: 1.8 }
+    };
+
+    function loadPersistentData() {
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) {
+                return {
+                    username: localStorage.getItem("odc_username") || "Viaggiatore",
+                    records: { "color-easy": 0, "color-medium": 0, "color-hard": 0, "word": 0 },
+                    history: [],
+                    sound: true
+                };
+            }
+            const parsed = JSON.parse(raw);
+            return {
+                username: parsed.username || localStorage.getItem("odc_username") || "Viaggiatore",
+                records: Object.assign({ "color-easy": 0, "color-medium": 0, "color-hard": 0, "word": 0 }, parsed.records || {}),
+                history: Array.isArray(parsed.history) ? parsed.history : [],
+                sound: parsed.sound !== false
+            };
+        } catch (e) {
+            return {
+                username: "Viaggiatore",
+                records: { "color-easy": 0, "color-medium": 0, "color-hard": 0, "word": 0 },
+                history: [],
+                sound: true
+            };
+        }
+    }
+
+    function savePersistentData(data) {
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            localStorage.setItem("odc_username", data.username);
+        } catch (e) {}
+    }
+
+    let store = loadPersistentData();
+
+    /* ==========================================================================
+       4. STATO PARTITA CORRENTE
+       ========================================================================== */
+    let game = {
+        modeKey: "color-easy",
+        secret: [],
+        locked: [],
+        attempts: [],
+        current: [],
+        cursor: 0,
+        keyStates: {},
+        active: false,
+        startTime: 0,
+        elapsed: 0,
+        timerId: null,
+        lbFilter: "ALL"
+    };
+
+    /* ==========================================================================
+       5. SINTETIZZATORE AUDIO WEB AUDIO API (AUTONOMO)
+       ========================================================================== */
+    let audioCtx = null;
+    function beep(freq, type = "sine", dur = 0.11, vol = 0.08) {
+        if (!store.sound) return;
+        try {
+            if (!audioCtx) {
+                const AC = window.AudioContext || window.webkitAudioContext;
+                if (AC) audioCtx = new AC();
+            }
+            if (!audioCtx) return;
+            if (audioCtx.state === "suspended") audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + dur);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + dur);
+        } catch (e) {}
+    }
+
+    const soundFX = {
+        click: () => beep(540, "triangle", 0.07, 0.06),
+        erase: () => beep(270, "sine", 0.08, 0.06),
+        lock:  () => { beep(660, "sine", 0.11, 0.08); setTimeout(() => beep(880, "sine", 0.15, 0.08), 80); },
+        check: () => beep(410, "triangle", 0.12, 0.07),
+        win:   () => [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => setTimeout(() => beep(f, "triangle", 0.24, 0.1), i * 105)),
+        lose:  () => [320, 260, 210].forEach((f, i) => setTimeout(() => beep(f, "sawtooth", 0.24, 0.07), i * 140))
+    };
+
+    /* ==========================================================================
+       6. CAMPO STELLATO & ANIMAZIONE OCCHIO COSMICO
+       ========================================================================== */
+    const canvas = document.getElementById("starfield-canvas");
+    const ctx = canvas.getContext("2d");
+    let stars = [];
+
+    function resizeStarfield() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        stars = Array.from({ length: 80 }, () => ({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            r: Math.random() * 1.5 + 0.4,
+            s: Math.random() * 0.22 + 0.05,
+            a: Math.random() * 0.7 + 0.25
+        }));
+    }
+
+    function drawStarfield() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (const st of stars) {
+            st.y += st.s;
+            if (st.y > canvas.height) {
+                st.y = 0;
+                st.x = Math.random() * canvas.width;
+            }
+            ctx.beginPath();
+            ctx.arc(st.x, st.y, st.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(186, 230, 253, ${st.a})`;
+            ctx.fill();
+        }
+        requestAnimationFrame(drawStarfield);
+    }
+
+    window.addEventListener("resize", resizeStarfield);
+    resizeStarfield();
+    drawStarfield();
+
+    const eyeWrapper = document.getElementById("eye-wrapper");
+    const irisGroup = document.getElementById("eye-iris-group");
+    const irisStop1 = document.getElementById("iris-stop-1");
+    const irisStop2 = document.getElementById("iris-stop-2");
+    const eyeOutline = document.getElementById("eye-outline");
+    const eyeStatus = document.getElementById("eye-status");
+
+    function setEyeState(mood, text) {
+        const themes = {
+            cyan:   { s1: "#00f3ff", s2: "#0284c7", glow: "rgba(0, 243, 255, 0.55)" },
+            amber:  { s1: "#ffbe0b", s2: "#b45309", glow: "rgba(255, 190, 11, 0.6)" },
+            green:  { s1: "#00ff88", s2: "#047857", glow: "rgba(0, 255, 136, 0.65)" },
+            danger: { s1: "#ff2a5f", s2: "#9f1239", glow: "rgba(255, 42, 95, 0.65)" }
+        };
+        const t = themes[mood] || themes.cyan;
+        irisStop1.setAttribute("stop-color", t.s1);
+        irisStop2.setAttribute("stop-color", t.s2);
+        eyeOutline.setAttribute("stroke", t.s1);
+        eyeWrapper.style.setProperty("--eye-glow", t.glow);
+        eyeStatus.style.color = t.s1;
+        eyeStatus.style.borderColor = t.s1;
+        if (text) eyeStatus.textContent = text;
+    }
+
+    function trackIris(clientX, clientY) {
+        const rect = eyeWrapper.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        const dx = clientX - cx;
+        const dy = clientY - cy;
+        const angle = Math.atan2(dy, dx);
+        const dist = Math.min(18, Math.hypot(dx, dy) / 14);
+        irisGroup.setAttribute("transform", `translate(${(Math.cos(angle) * dist).toFixed(1)}, ${(Math.sin(angle) * dist * 0.55).toFixed(1)})`);
+    }
+
+    window.addEventListener("pointermove", e => trackIris(e.clientX, e.clientY));
+    window.addEventListener("pointerdown", e => trackIris(e.clientX, e.clientY));
+
+    function blinkEye() {
+        eyeWrapper.classList.add("blinking");
+        setTimeout(() => eyeWrapper.classList.remove("blinking"), 150);
+    }
+
+    setInterval(blinkEye, 4500);
+    eyeWrapper.addEventListener("click", () => {
+        blinkEye();
+        soundFX.click();
+    });
+
+    /* ==========================================================================
+       7. HELPER UI & MENU PRINCIPALE
+       ========================================================================== */
+    const $ = id => document.getElementById(id);
+
+    function escapeHtml(str) {
+        return String(str).replace(/[&<>"']/g, m => ({
+            "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+        }[m]));
+    }
+
+    function showToast(msg) {
+        const el = $("toast");
+        el.textContent = msg;
+        el.classList.add("visible");
+        clearTimeout(el._t);
+        el._t = setTimeout(() => el.classList.remove("visible"), 2200);
+    }
+
+    function formatDuration(sec) {
+        const m = String(Math.floor(sec / 60)).padStart(2, "0");
+        const s = String(sec % 60).padStart(2, "0");
+        return `${m}:${s}`;
+    }
+
+    function getGlobalBestScore() {
+        return Math.max(0, ...Object.values(store.records));
+    }
+
+    function getUsername() {
+        const val = $("username-input").value.trim();
+        return val.length > 0 ? val : (store.username || "Viaggiatore");
+    }
+
+    function refreshMenuUI() {
+        $("username-input").value = store.username || "Viaggiatore";
+        $("top-best-score").textContent = getGlobalBestScore().toLocaleString("it-IT");
+        $("btn-sound").textContent = store.sound ? "🔊" : "🔇";
+
+        const grid = $("records-grid");
+        grid.innerHTML = "";
+        Object.entries(MODE_CONFIG).forEach(([key, cfg]) => {
+            const val = store.records[key] || 0;
+            const div = document.createElement("div");
+            div.className = "record-item";
+            div.innerHTML = `
+                <span style="color:var(--text-muted);">${cfg.short}</span>
+                <span class="record-val">${val.toLocaleString("it-IT")}</span>
+            `;
+            grid.appendChild(div);
+        });
+    }
+
+    $("btn-save-user").addEventListener("click", () => {
+        soundFX.click();
+        const clean = getUsername();
+        store.username = clean;
+        $("username-input").value = clean;
+        savePersistentData(store);
+        showToast(`Profilo salvato: ${clean}`);
+    });
+
+    document.querySelectorAll(".mode-card").forEach(card => {
+        card.addEventListener("click", () => {
+            startNewGame(card.dataset.mode);
+        });
+    });
+
+    /* ==========================================================================
+       8. MOTORE DI GIOCO (7 TENTATIVI CON BLOCCO VERDE)
+       ========================================================================== */
+    function startNewGame(modeKey) {
+        soundFX.click();
+        const cfg = MODE_CONFIG[modeKey];
+        game.modeKey = modeKey;
+        game.attempts = [];
+        game.locked = Array(cfg.len).fill(null);
+        game.current = Array(cfg.len).fill(null);
+        game.cursor = 0;
+        game.keyStates = {};
+        game.active = true;
+        game.elapsed = 0;
+        game.startTime = Date.now();
+
+        if (cfg.type === "color") {
+            const pool = Array.from({ length: cfg.colors }, (_, idx) => idx);
+            for (let i = pool.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [pool[i], pool[j]] = [pool[j], pool[i]];
+            }
+            game.secret = pool.slice(0, cfg.len);
+
+            $("color-input-grid").classList.remove("hidden");
+            $("qwerty-input-grid").classList.add("hidden");
+            renderColorButtons(cfg.colors);
+            setEyeState("cyan", `Decifra i ${cfg.len} colori unici`);
+        } else {
+            const chosenWord = WORDS_6[Math.floor(Math.random() * WORDS_6.length)];
+            game.secret = chosenWord.split("");
+            $("color-input-grid").classList.add("hidden");
+            $("qwerty-input-grid").classList.remove("hidden");
+            renderQwertyKeyboard();
+            setEyeState("cyan", "Componi una parola italiana da 6 lettere");
+        }
+
+        $("hud-mode").textContent = `${cfg.short} (${cfg.mult.toFixed(1)}x)`;
+        $("menu-screen").classList.add("hidden");
+        $("game-screen").classList.remove("hidden");
+        $("btn-home").classList.remove("hidden");
+
+        clearInterval(game.timerId);
+        $("hud-timer").textContent = "00:00";
+        game.timerId = setInterval(() => {
+            if (!game.active) return;
+            game.elapsed = Math.floor((Date.now() - game.startTime) / 1000);
+            $("hud-timer").textContent = formatDuration(game.elapsed);
+        }, 500);
+
+        updateHudAttempts();
+        renderBoard();
+        updateSubmitButton();
+    }
+
+    function updateHudAttempts() {
+        const left = MAX_ATTEMPTS - game.attempts.length;
+        $("hud-attempts").textContent = `${left} / ${MAX_ATTEMPTS}`;
+    }
+
+    function getNextUnlockedIndex(startIdx) {
+        const len = game.secret.length;
+        for (let i = startIdx; i < len; i++) {
+            if (game.locked[i] === null) return i;
+        }
+        for (let i = 0; i < startIdx; i++) {
+            if (game.locked[i] === null) return i;
+        }
+        return -1;
+    }
+
+    function onSelectInput(val) {
+        if (!game.active) return;
+        const len = game.secret.length;
+        const cfg = MODE_CONFIG[game.modeKey];
+
+        if (cfg.type === "color") {
+            const existingIdx = game.current.findIndex((item, idx) => item === val && idx !== game.cursor);
+            if (existingIdx !== -1) {
+                if (game.locked[existingIdx] !== null) {
+                    showToast("Colore già bloccato in un'altra casella!");
+                    return;
+                }
+                game.current[existingIdx] = null;
+            }
+        }
+
+        if (game.locked[game.cursor] !== null) {
+            const nxt = getNextUnlockedIndex(0);
+            if (nxt === -1) return;
+            game.cursor = nxt;
+        }
+
+        soundFX.click();
+        game.current[game.cursor] = val;
+
+        let nextFree = -1;
+        for (let i = game.cursor + 1; i < len; i++) {
+            if (game.locked[i] === null && game.current[i] === null) {
+                nextFree = i;
+                break;
+            }
+        }
+        if (nextFree === -1) {
+            for (let i = 0; i < len; i++) {
+                if (game.locked[i] === null && game.current[i] === null) {
+                    nextFree = i;
+                    break;
+                }
+            }
+        }
+        if (nextFree !== -1) game.cursor = nextFree;
+
+        renderBoard();
+        updateSubmitButton();
+    }
+
+    function onClearSlot() {
+        if (!game.active) return;
+        const len = game.secret.length;
+        soundFX.erase();
+
+        if (game.locked[game.cursor] === null && game.current[game.cursor] !== null) {
+            game.current[game.cursor] = null;
+        } else {
+            for (let i = len - 1; i >= 0; i--) {
+                if (game.locked[i] === null && game.current[i] !== null) {
+                    game.current[i] = null;
+                    game.cursor = i;
+                    break;
+                }
+            }
+        }
+
+        renderBoard();
+        updateSubmitButton();
+    }
+
+    function updateSubmitButton() {
+        $("btn-submit").disabled = game.current.some(v => v === null);
+    }
+
+    function evaluateAttempt(guess, secret) {
+        const len = secret.length;
+        const statuses = Array(len).fill("none");
+        const secUsed = Array(len).fill(false);
+        const gueUsed = Array(len).fill(false);
+        let greens = 0;
+        let yellows = 0;
+
+        for (let i = 0; i < len; i++) {
+            if (guess[i] === secret[i]) {
+                statuses[i] = "green";
+                secUsed[i] = true;
+                gueUsed[i] = true;
+                greens++;
+            }
+        }
+
+        for (let i = 0; i < len; i++) {
+            if (gueUsed[i]) continue;
+            for (let j = 0; j < len; j++) {
+                if (!secUsed[j] && guess[i] === secret[j]) {
+                    statuses[i] = "yellow";
+                    secUsed[j] = true;
+                    gueUsed[i] = true;
+                    yellows++;
+                    break;
+                }
+            }
+        }
+
+        return { statuses, greens, yellows };
+    }
+
+    function onSubmitAttempt() {
+        if (!game.active) return;
+        if (game.current.some(v => v === null)) return;
+
+        const cfg = MODE_CONFIG[game.modeKey];
+        const guess = [...game.current];
+        const { statuses, greens, yellows } = evaluateAttempt(guess, game.secret);
+
+        game.attempts.push({ guess, statuses, greens, yellows });
+
+        if (cfg.type === "word") {
+            guess.forEach((ch, idx) => {
+                const st = statuses[idx];
+                const prev = game.keyStates[ch];
+                if (st === "green") game.keyStates[ch] = "green";
+                else if (st === "yellow" && prev !== "green") game.keyStates[ch] = "yellow";
+                else if (st === "none" && !prev) game.keyStates[ch] = "none";
+            });
+            renderQwertyKeyboard();
+        }
+
+        let newlyLocked = 0;
+        for (let i = 0; i < cfg.len; i++) {
+            if (statuses[i] === "green" && game.locked[i] === null) {
+                game.locked[i] = guess[i];
+                newlyLocked++;
+            }
+        }
+
+        updateHudAttempts();
+
+        if (greens === cfg.len) {
+            concludeGame(true);
+            return;
+        }
+
+        if (game.attempts.length >= MAX_ATTEMPTS) {
+            concludeGame(false);
+            return;
+        }
+
+        game.current = game.locked.map(v => v !== null ? v : null);
+        game.cursor = getNextUnlockedIndex(0);
+
+        const remaining = MAX_ATTEMPTS - game.attempts.length;
+        if (newlyLocked > 0) {
+            soundFX.lock();
+            setEyeState("green", `Blocco verde su ${greens}/${cfg.len}! (${yellows} fuori posto)`);
+        } else if (yellows > 0) {
+            soundFX.check();
+            setEyeState(remaining <= 2 ? "danger" : "amber", `${yellows} element${yellows === 1 ? "o" : "i"} fuori posizione`);
+        } else {
+            soundFX.check();
+            setEyeState(remaining <= 2 ? "danger" : "cyan", `Nessuna corrispondenza • ${remaining} tentativi`);
+        }
+
+        renderBoard();
+        updateSubmitButton();
+    }
+
+    function computeScore(won) {
+        if (!won) return 0;
+        const cfg = MODE_CONFIG[game.modeKey];
+        const baseScore = 400;
+        const attemptsLeftBonus = (MAX_ATTEMPTS - game.attempts.length + 1) * 250;
+        const speedBonus = Math.max(150, 900 - game.elapsed * 4);
+        return Math.round((baseScore + attemptsLeftBonus + speedBonus) * cfg.mult);
+    }
+
+    function concludeGame(won) {
+        game.active = false;
+        clearInterval(game.timerId);
+        game.elapsed = Math.floor((Date.now() - game.startTime) / 1000);
+        $("hud-timer").textContent = formatDuration(game.elapsed);
+
+        renderBoard();
+
+        const cfg = MODE_CONFIG[game.modeKey];
+        const score = computeScore(won);
+        const username = getUsername();
+        const solText = cfg.type === "color"
+            ? game.secret.map(id => COLOR_PALETTE[id].name).join(" • ")
+            : game.secret.join("");
+
+        const entry = {
+            id: Date.now(),
+            username,
+            date: new Date().toLocaleString("it-IT", {
+                day: "2-digit", month: "2-digit", year: "2-digit",
+                hour: "2-digit", minute: "2-digit"
+            }),
+            mode: cfg.label,
+            won,
+            attempts: game.attempts.length,
+            elapsed: game.elapsed,
+            score,
+            solution: solText
+        };
+
+        store.history.unshift(entry);
+        if (store.history.length > 100) store.history.length = 100;
+
+        let newRecord = false;
+        if (won && score > (store.records[game.modeKey] || 0)) {
+            store.records[game.modeKey] = score;
+            newRecord = true;
+        }
+        savePersistentData(store);
+        refreshMenuUI();
+
+        if (won && window.pushScoreToCloud) {
+            window.pushScoreToCloud(entry);
+        }
+
+        if (won) {
+            soundFX.win();
+            setEyeState("green", newRecord ? "Nuovo Record Cosmico!" : "Sequenza Decifrata!");
+            $("end-title").textContent = newRecord ? "🏆 Nuovo Record!" : "✨ Sequenza Decifrata!";
+            $("end-desc").textContent = `Ottimo lavoro ${username}, enigma risolto in ${game.attempts.length} tentativ${game.attempts.length === 1 ? "o" : "i"} e ${formatDuration(game.elapsed)}.`;
+        } else {
+            soundFX.lose();
+            setEyeState("danger", "Tentativi esauriti");
+            $("end-title").textContent = "⚠️ Connessione Interrotta";
+            $("end-desc").textContent = "Hai esaurito i 7 tentativi. Questa era la combinazione scelta dall'Occhio:";
+        }
+
+        const strip = $("end-solution");
+        strip.innerHTML = "";
+        game.secret.forEach(item => {
+            const box = document.createElement("div");
+            box.className = "slot-box status-green";
+            if (cfg.type === "color") {
+                const c = COLOR_PALETTE[item];
+                box.style.backgroundColor = c.bg;
+                box.style.color = c.fg;
+                box.textContent = c.sym;
+            } else {
+                box.style.backgroundColor = "var(--emerald-bg)";
+                box.style.color = "var(--emerald-glow)";
+                box.textContent = item;
+            }
+            strip.appendChild(box);
+        });
+
+        $("end-stats").innerHTML = `
+            <div class="stat-box"><div class="stat-num">${score.toLocaleString("it-IT")}</div><div class="stat-lbl">Punteggio</div></div>
+            <div class="stat-box"><div class="stat-num">${game.attempts.length}/${MAX_ATTEMPTS}</div><div class="stat-lbl">Tentativi</div></div>
+            <div class="stat-box"><div class="stat-num">${formatDuration(game.elapsed)}</div><div class="stat-lbl">Tempo</div></div>
+        `;
+
+        setTimeout(() => $("end-modal").classList.remove("hidden"), 380);
+    }
+
+    /* ==========================================================================
+       9. RENDERING BOARD E PANNELLI INPUT
+       ========================================================================== */
+    function renderBoard() {
+        const board = $("board-panel");
+        const cfg = MODE_CONFIG[game.modeKey];
+        board.innerHTML = "";
+
+        for (let r = 0; r < MAX_ATTEMPTS; r++) {
+            const row = document.createElement("div");
+            const isPast = r < game.attempts.length;
+            const isCurrent = r === game.attempts.length && game.active;
+            const isFuture = !isPast && !isCurrent;
+
+            row.className = "attempt-row" + (isCurrent ? " active" : "") + (isFuture ? " future" : "");
+
+            const idxSpan = document.createElement("span");
+            idxSpan.className = "row-index";
+            idxSpan.textContent = r + 1;
+            row.appendChild(idxSpan);
+
+            const slotsWrap = document.createElement("div");
+            slotsWrap.className = "slots-container";
+
+            for (let c = 0; c < cfg.len; c++) {
+                const slot = document.createElement("div");
+                slot.className = "slot-box";
+
+                if (isPast) {
+                    const att = game.attempts[r];
+                    const val = att.guess[c];
+                    const st = att.statuses[c];
+                    slot.classList.add(`status-${st}`);
+
+                    if (cfg.type === "color") {
+                        const col = COLOR_PALETTE[val];
+                        slot.style.backgroundColor = col.bg;
+                        slot.style.color = col.fg;
+                        slot.textContent = col.sym;
+                    } else {
+                        slot.textContent = val;
+                        if (st === "green") {
+                            slot.style.backgroundColor = "var(--emerald-bg)";
+                            slot.style.color = "var(--emerald-glow)";
+                        } else if (st === "yellow") {
+                            slot.style.backgroundColor = "var(--amber-bg)";
+                            slot.style.color = "var(--amber-glow)";
+                        }
+                    }
+
+                    if (st === "green" || st === "yellow") {
+                        const badge = document.createElement("span");
+                        badge.className = `slot-badge ${st}`;
+                        badge.textContent = st === "green" ? "✓" : "~";
+                        slot.appendChild(badge);
+                    }
+                } else if (isCurrent) {
+                    const isLocked = game.locked[c] !== null;
+                    const val = game.current[c];
+
+                    if (isLocked) {
+                        slot.classList.add("status-green");
+                        if (cfg.type === "color") {
+                            const col = COLOR_PALETTE[val];
+                            slot.style.backgroundColor = col.bg;
+                            slot.style.color = col.fg;
+                            slot.textContent = col.sym;
+                        } else {
+                            slot.style.backgroundColor = "var(--emerald-bg)";
+                            slot.style.color = "var(--emerald-glow)";
+                            slot.textContent = val;
+                        }
+                        const badge = document.createElement("span");
+                        badge.className = "slot-badge green";
+                        badge.textContent = "🔒";
+                        slot.appendChild(badge);
+                    } else {
+                        slot.classList.add("selectable");
+                        if (c === game.cursor) slot.classList.add("selected");
+
+                        if (val !== null) {
+                            if (cfg.type === "color") {
+                                const col = COLOR_PALETTE[val];
+                                slot.style.backgroundColor = col.bg;
+                                slot.style.color = col.fg;
+                                slot.textContent = col.sym;
+                            } else {
+                                slot.textContent = val;
+                            }
+                        }
+
+                        slot.addEventListener("click", () => {
+                            soundFX.click();
+                            game.cursor = c;
+                            renderBoard();
+                        });
+                    }
+                }
+
+                slotsWrap.appendChild(slot);
+            }
+            row.appendChild(slotsWrap);
+
+            const leds = document.createElement("div");
+            leds.className = "row-leds";
+            if (isPast) {
+                const att = game.attempts[r];
+                leds.innerHTML = `
+                    <span class="led-pill green" title="Posizione ed elemento esatti">● ${att.greens}</span>
+                    <span class="led-pill yellow" title="Elemento corretto ma ordine sbagliato">● ${att.yellows}</span>
+                `;
+            }
+            row.appendChild(leds);
+
+            board.appendChild(row);
+        }
+    }
+
+    function renderColorButtons(count) {
+        const grid = $("color-input-grid");
+        grid.innerHTML = "";
+        const is25 = count >= 25;
+        COLOR_PALETTE.slice(0, count).forEach(col => {
+            const btn = document.createElement("button");
+            btn.className = "color-btn" + (is25 ? " compact-25" : "");
+            btn.style.backgroundColor = col.bg;
+            btn.style.color = col.fg;
+            btn.innerHTML = `
+                <span class="color-symbol" style="color:${col.fg};">${col.sym}</span>
+                <span class="color-name" style="color:${col.fg};">${col.name}</span>
+            `;
+            btn.addEventListener("click", () => onSelectInput(col.id));
+            grid.appendChild(btn);
+        });
+    }
+
+    function renderQwertyKeyboard() {
+        const container = $("qwerty-input-grid");
+        container.innerHTML = "";
+        const layout = [
+            ["Q","W","E","R","T","Y","U","I","O","P"],
+            ["A","S","D","F","G","H","J","K","L"],
+            ["Z","X","C","V","B","N","M"]
+        ];
+        layout.forEach(rowLetters => {
+            const rowDiv = document.createElement("div");
+            rowDiv.className = "qwerty-row";
+            rowLetters.forEach(ch => {
+                const btn = document.createElement("button");
+                btn.className = "key-btn";
+                const st = game.keyStates[ch];
+                if (st) btn.classList.add(`key-${st}`);
+                btn.textContent = ch;
+                btn.addEventListener("click", () => onSelectInput(ch));
+                rowDiv.appendChild(btn);
+            });
+            container.appendChild(rowDiv);
+        });
+    }
+
+    /* ==========================================================================
+       10. CLASSIFICA GLOBALE, STORICO PUNTEGGI & EVENTI GLOBALI
+       ========================================================================== */
+    window.renderLeaderboardList = function() {
+        const list = $("leaderboard-list");
+        const cloudData = window.cachedCloudLeaderboard || [];
+        const localWins = store.history.filter(h => h.won).map(h => ({
+            username: h.username || store.username || "Viaggiatore",
+            mode: h.mode,
+            score: h.score,
+            attempts: h.attempts,
+            seconds: h.elapsed
+        }));
+
+        const source = cloudData.length > 0 ? cloudData : localWins;
+        const filtered = game.lbFilter === "ALL"
+            ? source
+            : source.filter(item => item.mode === game.lbFilter);
+
+        if (filtered.length === 0) {
+            list.innerHTML = `<div style="text-align:center; padding:18px; font-size:0.78rem; color:var(--text-muted);">Nessun punteggio registrato in questa categoria.</div>`;
+            return;
+        }
+
+        list.innerHTML = "";
+        filtered.slice(0, 30).forEach((item, idx) => {
+            const card = document.createElement("div");
+            card.className = "history-card win";
+            const rankCls = idx === 0 ? "r1" : idx === 1 ? "r2" : idx === 2 ? "r3" : "";
+            card.innerHTML = `
+                <div style="display:flex; align-items:center; gap:9px;">
+                    <span class="rank-pill ${rankCls}">${idx + 1}</span>
+                    <div style="display:flex; flex-direction:column; gap:2px;">
+                        <strong style="color:var(--text-main);">${escapeHtml(item.username || "Anonimo")}</strong>
+                        <span style="color:var(--text-muted); font-size:0.68rem;">${escapeHtml(item.mode)} • ${item.attempts}/${MAX_ATTEMPTS} tent. • ${formatDuration(item.seconds || 0)}</span>
+                    </div>
+                </div>
+                <div style="font-family:var(--font-mono); font-weight:800; font-size:0.9rem; color:var(--emerald-glow);">${Number(item.score || 0).toLocaleString("it-IT")} pt</div>
+            `;
+            list.appendChild(card);
+        });
+    };
+
+    function openLeaderboardModal() {
+        soundFX.click();
+        if (window.refreshLeaderboardData) window.refreshLeaderboardData();
+        window.renderLeaderboardList();
+        $("leaderboard-modal").classList.remove("hidden");
+    }
+
+    document.querySelectorAll("#lb-tabs .filter-tab").forEach(tab => {
+        tab.addEventListener("click", () => {
+            soundFX.click();
+            document.querySelectorAll("#lb-tabs .filter-tab").forEach(t => t.classList.remove("active"));
+            tab.classList.add("active");
+            game.lbFilter = tab.dataset.filter;
+            window.renderLeaderboardList();
+        });
+    });
+
+    function openHistoryModal() {
+        soundFX.click();
+        const total = store.history.length;
+        const wins = store.history.filter(h => h.won).length;
+        const rate = total ? Math.round((wins / total) * 100) : 0;
+
+        $("history-summary").innerHTML = `
+            <div class="stat-box"><div class="stat-num">${getGlobalBestScore().toLocaleString("it-IT")}</div><div class="stat-lbl">Record Max</div></div>
+            <div class="stat-box"><div class="stat-num">${wins}/${total}</div><div class="stat-lbl">Vittorie</div></div>
+            <div class="stat-box"><div class="stat-num">${rate}%</div><div class="stat-lbl">Successo</div></div>
+        `;
+
+        const list = $("history-list");
+        list.innerHTML = "";
+        if (total === 0) {
+            list.innerHTML = `<div style="text-align:center; padding:18px; font-size:0.78rem; color:var(--text-muted);">Nessuna partita registrata. Gioca una sfida per salvarla in automatico!</div>`;
+        } else {
+            store.history.forEach(item => {
+                const card = document.createElement("div");
+                card.className = `history-card ${item.won ? "win" : "loss"}`;
+                card.innerHTML = `
+                    <div style="display:flex; flex-direction:column; gap:2px;">
+                        <strong style="color:var(--text-main);">${item.won ? "✅" : "❌"} ${escapeHtml(item.mode)}</strong>
+                        <span style="color:var(--text-muted); font-size:0.68rem;">${escapeHtml(item.date)} • ${item.attempts}/${MAX_ATTEMPTS} tent. • ${formatDuration(item.elapsed)}</span>
+                        <span style="color:var(--cyan-glow); font-size:0.68rem;">Soluzione: ${escapeHtml(item.solution)}</span>
+                    </div>
+                    <div style="font-family:var(--font-mono); font-weight:800; font-size:0.9rem; color:var(--emerald-glow);">${item.score.toLocaleString("it-IT")} pt</div>
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        $("history-modal").classList.remove("hidden");
+    }
+
+    function returnHome() {
+        soundFX.click();
+        game.active = false;
+        clearInterval(game.timerId);
+        $("game-screen").classList.add("hidden");
+        $("menu-screen").classList.remove("hidden");
+        $("btn-home").classList.add("hidden");
+        setEyeState("cyan", "Scegli una sfida neurale");
+    }
+
+    $("btn-clear").addEventListener("click", onClearSlot);
+    $("btn-submit").addEventListener("click", onSubmitAttempt);
+
+    $("btn-home").addEventListener("click", returnHome);
+    $("brand-home").addEventListener("click", () => {
+        if (!$("game-screen").classList.contains("hidden")) returnHome();
+    });
+
+    $("btn-sound").addEventListener("click", () => {
+        store.sound = !store.sound;
+        savePersistentData(store);
+        refreshMenuUI();
+        if (store.sound) soundFX.click();
+    });
+
+    $("btn-leaderboard").addEventListener("click", openLeaderboardModal);
+    $("btn-close-lb").addEventListener("click", () => $("leaderboard-modal").classList.add("hidden"));
+
+    $("btn-history").addEventListener("click", openHistoryModal);
+    $("btn-close-history").addEventListener("click", () => $("history-modal").classList.add("hidden"));
+    $("btn-close-end").addEventListener("click", () => $("end-modal").classList.add("hidden"));
+
+    $("btn-end-lb").addEventListener("click", () => {
+        $("end-modal").classList.add("hidden");
+        openLeaderboardModal();
+    });
+
+    $("btn-replay").addEventListener("click", () => {
+        $("end-modal").classList.add("hidden");
+        startNewGame(game.modeKey);
+    });
+
+    $("btn-export").addEventListener("click", () => {
+        const blob = new Blob([JSON.stringify(store, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `occhio_del_cosmo_storico_${new Date().toISOString().slice(0, 10)}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast("Backup storico esportato!");
+    });
+
+    $("btn-reset-history").addEventListener("click", () => {
+        soundFX.click();
+        $("confirm-reset-modal").classList.remove("hidden");
+    });
+
+    $("btn-cancel-reset").addEventListener("click", () => $("confirm-reset-modal").classList.add("hidden"));
+    $("btn-cancel-reset-x").addEventListener("click", () => $("confirm-reset-modal").classList.add("hidden"));
+
+    $("btn-confirm-reset").addEventListener("click", () => {
+        store.records = { "color-easy": 0, "color-medium": 0, "color-hard": 0, "word": 0 };
+        store.history = [];
+        savePersistentData(store);
+        refreshMenuUI();
+        $("confirm-reset-modal").classList.add("hidden");
+        openHistoryModal();
+        showToast("Storico azzerato.");
+    });
+
+    // Supporto tastiera fisica su computer
+    window.addEventListener("keydown", e => {
+        if (!game.active) return;
+        const cfg = MODE_CONFIG[game.modeKey];
+        if (e.key === "Backspace" || e.key === "Delete") {
+            e.preventDefault();
+            onClearSlot();
+        } else if (e.key === "Enter") {
+            e.preventDefault();
+            if (!$("btn-submit").disabled) onSubmitAttempt();
+        } else if (cfg.type === "word" && /^[a-zA-Z]$/.test(e.key)) {
+            e.preventDefault();
+            onSelectInput(e.key.toUpperCase());
+        }
+    });
+
+    // Inizializzazione
+    refreshMenuUI();
+})();
+</script>
+</body>
+</html>
