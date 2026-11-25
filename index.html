@@ -1214,7 +1214,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
     import { initializeAppCheck, ReCaptchaEnterpriseProvider } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app-check.js";
     import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
-    import { getFirestore, collection, addDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocsFromServer, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
     const CUSTOM_FIREBASE_CONFIG = {
         apiKey: "AIzaSyDctdxiEzKSMrxaBLIWmwtgam4OLsung6I",
@@ -1229,39 +1229,52 @@
     let currentUser = null;
     const COLLECTION_PATH = ["artifacts", "occhio-del-cosmo-prod", "public", "data", "leaderboard"];
 
+    window.cloudLeaderboardState = { status: "loading", error: "", saveMessage: "" };
+
+    function cloudError(err) {
+        return [err?.code, err?.message].filter(Boolean).join(": ") || String(err);
+    }
+
+    function updateCloudStatus(status, error = "") {
+        window.cloudLeaderboardState.status = status;
+        window.cloudLeaderboardState.error = error;
+        document.getElementById("sync-dot").classList.toggle("online", status === "ready");
+        document.getElementById("sync-text").textContent = status === "ready"
+            ? "Classifica Online Attiva" : status === "loading"
+            ? "Connessione..." : "Classifica online non disponibile";
+        window.renderLeaderboardList?.();
+    }
+
     async function initCloud() {
-        const dot = document.getElementById("sync-dot");
-        const txt = document.getElementById("sync-text");
         try {
             const app = initializeApp(CUSTOM_FIREBASE_CONFIG);
-
-            // Firebase App Check: protezione delle richieste tramite reCAPTCHA Enterprise.
             initializeAppCheck(app, {
                 provider: new ReCaptchaEnterpriseProvider("6LdxszAuAAAAACzrTxzrhWNM6yL7Q-eruYyGrFDq"),
                 isTokenAutoRefreshEnabled: true
             });
-
             const auth = getAuth(app);
             db = getFirestore(app);
-
             onAuthStateChanged(auth, (user) => {
-                if (user) {
-                    currentUser = user;
-                    dot.classList.add("online");
-                    txt.textContent = "Classifica Online Attiva";
-                    window.refreshLeaderboardData();
-                }
+                currentUser = user;
+                if (user) window.refreshLeaderboardData();
             });
-
-            await signInAnonymously(auth);
+            await auth.authStateReady();
+            if (!auth.currentUser) await signInAnonymously(auth);
         } catch (err) {
-            console.warn("Firebase offline:", err);
-            txt.textContent = "Modalità Locale Offline";
+            console.error("Errore inizializzazione Firebase:", err);
+            updateCloudStatus("error", "Autenticazione/inizializzazione: " + cloudError(err));
         }
     }
 
     window.pushScoreToCloud = async function(entry) {
-        if (!db || !currentUser) return;
+        const state = window.cloudLeaderboardState;
+        if (!db || !currentUser) {
+            state.saveMessage = "Punteggio salvato solo in locale: autenticazione non disponibile.";
+            window.renderLeaderboardList?.();
+            return;
+        }
+        state.saveMessage = "Invio punteggio in corso...";
+        window.renderLeaderboardList?.();
         try {
             await addDoc(collection(db, ...COLLECTION_PATH), {
                 uid: currentUser.uid,
@@ -1272,24 +1285,38 @@
                 seconds: entry.elapsed,
                 createdAt: serverTimestamp()
             });
-            window.refreshLeaderboardData();
+            state.saveMessage = "Punteggio registrato su Firebase.";
+            await window.refreshLeaderboardData();
         } catch (e) {
             console.error("Errore salvataggio punteggio:", e);
+            state.saveMessage = "Punteggio salvato solo in locale. Errore invio: " + cloudError(e);
+            window.renderLeaderboardList?.();
         }
     };
 
-    window.refreshLeaderboardData = async function() {
-        if (!db || !currentUser) return;
-        try {
-            const snap = await getDocs(collection(db, ...COLLECTION_PATH));
-            const items = [];
-            snap.forEach((doc) => items.push(doc.data()));
-            items.sort((a, b) => b.score - a.score || a.attempts - b.attempts || a.seconds - b.seconds);
-            window.cachedCloudLeaderboard = items;
-            if (window.renderLeaderboardList) window.renderLeaderboardList();
-        } catch (e) {
-            console.error("Errore lettura classifica:", e);
-        }
+    let pendingRead = null;
+    window.refreshLeaderboardData = function() {
+        if (!db || !currentUser) return Promise.resolve();
+        if (pendingRead) return pendingRead;
+        updateCloudStatus("loading");
+        pendingRead = (async () => {
+            try {
+                const snap = await getDocsFromServer(collection(db, ...COLLECTION_PATH));
+                const items = [];
+                snap.forEach((doc) => {
+                    if (!doc.metadata.hasPendingWrites) items.push(doc.data());
+                });
+                items.sort((a, b) => b.score - a.score || a.attempts - b.attempts || a.seconds - b.seconds);
+                window.cachedCloudLeaderboard = items;
+                updateCloudStatus("ready");
+            } catch (e) {
+                console.error("Errore lettura classifica:", e);
+                updateCloudStatus("error", "Lettura Firestore: " + cloudError(e));
+            } finally {
+                pendingRead = null;
+            }
+        })();
+        return pendingRead;
     };
 
     initCloud();
@@ -2183,26 +2210,27 @@
        ========================================================================== */
     window.renderLeaderboardList = function() {
         const list = $("leaderboard-list");
-        const cloudData = window.cachedCloudLeaderboard || [];
-        const localWins = store.history.filter(h => h.won).map(h => ({
-            username: h.username || store.username || "Viaggiatore",
-            mode: h.mode,
-            score: h.score,
-            attempts: h.attempts,
-            seconds: h.elapsed
-        }));
-
-        const source = cloudData.length > 0 ? cloudData : localWins;
+        const state = window.cloudLeaderboardState || { status: "loading", error: "", saveMessage: "" };
+        list.innerHTML = "";
+        function message(value) {
+            const el = document.createElement("div");
+            el.style.cssText = "text-align:center;padding:12px;font-size:0.78rem;color:var(--text-muted);overflow-wrap:anywhere;";
+            el.textContent = value;
+            list.appendChild(el);
+        }
+        if (state.saveMessage) message(state.saveMessage);
+        if (state.status !== "ready") {
+            message(state.status === "loading" ? "Caricamento classifica dal server..." : "Classifica globale non disponibile. " + state.error);
+            return;
+        }
+        const source = window.cachedCloudLeaderboard || [];
         const filtered = game.lbFilter === "ALL"
             ? source
             : source.filter(item => item.mode === game.lbFilter);
-
         if (filtered.length === 0) {
-            list.innerHTML = `<div style="text-align:center; padding:18px; font-size:0.78rem; color:var(--text-muted);">Nessun punteggio registrato in questa categoria.</div>`;
+            message("Nessun punteggio online registrato in questa categoria.");
             return;
         }
-
-        list.innerHTML = "";
         filtered.slice(0, 30).forEach((item, idx) => {
             const card = document.createElement("div");
             card.className = "history-card win";
@@ -2212,7 +2240,7 @@
                     <span class="rank-pill ${rankCls}">${idx + 1}</span>
                     <div style="display:flex; flex-direction:column; gap:2px;">
                         <strong style="color:var(--text-main);">${escapeHtml(item.username || "Anonimo")}</strong>
-                        <span style="color:var(--text-muted); font-size:0.68rem;">${escapeHtml(item.mode)} • ${item.attempts}/${MAX_ATTEMPTS} tent. • ${formatDuration(item.seconds || 0)}</span>
+                        <span style="color:var(--text-muted); font-size:0.68rem;">${escapeHtml(item.mode)} • ${Number(item.attempts)}/${MAX_ATTEMPTS} tent. • ${formatDuration(item.seconds || 0)}</span>
                     </div>
                 </div>
                 <div style="font-family:var(--font-mono); font-weight:800; font-size:0.9rem; color:var(--emerald-glow);">${Number(item.score || 0).toLocaleString("it-IT")} pt</div>
