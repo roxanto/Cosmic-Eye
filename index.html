@@ -1078,9 +1078,22 @@ body {--identity-bottom:0px;--chrome-bottom:0px;}
 .room-directory {padding:10px;border:1px solid var(--panel-border);border-radius:12px;background:#0a1225;}
 .room-directory-head {display:flex;justify-content:space-between;align-items:center;gap:8px;}
 .room-directory-head .section-label {margin:0;}
+.room-entry-controls {padding:4px 0;}
+.room-entry-intro {margin:0;color:var(--text-muted);line-height:1.5;font-size:.88rem;overflow-wrap:anywhere;}
+.room-entry-intro::before {content:'Come si gioca';display:block;color:var(--cyan-glow);font-size:.72rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px;}
+.game-guide {border:1px solid var(--panel-border);border-radius:11px;padding:8px 11px;color:var(--text-muted);font-size:.78rem;line-height:1.45;background:#0b1428;min-width:0;}
+.game-guide summary {color:var(--cyan-glow);font-weight:750;cursor:pointer;}
+.game-guide p {margin:7px 0 0;}
+.game-intro {grid-area:intro;padding:9px 12px;color:var(--text-muted);font-size:.78rem;line-height:1.45;min-width:0;}
+.game-intro strong {color:var(--cyan-glow);}
+@media (min-width:720px) { .game-screen>.game-intro {grid-area:intro;} }
+.room-entry-controls>.mp-actions {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+.room-entry-controls>.mp-actions .action-btn,.room-entry-controls>.mp-actions .icon-btn {width:100%;min-height:56px;font-size:1rem;justify-content:center;}
+.room-entry-form {padding:12px;border:1px solid var(--panel-border);border-radius:12px;background:rgba(10,18,37,.78);}
 [id$="-directory-list"] {max-height:240px;overflow-y:auto;overscroll-behavior:contain;}
 .directory-row {flex-shrink:0;}
 .modal-box input,.modal-box select,.modal-box textarea {min-width:0;}
+@media (max-width:719px){.room-entry-controls>.mp-actions{grid-template-columns:1fr;}.room-entry-controls>.mp-actions .action-btn,.room-entry-controls>.mp-actions .icon-btn{min-height:48px;}}
 body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
 /* Tablet and desktop: broad dashboard, compact persistent header, two columns for play. */
 @media (min-width:720px) {
@@ -1103,7 +1116,7 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
  #multi-modes>.section-label,#multi-modes>.rules-box {grid-column:1/-1;}
  #multi-modes .mode-card {height:100%;min-height:85px;}
  .mode-title {font-size:1rem;}.mode-desc {font-size:.8rem;}
- .game-screen {display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);grid-template-areas:'hud hud' 'board side';align-items:start;gap:14px;}
+ .game-screen {display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);grid-template-areas:'hud hud' 'intro intro' 'board side';align-items:start;gap:14px;}
  .game-screen>.hud-bar {grid-area:hud;}
  #board-panel {grid-area:board;max-height:calc(100dvh - var(--chrome-bottom) - 86px);min-height:180px;}
  .game-side {grid-area:side;position:sticky;top:calc(var(--chrome-bottom) + 8px);}
@@ -1161,6 +1174,101 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
 }
 @media(prefers-reduced-motion:reduce) {.eye-ring-spin,.eye-ring-spin-rev {animation:none;}}
 
+
+/* Compact, transparent cosmic dashboard. The eye lives inside the main bar. */
+.app-chrome,.identity-bar,.top-bar,.eye-stage,.menu-controls,.menu-screen {
+ background:transparent; border:0; box-shadow:none; backdrop-filter:none; -webkit-backdrop-filter:none;
+}
+.app-chrome {gap:8px;padding:6px 0 4px;border-radius:0 0 12px 12px;}
+/* A readable sticky strip only when content actually scrolls behind it. */
+.app-chrome.is-scrolled {background:rgba(7,13,27,.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}
+.identity-bar {grid-template-columns:minmax(0,1fr);gap:0;}
+.top-bar {display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:8px;min-height:0;padding:4px 10px;}
+.brand-group {justify-self:start;max-width:100%;overflow-wrap:anywhere;}
+.header-actions {justify-self:end;justify-content:flex-end;max-width:100%;flex-wrap:wrap;}
+.eye-stage {display:flex;flex-direction:column;justify-content:center;align-items:center;gap:3px;padding:0;min-height:0;min-width:0;}
+.eye-wrapper {width:92px;height:50px;margin:0;}
+.eye-status-pill {margin:0;padding:3px 9px;font-size:.68rem;max-width:100%;line-height:1.2;}
+.menu-controls,.menu-screen {padding-left:10px;padding-right:10px;}
+@media(min-width:720px) {
+ .top-bar {padding:4px 14px;gap:12px;}
+ .eye-wrapper {width:108px;height:59px;}
+ .eye-status-pill {font-size:.75rem;}
+ .menu-controls,.menu-screen {padding-left:14px;padding-right:14px;}
+ .menu-screen {padding-top:10px;}
+}
+@media(max-width:719px) {
+ .top-bar {grid-template-columns:minmax(0,1fr) 62px minmax(0,1fr);gap:4px 6px;padding:4px 3px;}
+ .eye-stage {display:contents;}
+ .brand-group {grid-column:1;grid-row:1;}
+ .eye-wrapper {grid-column:2;grid-row:1;width:62px;height:34px;justify-self:center;}
+ .header-actions {grid-column:3;grid-row:1;gap:3px;}
+ .header-actions .icon-btn {min-width:27px;height:30px;padding:0 4px;font-size:.69rem;}
+ .eye-status-pill {grid-column:1/-1;grid-row:2;justify-self:center;font-size:.64rem;}
+ .brand-title {font-size:clamp(.78rem,3.1vw,1rem);}
+ .brand-subtitle {font-size:clamp(.49rem,1.8vw,.65rem);}
+ .menu-controls,.menu-screen {padding-left:3px;padding-right:3px;}
+}
+@media(max-width:360px) {
+ .top-bar {grid-template-columns:minmax(0,1fr) 48px minmax(0,1fr);gap:4px;}
+ .eye-wrapper {width:48px;height:27px;}
+ .header-actions .icon-btn {min-width:25px;padding:0 3px;}
+}
+@media(max-height:520px) and (orientation:landscape) and (min-width:720px) {
+ .app-chrome {padding-top:2px;gap:3px;}
+ .top-bar {padding:2px 8px;}
+ .eye-stage {flex-direction:column;gap:2px;}
+ .eye-wrapper {width:65px;height:36px;}
+ .eye-status-pill {font-size:.63rem;}
+ .menu-controls,.menu-screen {padding-left:8px;padding-right:8px;}
+}
+
+
+/* Game cards: keep facts separate; stack them on compact cards. */
+.mode-card > div {flex:1 1 0;min-width:0;container-type:inline-size;container-name:game-card-info;}
+.mode-card > .mult-badge {flex:0 0 auto;}
+.mode-card .mode-info {display:flex;flex-wrap:wrap;align-items:baseline;gap:3px 12px;margin-top:5px;line-height:1.35;overflow-wrap:normal;}
+.mode-info-item {display:block;min-width:0;max-width:100%;white-space:normal;overflow-wrap:normal;}
+.mode-info-meta {white-space:nowrap;}
+@container game-card-info (max-width: 340px) {
+ .mode-card .mode-info {flex-direction:column;align-items:flex-start;gap:2px;}
+}
+
+
+/* Unified multiplayer entry: directory left, controls and forms right. */
+:is(#mp-entry,#cc-entry,#party-entry,#bg-entry) > .room-directory,
+:is(#mp-entry,#cc-entry,#party-entry,#bg-entry) > .room-entry-controls {min-width:0;min-height:0;}
+.room-directory {display:flex;flex-direction:column;gap:9px;}
+.room-directory > :not([id$="-directory-list"]) {flex-shrink:0;}
+.room-directory > [id$="-directory-list"] {min-height:0;flex:1 1 auto;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;}
+.room-entry-controls > .mp-actions {grid-template-columns:repeat(2,minmax(0,1fr));flex-shrink:0;gap:10px;}
+.room-entry-controls > .mp-actions > .btn-submit {min-width:0;min-height:48px;padding:8px 10px;white-space:normal;}
+.room-entry-controls > .room-entry-form {flex-shrink:0;width:100%;margin:0;}
+.room-entry-controls > .room-entry-intro {flex-shrink:0;}
+.directory-row > div:first-child {min-width:0;overflow-wrap:anywhere;}
+.directory-row > button {flex-shrink:0;}
+@media(min-width:720px) {
+ .modal-box:has(> :is(#mp-entry,#cc-entry,#party-entry,#bg-entry):not(.hidden)) {
+   max-width:1040px;max-height:calc(100dvh - var(--identity-bottom) - 30px);overflow:hidden;
+ }
+ .modal-box:has(> :is(#mp-entry,#cc-entry,#party-entry,#bg-entry):not(.hidden) .room-entry-form:not(.hidden)) {
+   height:min(720px,calc(100dvh - var(--identity-bottom) - 30px));
+ }
+ :is(#mp-entry,#cc-entry,#party-entry,#bg-entry):not(.hidden) {
+   flex:1 1 auto;min-height:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:stretch;
+ }
+ :is(#mp-entry,#cc-entry,#party-entry,#bg-entry) > .room-directory {max-height:100%;align-self:stretch;overflow:hidden;}
+ :is(#mp-entry,#cc-entry,#party-entry,#bg-entry) > .room-entry-controls {
+   align-self:stretch;max-height:100%;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;padding:4px 4px 4px 0;
+ }
+ .room-directory > [id$="-directory-list"] {max-height:440px;}
+ .modal-box:has(> :is(#mp-entry,#cc-entry,#party-entry,#bg-entry):not(.hidden) .room-entry-form:not(.hidden)) .room-directory > [id$="-directory-list"] {max-height:none;}
+}
+@media(max-width:719px) {
+ :is(#mp-entry,#cc-entry,#party-entry,#bg-entry) > .room-directory > [id$="-directory-list"] {max-height:min(28dvh,240px);}
+ .room-entry-controls > .mp-actions > .btn-submit {font-size:.78rem;min-height:44px;padding:6px;}
+}
+
 </style>
 </head>
 <body>
@@ -1177,22 +1285,8 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
             <span class="brand-title">Cosmic Eye</span>
             <span class="brand-subtitle">L’occhio delle sfide</span>
         </div>
-        <div class="header-actions">
-            <button id="btn-leaderboard" class="icon-btn" title="Classifica Globale">🌐</button>
-            <button id="btn-history" class="icon-btn" title="Archivio Storico Punteggi">🏆 <span id="top-best-score">0</span></button>
-            <button id="btn-sound" class="icon-btn" title="Audio">🔊</button>
-            <button id="btn-home" class="icon-btn hidden" title="Torna alla Home" aria-label="Torna alla Home">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 10.5L12 3l9 7.5"></path>
-                    <path d="M5 9.5V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.5"></path>
-                    <path d="M9 21v-7h6v7"></path>
-                </svg>
-            </button>
-        </div>
-    </header>
-
     <!-- COSMIC EYE STAGE -->
-    <section class="glass-panel eye-stage">
+    <div class="eye-stage">
         <div class="eye-wrapper" id="eye-wrapper" title="Cosmic Eye ti osserva">
             <svg class="eye-svg" viewBox="0 0 220 120">
                 <defs>
@@ -1229,7 +1323,22 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
             </svg>
         </div>
         <div class="eye-status-pill" id="eye-status">Mens sana in corpore sano</div>
-    </section>
+    </div>
+        <div class="header-actions">
+            <button id="btn-leaderboard" class="icon-btn" title="Classifica Globale">🌐</button>
+            <button id="btn-history" class="icon-btn" title="Archivio Storico Punteggi">🏆 <span id="top-best-score">0</span></button>
+            <button id="btn-sound" class="icon-btn" title="Audio">🔊</button>
+            <button id="btn-home" class="icon-btn hidden" title="Torna alla Home" aria-label="Torna alla Home">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 10.5L12 3l9 7.5"></path>
+                    <path d="M5 9.5V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.5"></path>
+                    <path d="M9 21v-7h6v7"></path>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+
 
     </div>
     <div class="menu-controls glass-panel" id="menu-controls">
@@ -1259,21 +1368,21 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
                 <button class="mode-card" data-mode="color-easy">
                     <div>
                         <div class="mode-title">Colori - Facile</div>
-                        <div class="mode-desc">4 caselle · 15 colori</div>
+                        <div class="mode-desc mode-info"><span class="mode-info-item mode-info-meta">4 caselle</span><span class="mode-info-item mode-info-meta">15 colori</span></div>
                     </div>
                     <span class="mult-badge">1.0x</span>
                 </button>
                 <button class="mode-card" data-mode="color-medium">
                     <div>
                         <div class="mode-title">Colori - Medio</div>
-                        <div class="mode-desc">5 caselle · 20 colori</div>
+                        <div class="mode-desc mode-info"><span class="mode-info-item mode-info-meta">5 caselle</span><span class="mode-info-item mode-info-meta">20 colori</span></div>
                     </div>
                     <span class="mult-badge">1.5x</span>
                 </button>
                 <button class="mode-card" data-mode="color-hard">
                     <div>
                         <div class="mode-title">Colori - Difficile</div>
-                        <div class="mode-desc">6 caselle · 25 colori</div>
+                        <div class="mode-desc mode-info"><span class="mode-info-item mode-info-meta">6 caselle</span><span class="mode-info-item mode-info-meta">25 colori</span></div>
                     </div>
                     <span class="mult-badge">2.0x</span>
                 </button>
@@ -1286,7 +1395,7 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
                 <button class="mode-card word-card" data-mode="word">
                     <div>
                         <div class="mode-title">Parola Italiana - 6 Lettere</div>
-                        <div class="mode-desc">Dizionario italiano • Tastiera QWERTY</div>
+                        <div class="mode-desc mode-info"><span class="mode-info-item">Dizionario italiano</span><span class="mode-info-item">Tastiera QWERTY</span></div>
                     </div>
                     <span class="mult-badge">1.8x</span>
                 </button>
@@ -1304,14 +1413,14 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
         </div>
         <div id="multi-modes" class="menu-section hidden" role="tabpanel" aria-labelledby="menu-multi">
           <div class="section-label">◈ Sfide online · Stanze libere e protette</div>
-          <button id="mp-open" class="mode-card mp-card"><div><div class="mode-title">Duello Cromatico</div><div class="mode-desc">Stessa combinazione · Punteggi individuali · 2–16 giocatori</div></div><span class="mult-badge">VS</span></button>
-          <button id="cc-open" class="mode-card word-card"><div><div class="mode-title">Connessioni Cosmiche</div><div class="mode-desc">Indizi e parole · 2–4 squadre · 4–16 giocatori</div></div><span class="mult-badge">TEAM</span></button>
-          <button id="party-draw-open" class="mode-card party-card"><div><div class="mode-title">Tratti Stellari</div><div class="mode-desc">Disegna e indovina · 2–16 giocatori</div></div><span class="mult-badge">✎</span></button>
-          <button id="party-taboo-open" class="mode-card party-taboo"><div><div class="mode-title">Parole Proibite</div><div class="mode-desc">Indizi senza parole vietate · 2 squadre · 4–16 giocatori</div></div><span class="mult-badge">TEAM</span></button>
+          <button id="mp-open" class="mode-card mp-card"><div><div class="mode-title">Duello Cromatico</div><div class="mode-desc mode-info"><span class="mode-info-item">Stessa combinazione</span><span class="mode-info-item">Punteggi individuali</span><span class="mode-info-item mode-info-meta">2-16 giocatori</span></div></div><span class="mult-badge">VS</span></button>
+          <button id="cc-open" class="mode-card word-card"><div><div class="mode-title">Connessioni Cosmiche</div><div class="mode-desc mode-info"><span class="mode-info-item">Indizi e parole</span><span class="mode-info-item mode-info-meta">2-4 squadre</span><span class="mode-info-item mode-info-meta">4-16 giocatori</span></div></div><span class="mult-badge">TEAM</span></button>
+          <button id="party-draw-open" class="mode-card party-card"><div><div class="mode-title">Tratti Stellari</div><div class="mode-desc mode-info"><span class="mode-info-item">Disegna e indovina</span><span class="mode-info-item mode-info-meta">2-16 giocatori</span></div></div><span class="mult-badge">✎</span></button>
+          <button id="party-taboo-open" class="mode-card party-taboo"><div><div class="mode-title">Parole Proibite</div><div class="mode-desc mode-info"><span class="mode-info-item">Indizi senza parole vietate</span><span class="mode-info-item mode-info-meta">2 squadre</span><span class="mode-info-item mode-info-meta">4-16 giocatori</span></div></div><span class="mult-badge">TEAM</span></button>
           <div class="section-label" style="margin-top:8px">◈ Strategia da tavolo</div>
-          <button id="bg-tris-open" class="mode-card bg-card"><div><div class="mode-title">Tris Orbitale</div><div class="mode-desc">Tre simboli in fila · 2 giocatori</div></div><span class="mult-badge">3×3</span></button>
-          <button id="bg-four-open" class="mode-card bg-card"><div><div class="mode-title">Quattro Astrale</div><div class="mode-desc">Quattro pedine allineate · 2 giocatori</div></div><span class="mult-badge">7×6</span></button>
-          <button id="bg-naval-open" class="mode-card bg-card"><div><div class="mode-title">Flotte Cosmiche</div><div class="mode-desc">Battaglia navale tutti contro tutti · 2–4 giocatori</div></div><span class="mult-badge">8×8</span></button>
+          <button id="bg-tris-open" class="mode-card bg-card"><div><div class="mode-title">Tris Orbitale</div><div class="mode-desc mode-info"><span class="mode-info-item">Tre simboli in fila</span><span class="mode-info-item mode-info-meta">2 giocatori</span></div></div><span class="mult-badge">3×3</span></button>
+          <button id="bg-four-open" class="mode-card bg-card"><div><div class="mode-title">Quattro Astrale</div><div class="mode-desc mode-info"><span class="mode-info-item">Quattro pedine allineate</span><span class="mode-info-item mode-info-meta">2 giocatori</span></div></div><span class="mult-badge">7×6</span></button>
+          <button id="bg-naval-open" class="mode-card bg-card"><div><div class="mode-title">Flotte Cosmiche</div><div class="mode-desc mode-info"><span class="mode-info-item">Battaglia navale tutti contro tutti</span><span class="mode-info-item mode-info-meta">2-4 giocatori</span></div></div><span class="mult-badge">8×8</span></button>
           <div class="rules-box">Crea una stanza aperta o protetta da password, oppure entra in una stanza disponibile. I risultati multiplayer restano separati dai record personali.</div>
         </div>
     </main>
@@ -1334,6 +1443,7 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
             </div>
         </div>
 
+        <section class="glass-panel game-intro" aria-label="Come si gioca"><strong>Come si gioca: </strong><span id="game-intro-text"></span></section>
         <!-- BOARD 7 TENTATIVI -->
         <div class="glass-panel board-panel" id="board-panel"></div>
 
@@ -1435,14 +1545,14 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
 
 <div id="mp-modal" class="modal-backdrop hidden">
   <div class="glass-panel modal-box mp-modal-box">
-    <div class="modal-head"><span class="modal-title">🌐 Multiplayer</span><button id="mp-close" class="icon-btn">✕</button></div>
+    <div class="modal-head"><span class="modal-title">🌐 Duello Cromatico</span><button id="mp-close" class="icon-btn">✕</button></div>
     <div id="mp-message" class="mp-message" role="status" aria-live="polite"></div>
     <div id="mp-entry" class="mp-stack"><section class="room-directory mp-stack" aria-label="Stanze disponibili"><div class="room-directory-head"><div class="section-label">◈ Stanze aperte</div><button id="mp-directory-refresh" type="button" class="icon-btn" title="Aggiorna elenco">↻</button></div><p class="cc-muted">🔓 Libera · 🔒 Con password</p><div id="mp-directory-list" class="mp-stack" role="status" aria-live="polite"><p class="cc-muted">Caricamento…</p></div></section><div class="room-entry-controls mp-stack">
-      <div class="rules-box">Sfida tra esploratori. Tutti ricevono la stessa sequenza di colori. I risultati non confluiscono nella classifica single player.</div>
-      <div class="mp-actions"><button id="mp-show-create" class="action-btn btn-submit">Crea stanza</button><button id="mp-show-join" class="action-btn btn-clear">Unisciti</button></div>
-      <form id="mp-create" class="mp-stack hidden" autocomplete="off">
+      <p class="room-entry-intro">Tutti devono decifrare la stessa sequenza di colori, ma giocano sulla propria griglia. Le luci verdi indicano colori nella posizione giusta e le gialle quelli fuori posizione. Vince chi ottiene più punti, trovando la soluzione in meno tentativi e in meno tempo.</p>
+      <div class="mp-actions"><button id="mp-show-create" type="button" class="action-btn btn-submit">＋ Crea stanza</button><button id="mp-show-join" type="button" class="action-btn btn-submit">Unisciti</button></div>
+      <form id="mp-create" class="mp-stack hidden room-entry-form" autocomplete="off">
         <label>Nome stanza<input id="mp-name" class="profile-input" maxlength="30" value="Sfida cosmica" required></label>
-        <label>Password (vuota = accesso libero; altrimenti 8–64 caratteri)<input id="mp-password" class="profile-input" type="password" minlength="8" maxlength="64" autocomplete="new-password"></label>
+        <label>Password (vuota = accesso libero; altrimenti 8-64 caratteri)<input id="mp-password" class="profile-input" type="password" minlength="8" maxlength="64" autocomplete="new-password"></label>
         <div class="mp-fields">
           <label>Tentativi<select id="mp-attempts"></select></label><label>Colori<select id="mp-colors"></select></label>
           <label>Caselle<select id="mp-slots"></select></label><label>Giocatori max<select id="mp-capacity"></select></label>
@@ -1451,13 +1561,13 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
         <label class="mp-check"><input id="mp-duplicates" type="checkbox"> Consenti colori ripetuti</label>
         <button class="action-btn btn-submit" type="submit">Crea stanza</button>
       </form>
-      <form id="mp-join" class="mp-stack hidden" autocomplete="off">
+      <form id="mp-join" class="mp-stack hidden room-entry-form" autocomplete="off">
         <label>Codice stanza<input id="mp-code-input" class="profile-input" maxlength="10" placeholder="Es. A1B2C3D4E5" required autocapitalize="characters"></label>
-        <label>Password (vuota = accesso libero; altrimenti 8–64 caratteri)<input id="mp-join-password" class="profile-input" type="password" minlength="8" maxlength="64" autocomplete="off"></label>
-        <button class="action-btn btn-submit" type="submit">Entra nella stanza</button>
+        <label>Password (vuota = accesso libero; altrimenti 8-64 caratteri)<input id="mp-join-password" class="profile-input" type="password" minlength="8" maxlength="64" autocomplete="off"></label>
+        <button class="action-btn btn-submit" type="submit">Unisciti</button>
       </form>
     </div></div>
-    <div id="mp-room" class="mp-stack hidden">
+    <div id="mp-room" class="mp-stack hidden"><details class="game-guide"><summary>Come si gioca</summary><p id="mp-guide-text">Tutti devono decifrare la stessa sequenza di colori, ma giocano sulla propria griglia. Le luci verdi indicano colori nella posizione giusta e le gialle quelli fuori posizione. Vince chi ottiene più punti, trovando la soluzione in meno tentativi e in meno tempo.</p></details>
       <div class="mp-room-header"><div id="mp-room-name" class="mode-title"></div><div id="mp-room-code" class="mp-code"></div><div id="mp-room-settings" class="mode-desc"></div></div>
       <button id="mp-invite" class="icon-btn">Condividi codice / invito</button>
       <div id="mp-phase" class="section-label"></div>
@@ -1479,11 +1589,11 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
   <div class="modal-head"><span class="modal-title">✦ Connessioni Cosmiche</span><button id="cc-close" class="icon-btn">✕</button></div>
   <div id="cc-message" class="mp-message" role="status"></div>
   <div id="cc-entry" class="mp-stack"><section class="room-directory mp-stack" aria-label="Stanze disponibili"><div class="room-directory-head"><div class="section-label">◈ Stanze aperte</div><button id="cc-directory-refresh" type="button" class="icon-btn" title="Aggiorna elenco">↻</button></div><p class="cc-muted">🔓 Libera · 🔒 Con password</p><div id="cc-directory-list" class="mp-stack" role="status" aria-live="polite"><p class="cc-muted">Caricamento…</p></div></section><div class="room-entry-controls mp-stack">
-   <p class="cc-muted">Due o più squadre, un capitano per squadra. Collega le parole con indizi e trova tutti i tuoi segnali prima degli altri.</p>
-   <div class="mp-actions"><button id="cc-show-create" class="icon-btn">＋ Crea stanza</button><button id="cc-show-join" class="icon-btn">Entra</button></div>
-   <form id="cc-create" class="mp-stack hidden">
+   <p class="room-entry-intro">Ogni squadra ha un master che conosce la mappa delle parole. Il master dà un indizio di una sola parola e un numero; gli esploratori cercano i segnali della propria squadra. Una scelta errata termina il turno, mentre il Vuoto elimina la squadra. Vince chi trova tutti i propri segnali o rimane l’ultima squadra in gioco.</p>
+   <div class="mp-actions"><button id="cc-show-create" type="button" class="action-btn btn-submit">＋ Crea stanza</button><button id="cc-show-join" type="button" class="action-btn btn-submit">Unisciti</button></div>
+   <form id="cc-create" class="mp-stack hidden room-entry-form">
     <label>Nome stanza<input id="cc-name" class="profile-input" maxlength="30" required value="Connessioni cosmiche"></label>
-    <label>Password (vuota = accesso libero; altrimenti 8–64 caratteri)<input id="cc-password" type="password" class="profile-input" minlength="8" maxlength="64" autocomplete="new-password"></label>
+    <label>Password (vuota = accesso libero; altrimenti 8-64 caratteri)<input id="cc-password" type="password" class="profile-input" minlength="8" maxlength="64" autocomplete="new-password"></label>
     <div class="mp-fields">
      <label>Griglia<select id="cc-size"><option value="4">4 × 4</option><option value="5" selected>5 × 5</option><option value="6">6 × 6</option><option value="7">7 × 7</option></select></label>
      <label>Squadre<select id="cc-teams"><option value="2">2 squadre</option><option value="3">3 squadre</option><option value="4">4 squadre</option></select></label>
@@ -1513,13 +1623,13 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
     <label class="mp-check"><input id="cc-rotate" type="checkbox" checked> Ruota i capitani nelle rivincite</label>
     <button type="submit" class="action-btn btn-submit">Crea stanza</button>
    </form>
-   <form id="cc-join" class="mp-stack hidden">
+   <form id="cc-join" class="mp-stack hidden room-entry-form">
     <label>Codice stanza<input id="cc-code-input" class="profile-input" maxlength="10" required autocapitalize="characters"></label>
-    <label>Password (vuota = accesso libero; altrimenti 8–64 caratteri)<input id="cc-join-password" class="profile-input" type="password" minlength="8" maxlength="64"></label>
+    <label>Password (vuota = accesso libero; altrimenti 8-64 caratteri)<input id="cc-join-password" class="profile-input" type="password" minlength="8" maxlength="64"></label>
     <button type="submit" class="action-btn btn-submit">Unisciti</button>
    </form>
   </div></div>
-  <div id="cc-room" class="mp-stack hidden">
+  <div id="cc-room" class="mp-stack hidden"><details class="game-guide"><summary>Come si gioca</summary><p id="cc-guide-text">Ogni squadra ha un master che conosce la mappa delle parole. Il master dà un indizio di una sola parola e un numero; gli esploratori cercano i segnali della propria squadra. Una scelta errata termina il turno, mentre il Vuoto elimina la squadra. Vince chi trova tutti i propri segnali o rimane l’ultima squadra in gioco.</p></details>
    <div class="mp-room-header"><strong id="cc-room-name"></strong><span id="cc-room-code" class="mp-code"></span><span id="cc-room-settings" class="cc-muted"></span><button id="cc-invite" class="icon-btn">Condividi invito</button></div>
    <div id="cc-lobby" class="mp-stack">
     <div class="section-label">Squadre e ruoli</div><div id="cc-players" class="cc-team-grid"></div>
@@ -1547,17 +1657,18 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
  <div class="modal-head"><span id="party-title" class="modal-title"></span><button id="party-close" class="icon-btn">✕</button></div>
  <div id="party-message" class="mp-message" role="status"></div>
  <div id="party-entry" class="mp-stack"><section class="room-directory mp-stack" aria-label="Stanze disponibili"><div class="room-directory-head"><div class="section-label">◈ Stanze aperte</div><button id="party-directory-refresh" type="button" class="icon-btn" title="Aggiorna elenco">↻</button></div><p class="cc-muted">🔓 Libera · 🔒 Con password</p><div id="party-directory-list" class="mp-stack" role="status" aria-live="polite"><p class="cc-muted">Caricamento…</p></div></section><div class="room-entry-controls mp-stack">
-  <p id="party-intro" class="cc-muted"></p>
-  <form id="party-create" class="mp-stack"><div class="section-label">Crea stanza</div>
+  <p id="party-intro" class="room-entry-intro"></p>
+  <div class="mp-actions"><button id="party-show-create" type="button" class="action-btn btn-submit">＋ Crea stanza</button><button id="party-show-join" type="button" class="action-btn btn-submit">Unisciti</button></div>
+  <form id="party-create" class="mp-stack room-entry-form hidden"><div class="section-label">Crea stanza</div>
    <label>Nome stanza<input id="party-name" class="profile-input" maxlength="30" required value="Sfida tra amici"></label>
-   <label>Password (vuota = accesso libero; altrimenti 8–64 caratteri)<input id="party-password" class="profile-input" type="password" minlength="8" maxlength="64"></label>
+   <label>Password (vuota = accesso libero; altrimenti 8-64 caratteri)<input id="party-password" class="profile-input" type="password" minlength="8" maxlength="64"></label>
    <div class="mp-fields"><label>Giocatori massimi<select id="party-capacity"><option>2</option><option>4</option><option>6</option><option selected>8</option><option>12</option><option>16</option></select></label>
    <label>Giri completi<select id="party-rounds"><option>1</option><option selected>2</option><option>3</option><option>4</option></select></label></div>
    <label>Durata turno<select id="party-duration"><option value="30">30 secondi</option><option value="60" selected>60 secondi</option><option value="90">90 secondi</option><option value="120">120 secondi</option><option value="180">180 secondi</option><option value="0">Nessun timer</option></select></label>
    <button class="action-btn btn-submit">Crea stanza</button></form>
-  <form id="party-join" class="mp-stack"><div class="section-label">Unisciti</div><label>Codice stanza<input id="party-code-input" class="profile-input" maxlength="10" required></label><label>Password (vuota = accesso libero; altrimenti 8–64 caratteri)<input id="party-join-password" class="profile-input" type="password" maxlength="64" minlength="8"></label><button class="action-btn btn-submit">Entra</button></form>
+  <form id="party-join" class="mp-stack room-entry-form hidden"><div class="section-label">Unisciti</div><label>Codice stanza<input id="party-code-input" class="profile-input" maxlength="10" required></label><label>Password (vuota = accesso libero; altrimenti 8-64 caratteri)<input id="party-join-password" class="profile-input" type="password" maxlength="64" minlength="8"></label><button class="action-btn btn-submit">Unisciti</button></form>
  </div></div>
- <div id="party-room" class="mp-stack hidden">
+ <div id="party-room" class="mp-stack hidden"><details class="game-guide"><summary>Come si gioca</summary><p id="party-guide-text"></p></details>
   <div class="mp-room-header"><strong id="party-room-name"></strong><span class="mp-code" id="party-code"></span><button id="party-invite" class="icon-btn">Condividi invito</button></div>
   <div id="party-status" class="cc-turn"></div><div id="party-players" class="mp-stack"></div>
   <div id="party-lobby" class="mp-stack"><label id="party-team-label">Squadra<select id="party-team"><option value="0">Nebula</option><option value="1">Nova</option></select></label><button id="party-start" class="action-btn btn-submit">Avvia partita</button></div>
@@ -1574,10 +1685,11 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
 <div id="boardgames-modal" class="modal-backdrop hidden"><div class="glass-panel modal-box cc-box bg-box">
  <div class="modal-head"><span id="bg-title" class="modal-title"></span><button id="bg-close" class="icon-btn">✕</button></div>
  <div id="bg-message" class="mp-message" role="status"></div>
- <div id="bg-entry" class="mp-stack"><section class="room-directory mp-stack" aria-label="Stanze disponibili"><div class="room-directory-head"><div class="section-label">◈ Stanze aperte</div><button id="bg-directory-refresh" type="button" class="icon-btn" title="Aggiorna elenco">↻</button></div><p class="cc-muted">🔓 Libera · 🔒 Con password</p><div id="bg-directory-list" class="mp-stack" role="status" aria-live="polite"><p class="cc-muted">Caricamento…</p></div></section><div class="room-entry-controls mp-stack"><p id="bg-intro" class="cc-muted"></p>
- <form id="bg-create" class="mp-stack"><div class="section-label">Crea stanza</div><label>Nome stanza<input id="bg-name" class="profile-input" maxlength="30" required value="Sfida tra amici"></label><label>Password (vuota = accesso libero; altrimenti 8–64 caratteri)<input id="bg-password" class="profile-input" type="password" minlength="8" maxlength="64"></label><label id="bg-cap-label">Giocatori massimi<select id="bg-cap"><option>2</option><option>3</option><option selected>4</option></select></label><button class="action-btn btn-submit">Crea stanza</button></form>
- <form id="bg-join" class="mp-stack"><div class="section-label">Unisciti a una stanza</div><label>Codice stanza<input id="bg-code-input" class="profile-input" maxlength="10" required></label><label>Password (vuota = accesso libero; altrimenti 8–64 caratteri)<input id="bg-join-password" class="profile-input" type="password" minlength="8" maxlength="64"></label><button class="action-btn btn-submit">Entra</button></form></div></div>
- <div id="bg-room" class="mp-stack hidden"><div class="mp-room-header"><strong id="bg-room-name"></strong><span class="mp-code" id="bg-code"></span><button id="bg-invite" class="icon-btn">Condividi invito</button></div><div id="bg-status" class="cc-turn" role="status"></div><div id="bg-players" class="mp-stack"></div><button id="bg-start" class="action-btn btn-submit hidden">Avvia partita</button>
+ <div id="bg-entry" class="mp-stack"><section class="room-directory mp-stack" aria-label="Stanze disponibili"><div class="room-directory-head"><div class="section-label">◈ Stanze aperte</div><button id="bg-directory-refresh" type="button" class="icon-btn" title="Aggiorna elenco">↻</button></div><p class="cc-muted">🔓 Libera · 🔒 Con password</p><div id="bg-directory-list" class="mp-stack" role="status" aria-live="polite"><p class="cc-muted">Caricamento…</p></div></section><div class="room-entry-controls mp-stack"><p id="bg-intro" class="room-entry-intro"></p>
+ <div class="mp-actions"><button id="bg-show-create" type="button" class="action-btn btn-submit">＋ Crea stanza</button><button id="bg-show-join" type="button" class="action-btn btn-submit">Unisciti</button></div>
+ <form id="bg-create" class="mp-stack room-entry-form hidden"><div class="section-label">Crea stanza</div><label>Nome stanza<input id="bg-name" class="profile-input" maxlength="30" required value="Sfida tra amici"></label><label>Password (vuota = accesso libero; altrimenti 8-64 caratteri)<input id="bg-password" class="profile-input" type="password" minlength="8" maxlength="64"></label><label id="bg-cap-label">Giocatori massimi<select id="bg-cap"><option>2</option><option>3</option><option selected>4</option></select></label><button class="action-btn btn-submit">Crea stanza</button></form>
+ <form id="bg-join" class="mp-stack room-entry-form hidden"><div class="section-label">Unisciti</div><label>Codice stanza<input id="bg-code-input" class="profile-input" maxlength="10" required></label><label>Password (vuota = accesso libero; altrimenti 8-64 caratteri)<input id="bg-join-password" class="profile-input" type="password" minlength="8" maxlength="64"></label><button class="action-btn btn-submit">Unisciti</button></form></div></div>
+ <div id="bg-room" class="mp-stack hidden"><details class="game-guide"><summary>Come si gioca</summary><p id="bg-guide-text"></p></details><div class="mp-room-header"><strong id="bg-room-name"></strong><span class="mp-code" id="bg-code"></span><button id="bg-invite" class="icon-btn">Condividi invito</button></div><div id="bg-status" class="cc-turn" role="status"></div><div id="bg-players" class="mp-stack"></div><button id="bg-start" class="action-btn btn-submit hidden">Avvia partita</button>
  <div id="bg-play" class="mp-stack hidden"><div id="bg-setup" class="mp-stack hidden"><p class="cc-muted">Disponi 4 navi (4, 3, 3, 2 caselle). Seleziona una nave e tocca la casella iniziale. Le navi possono toccarsi ma non sovrapporsi.</p><div class="mp-actions"><select id="bg-ship" aria-label="Nave"><option value="0">Nave 4</option><option value="1">Nave 3 A</option><option value="2">Nave 3 B</option><option value="3">Nave 2</option></select><button id="bg-rotate" class="icon-btn">↔ Orizzontale</button><button id="bg-random" class="icon-btn">Casuale</button><button id="bg-reset" class="icon-btn">Svuota</button></div><button id="bg-ready" class="action-btn btn-submit">Conferma flotta</button></div>
  <div id="bg-target-wrap" class="mp-stack hidden"><label>Bersaglio<select id="bg-target"></select></label><div id="bg-shot-status" class="cc-muted" role="status"></div><div class="section-label">Radar avversario</div><div id="bg-enemy" class="bg-grid"></div></div>
  <div id="bg-own-label" class="section-label hidden">La tua flotta</div><div id="bg-grid" class="bg-grid"></div><div id="bg-legend" class="cc-muted"></div></div>
@@ -1767,7 +1879,7 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
     const finished=r=>r.state==='finished'||(r.state==='running'&&(expired(r)||allDone(r)));
     function setForm(edit=false){
         mp.editing=edit;const form=M('mp-create');
-        (edit?M('mp-lobby-settings'):M('mp-entry')).appendChild(form);
+        (edit?M('mp-lobby-settings'):M('mp-entry').querySelector('.room-entry-controls')).appendChild(form);
         M('mp-password').parentElement.classList.toggle('hidden',edit);M('mp-password').required=false;
         form.querySelector('button[type=submit]').textContent=edit?'Salva impostazioni':'Crea stanza';
         if(edit){M('mp-name').value=mp.room.name;fillSettings(mp.room.settings);hide('mp-create',false);}
@@ -1828,7 +1940,7 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
     }));
     M('mp-rematch').onclick=()=>action(async()=>{await tx(r=>{if(r.hostUid!==mp.uid||!finished(r))throw Error('Round non concluso.');if(r.state==='running')return {state:'finished'};return {state:'lobby',pattern:[],startedAt:null}});if(mp.room?.state==='running')return;});
     M('mp-end-round').onclick=()=>{if(confirm('Terminare il round? I giocatori non arrivati al risultato saranno classificati come non conclusi.'))action(()=>tx(r=>{if(r.hostUid!==mp.uid||r.state!=='running')throw Error('Round non disponibile.');return {state:'finished'}}))};
-    M('mp-invite').onclick=async()=>{if(!mp.room)return;const url=new URL(location.href);url.search='';url.searchParams.set('room',mp.room.code);url.hash='';const text=`L’Occhio del Cosmo — stanza ${mp.room.code}\n${url.href}\n${mp.room.locked===false?'Accesso libero.':'Chiedi la password all’host.'}`;try{if(navigator.share)await navigator.share({title:'Sfida cosmica',text});else {await navigator.clipboard.writeText(text);say(mp.room.locked===false?'Invito copiato.':'Invito copiato. Invia la password separatamente.')}}catch(e){if(e.name!=='AbortError')say(text)}};
+    M('mp-invite').onclick=async()=>{if(!mp.room)return;const url=new URL(location.href);url.search='';url.searchParams.set('room',mp.room.code);url.hash='';const text=`L’Occhio del Cosmo: stanza ${mp.room.code}\n${url.href}\n${mp.room.locked===false?'Accesso libero.':'Chiedi la password all’host.'}`;try{if(navigator.share)await navigator.share({title:'Sfida cosmica',text});else {await navigator.clipboard.writeText(text);say(mp.room.locked===false?'Invito copiato.':'Invito copiato. Invia la password separatamente.')}}catch(e){if(e.name!=='AbortError')say(text)}};
     M('mp-leave').onclick=()=>leaveRoom();M('mp-game-lobby').onclick=()=>{hide('mp-modal',false);renderRoom()};M('mp-resume').onclick=()=>{hide('mp-modal',true);processRound()};
     async function leaveRoom(){
         if(!mp.room){detach();hide('mp-modal',true);return;}
@@ -1929,7 +2041,7 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
     function ccParseWords(raw){
       const words=[...new Set(raw.split(/[\n,;]+/).map(w=>w.normalize('NFC').trim().replace(/\s+/g,' ').toLocaleUpperCase('it-IT')).filter(Boolean))];
       if(words.length>100)throw Error('Inserisci al massimo 100 parole personalizzate.');
-      if(words.some(w=>w.length>30||! /^[\p{L}\p{N}][\p{L}\p{N} ’'\-]*$/u.test(w)))throw Error('Ogni parola deve contenere 1–30 caratteri: lettere, numeri, spazi, apostrofi o trattini.');
+      if(words.some(w=>w.length>30||! /^[\p{L}\p{N}][\p{L}\p{N} ’'\-]*$/u.test(w)))throw Error('Ogni parola deve contenere 1-30 caratteri: lettere, numeri, spazi, apostrofi o trattini.');
       return words;
     }
     const CC_CUSTOM_LEVELS={20:'Traccia',40:'Risonanza',60:'Dominio'};
@@ -1974,6 +2086,10 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
     M('cc-close').onclick=()=>{if(cc.ref&&!cc.room){ccDetach();}else if(cc.ref){ccSay('Usa Esci dalla stanza per tornare al menu.');return;}hide('cc-modal',true);};
     M('cc-show-create').onclick=()=>{hide('cc-create',false);hide('cc-join',true);ccSay()};
     M('cc-show-join').onclick=()=>{hide('cc-create',true);hide('cc-join',false);ccSay()};
+    M('party-show-create').onclick=()=>{hide('party-create',false);hide('party-join',true);partySay('');};
+    M('party-show-join').onclick=()=>{hide('party-create',true);hide('party-join',false);partySay('');};
+    M('bg-show-create').onclick=()=>{hide('bg-create',false);hide('bg-join',true);bgSay('');};
+    M('bg-show-join').onclick=()=>{hide('bg-create',true);hide('bg-join',false);bgSay('');};
     M('cc-create').onsubmit=e=>{e.preventDefault();ccAction(async()=>{if(cc.ref||mp.ref)throw Error('Sei già in una stanza.');const uid=requireOnline(),name=M('cc-name').value.trim(),settings={size:+M('cc-size').value,teams:+M('cc-teams').value,capacity:+M('cc-capacity').value,duration:ccReadTimer('cc-duration'),clueDuration:ccReadTimer('cc-clue-duration'),firstClueDuration:ccReadTimer('cc-first-duration'),wordMode:M('cc-word-mode').value,customPercent:+M('cc-custom-percent').value,customWords:ccParseWords(M('cc-custom-words').value),rotate:M('cc-rotate').checked};if(!name)throw Error('Inserisci il nome.');if(settings.capacity<settings.teams*2)throw Error('Servono almeno due posti per squadra.');if(settings.wordMode==='custom'&&settings.customWords.length<settings.size**2)throw Error(`Servono almeno ${settings.size**2} parole uniche per questa griglia.`);const code=bytesHex(crypto.getRandomValues(new Uint8Array(5))).toUpperCase(),password=M('cc-password').value,id=await deriveRoom(code,password),ref=doc(db,...CC_PATH,id);await runTransaction(db,async t=>{if((await t.get(ref)).exists())throw Error('Codice già in uso.');directoryCreate(t,ref,{locked:password!=='',code,name,hostUid:uid,settings,createdAt:serverTimestamp(),state:'lobby',round:0,players:{[uid]:ccNewPlayer()},words:[],roles:[],captains:['','','',''],target:0,revealed:[],scores:[0,0,0,0],eliminated:[],winner:-1,turn:0,phase:'clue',clue:'',clueCount:0,left:0,turnAt:null,lastIndex:-1,seenTeams:[],lastTimeout:null});});M('cc-password').value='';ccAttach(ref,uid);});};
     M('cc-join').onsubmit=e=>{e.preventDefault();ccAction(async()=>{if(cc.ref||mp.ref)throw Error('Sei già in una stanza.');const uid=requireOnline(),code=M('cc-code-input').value.trim().toUpperCase(),id=await deriveRoom(code,M('cc-join-password').value),ref=doc(db,...CC_PATH,id);await runTransaction(db,async t=>{const snap=await t.get(ref);if(!snap.exists())throw Error('Codice o password errati.');const r=snap.data();assertRoomFresh(r);if(r.state==='closed')throw Error('Stanza chiusa.');if(!Array.isArray(r.settings.customWords)||!Array.isArray(r.seenTeams))throw Error('Stanza creata con una versione precedente: chiedi all’host di crearne una nuova.');if(r.players[uid])return;if(r.state!=='lobby')throw Error('Partita in corso. Attendi la rivincita.');if(Object.keys(r.players).length>=r.settings.capacity)throw Error('Stanza piena.');const counts=Array.from({length:r.settings.teams},(_,i)=>Object.values(r.players).filter(p=>p.team===i).length);directoryUpdate(t,ref,r,{players:{...r.players,[uid]:ccNewPlayer(counts.indexOf(Math.min(...counts)))}});});M('cc-join-password').value='';ccAttach(ref,uid);});};
     function ccChangePlayer(patch){return ccAction(()=>ccTx(r=>{if(r.state!=='lobby')throw Error('La sfida è già iniziata.');return {players:{...r.players,[cc.uid]:{...ccMine(r),...patch}}}}));}
@@ -1992,11 +2108,11 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
     M('cc-timeout').onclick=()=>ccAction(()=>ccTx(r=>{if(r.state!=='running'||!ccExpired(r))throw Error('Il tempo non è ancora scaduto.');return ccTimeoutPatch(r);},true));
     M('cc-rematch').onclick=()=>ccAction(()=>ccTx(r=>{if(!ccHost(r)||r.state!=='finished')throw Error('Rivincita non disponibile.');return {state:'lobby'};}));
     M('cc-leave').onclick=()=>ccAction(async()=>{if(!cc.room){ccDetach();hide('cc-modal',true);return;}if(!confirm(ccHost(cc.room)?'Chiudere la stanza per tutti?':'Uscire dalla stanza?'))return;await ccTx(r=>{if(ccHost(r))return {state:'closed'};if(r.state!=='lobby')return null;const players={...r.players};delete players[cc.uid];return {players};});ccDetach();hide('cc-modal',true);});
-    M('cc-invite').onclick=async()=>{if(!cc.room)return;const url=new URL(location.href);url.search='';url.searchParams.set('connections',cc.room.code);url.hash='';const text=`Connessioni Cosmiche — stanza ${cc.room.code}\n${url.href}\n${cc.room.locked===false?'Accesso libero.':'Chiedi la password all’host.'}`;try{if(navigator.share)await navigator.share({title:'Connessioni Cosmiche',text});else{await navigator.clipboard.writeText(text);ccSay(cc.room.locked===false?'Invito copiato.':'Invito copiato. Invia la password separatamente.');}}catch(e){if(e.name!=='AbortError')ccSay(text);}};
+    M('cc-invite').onclick=async()=>{if(!cc.room)return;const url=new URL(location.href);url.search='';url.searchParams.set('connections',cc.room.code);url.hash='';const text=`Connessioni Cosmiche: stanza ${cc.room.code}\n${url.href}\n${cc.room.locked===false?'Accesso libero.':'Chiedi la password all’host.'}`;try{if(navigator.share)await navigator.share({title:'Connessioni Cosmiche',text});else{await navigator.clipboard.writeText(text);ccSay(cc.room.locked===false?'Invito copiato.':'Invito copiato. Invia la password separatamente.');}}catch(e){if(e.name!=='AbortError')ccSay(text);}};
     function ccTick(){const r=cc.room;if(!r||r.state!=='running')return;const sec=ccRemaining(r);const phase=r.phase==='clue'?(r.seenTeams.includes(r.turn)?'Indizio master':'Primo indizio master'):'Scelte esploratori';M('cc-timer').textContent=sec===Infinity?`${phase} · Nessun limite di tempo`:`${phase}: ${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`;M('cc-timer').classList.toggle('cc-urgent',sec<=10);ccAudioTick(r,sec);ccUpdateSound();hide('cc-timeout',sec!==0);M('cc-timeout').disabled=cc.busy;const enabled=!cc.busy&&ccCanGuess(r);for(const b of M('cc-board').children)b.disabled=!enabled||r.revealed.includes(+b.dataset.index);M('cc-pass').disabled=!enabled;M('cc-clue-form').querySelector('button').disabled=cc.busy||sec===0;}
     function ccRender(){const r=cc.room;if(!r){hide('cc-room',true);hide('cc-entry',!!cc.ref);return;}const me=ccMine(r);if(!me)return;const lobby=r.state==='lobby',done=r.state==='finished';hide('cc-entry',true);hide('cc-room',false);hide('cc-lobby',!lobby);hide('cc-play',lobby);M('cc-room-name').textContent=(r.locked===false?'🔓 ':'🔒 ')+r.name;M('cc-room-code').textContent=r.code;M('cc-room-settings').textContent=`${r.settings.size}×${r.settings.size} · ${r.settings.teams} squadre · ${Object.keys(r.players).length}/${r.settings.capacity} giocatori · ${r.settings.duration||r.settings.clueDuration||r.settings.firstClueDuration?`Primo master ${ccFormatTime(r.settings.firstClueDuration)} · Master ${ccFormatTime(r.settings.clueDuration)} · Esploratori ${ccFormatTime(r.settings.duration)}`:'Senza timer'} · ${r.settings.wordMode==='custom'?'Solo parole custom':(CC_CUSTOM_LEVELS[r.settings.customPercent]?`${CC_CUSTOM_LEVELS[r.settings.customPercent]} · ${r.settings.customPercent}% lista e griglia (${ccCustomQuota(r.settings)}/${r.settings.size**2} caselle custom)`:r.settings.customWords.length+' parole custom + dizionario')}`;
         if(lobby){const teams=[];for(let i=0;i<r.settings.teams;i++){const el=ccNode('div',undefined,'cc-team');el.style.setProperty('--team',CC_COLORS[i]);el.append(ccNode('strong',CC_NAMES[i]));for(const [id,p] of Object.entries(r.players).filter(([,p])=>p.team===i)){const line=ccNode('p',`${p.ready===r.round+1?'✓':'○'} ${p.name}${id===r.hostUid?' · Host':''}${id===cc.uid?' · Tu':''} · ${p.role==='captain'?'Capitano':'Esploratore'}`);if(ccHost(r)&&id!==cc.uid){const kick=ccNode('button','✕','icon-btn');kick.style.marginLeft='5px';kick.title='Espelli';kick.onclick=()=>ccAction(()=>ccTx(old=>{if(!ccHost(old)||old.state!=='lobby')throw Error('Lobby non disponibile.');const players={...old.players};delete players[id];return {players};}));line.append(kick);}el.append(line);}teams.push(el);}M('cc-players').replaceChildren(...teams);const select=M('cc-my-team');if(select.options.length!==r.settings.teams)select.replaceChildren(...CC_NAMES.slice(0,r.settings.teams).map((n,i)=>new Option(n,String(i))));select.value=String(me.team);select.disabled=cc.busy;M('cc-my-role').value=me.role;M('cc-my-role').disabled=cc.busy;M('cc-ready').disabled=cc.busy;M('cc-ready').textContent=me.ready===r.round+1?'✓ Pronto (annulla)':'Sono pronto';hide('cc-start',!ccHost(r));let valid=false;try{ccCaptains(r);valid=Object.entries(r.players).every(([id,p])=>id===cc.uid||p.ready===r.round+1)}catch(e){}M('cc-start').disabled=cc.busy||!valid;return;}
-        const scores=[];for(let i=0;i<r.settings.teams;i++){const el=ccNode('div',undefined,'cc-team');el.style.setProperty('--team',CC_COLORS[i]);el.append(ccNode('strong',CC_NAMES[i]+(i===me.team?' · Tu':'')),ccNode('p',r.eliminated.includes(i)?'Eliminata':`${r.scores[i]}/${r.target} segnali`),ccNode('p',`Capitano: ${r.players[r.captains[i]]?.name||'—'}`));scores.push(el);}M('cc-scores').replaceChildren(...scores);M('cc-turn').textContent=done?'Sfida conclusa':`${CC_NAMES[r.turn]} · ${r.phase==='clue'?'Attesa indizio':'Decifrazione'} · Tu: ${ccCaptain(r)?'Capitano':'Esploratore'}`;M('cc-clue-display').textContent=r.clue?`${r.clue} · ${r.clueCount} (scelte rimaste: ${r.left})`:'Nessun indizio ancora';M('cc-board').style.setProperty('--cc-size',r.settings.size);const canSee=done||ccCaptain(r);M('cc-board').replaceChildren(...r.words.map((word,i)=>{const revealed=r.revealed.includes(i),b=ccNode('button',undefined,'cc-cell'+(revealed?' cc-revealed':''));b.type='button';b.dataset.index=i;b.append(ccNode('span',word,'cc-word'));if(canSee||revealed){b.dataset.color=r.roles[i];b.append(ccNode('small',CC_SYMBOLS[r.roles[i]]+' '+(r.roles[i]<4?CC_NAMES[r.roles[i]]:r.roles[i]===4?'Neutro':'Vuoto')));}b.disabled=cc.busy||!ccCanGuess(r)||revealed;b.onclick=()=>ccGuess(i);return b;}));M('cc-legend').textContent=canSee?'Mappa capitano: trova i segnali della tua squadra. Il Vuoto elimina la squadra che lo seleziona.':'Seleziona i segnali della tua squadra. Un segnale neutro o rivale termina il turno; il Vuoto elimina la squadra.';const canClue=!done&&r.phase==='clue'&&ccTeam(r)===r.turn&&ccCaptain(r);hide('cc-clue-form',!canClue);const counts=M('cc-clue-count'),max=r.target-r.scores[r.turn];if(counts.options.length!==max)counts.replaceChildren(...Array.from({length:max},(_,i)=>new Option(String(i+1),String(i+1))));hide('cc-pass',!ccCanGuess(r));hide('cc-result',!done);hide('cc-rematch',!done||!ccHost(r));M('cc-rematch').disabled=cc.busy;if(done){M('cc-result').textContent=`🏆 Vince la squadra ${CC_NAMES[r.winner]}!`;M('cc-timer').textContent='';hide('cc-timeout',true);}else ccTick();
+        const scores=[];for(let i=0;i<r.settings.teams;i++){const el=ccNode('div',undefined,'cc-team');el.style.setProperty('--team',CC_COLORS[i]);el.append(ccNode('strong',CC_NAMES[i]+(i===me.team?' · Tu':'')),ccNode('p',r.eliminated.includes(i)?'Eliminata':`${r.scores[i]}/${r.target} segnali`),ccNode('p',`Capitano: ${r.players[r.captains[i]]?.name||'-'}`));scores.push(el);}M('cc-scores').replaceChildren(...scores);M('cc-turn').textContent=done?'Sfida conclusa':`${CC_NAMES[r.turn]} · ${r.phase==='clue'?'Attesa indizio':'Decifrazione'} · Tu: ${ccCaptain(r)?'Capitano':'Esploratore'}`;M('cc-clue-display').textContent=r.clue?`${r.clue} · ${r.clueCount} (scelte rimaste: ${r.left})`:'Nessun indizio ancora';M('cc-board').style.setProperty('--cc-size',r.settings.size);const canSee=done||ccCaptain(r);M('cc-board').replaceChildren(...r.words.map((word,i)=>{const revealed=r.revealed.includes(i),b=ccNode('button',undefined,'cc-cell'+(revealed?' cc-revealed':''));b.type='button';b.dataset.index=i;b.append(ccNode('span',word,'cc-word'));if(canSee||revealed){b.dataset.color=r.roles[i];b.append(ccNode('small',CC_SYMBOLS[r.roles[i]]+' '+(r.roles[i]<4?CC_NAMES[r.roles[i]]:r.roles[i]===4?'Neutro':'Vuoto')));}b.disabled=cc.busy||!ccCanGuess(r)||revealed;b.onclick=()=>ccGuess(i);return b;}));M('cc-legend').textContent=canSee?'Mappa capitano: trova i segnali della tua squadra. Il Vuoto elimina la squadra che lo seleziona.':'Seleziona i segnali della tua squadra. Un segnale neutro o rivale termina il turno; il Vuoto elimina la squadra.';const canClue=!done&&r.phase==='clue'&&ccTeam(r)===r.turn&&ccCaptain(r);hide('cc-clue-form',!canClue);const counts=M('cc-clue-count'),max=r.target-r.scores[r.turn];if(counts.options.length!==max)counts.replaceChildren(...Array.from({length:max},(_,i)=>new Option(String(i+1),String(i+1))));hide('cc-pass',!ccCanGuess(r));hide('cc-result',!done);hide('cc-rematch',!done||!ccHost(r));M('cc-rematch').disabled=cc.busy;if(done){M('cc-result').textContent=`🏆 Vince la squadra ${CC_NAMES[r.winner]}!`;M('cc-timer').textContent='';hide('cc-timeout',true);}else ccTick();
     }
     let ccAutoKey='',ccAutoSince=0,ccAutoAttempt=0,ccAutoPending=false;
     setInterval(async()=>{ccTick();const r=cc.room;if(r?.state!=='running'||!ccExpired(r)||cc.busy||ccAutoPending)return;const key=ccPhaseKey(r),now=Date.now();if(ccAutoKey!==key){ccAutoKey=key;ccAutoSince=now;ccAutoAttempt=0;}const delay=r.captains[r.turn]===cc.uid?200:ccHost(r)?800:1800;if(now-ccAutoSince<delay+750||now-ccAutoAttempt<3000)return;ccAutoAttempt=now;ccAutoPending=true;try{await ccTx(old=>old.state==='running'&&ccPhaseKey(old)===key&&ccExpired(old)?ccTimeoutPatch(old):null);}catch(e){console.warn('Timeout, nuovo tentativo:',cloudError(e));}finally{ccAutoPending=false;}},250);
@@ -2023,14 +2139,14 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
     const partyMember=r=>r.players[party.uid];
     const partyMin=r=>r.kind==='draw'?2:4;
     const partyNew=team=>({name:cleanName(),team});
-    function partyOpen(kind){if(bg.ref||mp.ref||cc.ref||window.cosmicGame.isSingleActive()||window.cosmicGame.isMultiplayer()){alert('Concludi o abbandona prima la partita in corso.');return;}if(party.ref&&party.kind!==kind){alert('Esci prima dalla stanza in corso.');return;}party.kind=kind;M('party-capacity').options[0].disabled=kind==='taboo';if(kind==='taboo'&&M('party-capacity').value==='2')M('party-capacity').value='4';hide('party-modal',false);partyRender();}
-    function partyDetach(message=''){party.unsub?.();party.strokeUnsub?.();pen=null;Object.assign(party,{ref:null,room:null,uid:null,unsub:null,strokeUnsub:null,strokeKey:'',strokes:[]});dropSession(PARTY_SESSION);partySay(message);partyRender();}
+    function partyOpen(kind){if(bg.ref||mp.ref||cc.ref||window.cosmicGame.isSingleActive()||window.cosmicGame.isMultiplayer()){alert('Concludi o abbandona prima la partita in corso.');return;}if(party.ref&&party.kind!==kind){alert('Esci prima dalla stanza in corso.');return;}party.kind=kind;M('party-capacity').options[0].disabled=kind==='taboo';if(kind==='taboo'&&M('party-capacity').value==='2')M('party-capacity').value='4';hide('party-create',true);hide('party-join',true);partySay('');hide('party-modal',false);partyRender();}
+    function partyDetach(message=''){party.unsub?.();party.strokeUnsub?.();pen=null;Object.assign(party,{ref:null,room:null,uid:null,unsub:null,strokeUnsub:null,strokeKey:'',strokes:[]});dropSession(PARTY_SESSION);hide('party-create',true);hide('party-join',true);partySay(message);partyRender();}
     function partyAttach(ref,uid,kind){void syncClock();party.kind=kind;party.ref=ref;party.uid=uid;saveSession(PARTY_SESSION,{id:ref.id,uid,kind});hide('party-modal',false);hide('party-entry',true);party.unsub=onSnapshot(ref,{includeMetadataChanges:true},snap=>{if(party.ref!==ref||!observeRoom(party,snap,partySay))return;const r=snap.exists()?snap.data():null;if(roomExpired(r)){partyDetach('Stanza scaduta dopo 24 ore. Crea una nuova stanza.');return;}if(!r||!r.players[uid]||r.state==='closed'){partyDetach('Stanza chiusa o accesso revocato.');return;}party.room=r;partyRender();},e=>partySay(cloudError(e)));}
     function partyRestore(uid){const s=readSession(PARTY_SESSION);if(!mp.ref&&!cc.ref&&!party.ref&&s?.uid===uid&&/^[a-f0-9]{64}$/.test(s.id)&&PARTY_NAMES[s.kind])partyAttach(doc(db,...PARTY_PATH,s.id),uid,s.kind);}
     async function partyAction(fn){if(party.busy)return;party.busy=true;partySay('');try{await fn();}catch(e){partySay(cloudError(e));console.error('Party:',e);}finally{party.busy=false;partyRender();}}
     async function partyTx(change){const ref=party.ref,uid=party.uid,old=party.room;if(!ref||uid!==requireOnline())throw Error('Stanza non disponibile.');await runTransaction(db,async t=>{const snap=await t.get(ref);if(!snap.exists())throw Error('Stanza non trovata.');const r=snap.data();assertRoomFresh(r);if(!r.players[uid]||r.state==='closed')throw Error('Stanza non disponibile.');if(old&&old.state==='running'&&(r.turnKey!==old.turnKey||r.card!==old.card||r.phase!==old.phase))throw Error('Il turno è cambiato, riprova.');const patch=change(r);if(patch)directoryUpdate(t,ref,r,patch);});}
     M('party-draw-open').onclick=()=>partyOpen('draw');M('party-taboo-open').onclick=()=>partyOpen('taboo');
-    M('party-close').onclick=()=>{if(party.ref){partySay('Usa Esci dalla stanza.');return;}hide('party-modal',true);};
+    M('party-close').onclick=()=>{if(party.ref){partySay('Usa Esci dalla stanza.');return;}hide('party-create',true);hide('party-join',true);hide('party-modal',true);};
     M('party-create').onsubmit=e=>{e.preventDefault();partyAction(async()=>{const uid=requireOnline();if(party.ref||mp.ref||cc.ref)throw Error('Sei già in una stanza.');const name=M('party-name').value.trim(),settings={capacity:+M('party-capacity').value,rounds:+M('party-rounds').value,duration:+M('party-duration').value};if(!name)throw Error('Inserisci il nome.');const code=bytesHex(crypto.getRandomValues(new Uint8Array(5))).toUpperCase(),password=M('party-password').value,id=await deriveRoom(code,password),ref=doc(db,...PARTY_PATH,id),kind=party.kind;await runTransaction(db,async t=>{if((await t.get(ref)).exists())throw Error('Codice già in uso.');directoryCreate(t,ref,{locked:password!=='',kind,code,name,hostUid:uid,settings,createdAt:serverTimestamp(),state:'lobby',players:{[uid]:partyNew(0)},order:[],deck:[],turn:0,card:0,turnKey:'',phase:'idle',startedAt:null,guessed:[],scores:{},teams:[0,0],chat:[],lastWord:''});});M('party-password').value='';partyAttach(ref,uid,kind);});};
     M('party-join').onsubmit=e=>{e.preventDefault();partyAction(async()=>{const uid=requireOnline();if(party.ref||mp.ref||cc.ref)throw Error('Sei già in una stanza.');const id=await deriveRoom(M('party-code-input').value.trim().toUpperCase(),M('party-join-password').value),ref=doc(db,...PARTY_PATH,id);let kind=party.kind;await runTransaction(db,async t=>{const snap=await t.get(ref);if(!snap.exists())throw Error('Codice o password errati.');const r=snap.data();assertRoomFresh(r);if(r.kind!==kind||r.state==='closed')throw Error('Stanza non disponibile per questa modalità.');if(r.players[uid])return;if(r.state!=='lobby'||Object.keys(r.players).length>=r.settings.capacity)throw Error('Stanza piena o partita già iniziata.');const counts=[0,0];Object.values(r.players).forEach(p=>counts[p.team]++);directoryUpdate(t,ref,r,{players:{...r.players,[uid]:partyNew(counts[0]<=counts[1]?0:1)}});});M('party-join-password').value='';partyAttach(ref,uid,kind);});};
     M('party-team').onchange=()=>partyAction(()=>partyTx(r=>{if(r.state!=='lobby'||r.kind!=='taboo')return null;return {players:{...r.players,[party.uid]:{...partyMember(r),team:+M('party-team').value}}};}));
@@ -2049,7 +2165,7 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
     M('party-pass').onclick=()=>partyCardAction(0);M('party-correct').onclick=()=>partyCardAction(1);M('party-foul').onclick=()=>partyCardAction(-1,true);
     M('party-rematch').onclick=()=>partyAction(()=>partyTx(r=>partyHost(r)&&r.state==='finished'?{state:'lobby'}:null));
     M('party-leave').onclick=()=>partyAction(async()=>{if(!party.room){partyDetach();hide('party-modal',true);return;}if(!confirm(partyHost(party.room)?'Chiudere la stanza per tutti?':'Uscire dalla stanza?'))return;await partyTx(r=>{if(partyHost(r))return {state:'closed'};if(r.state!=='lobby')return null;const players={...r.players};delete players[party.uid];return {players};});partyDetach();hide('party-modal',true);});
-    M('party-invite').onclick=async()=>{const r=party.room;if(!r)return;const url=new URL(location.href);url.search='';url.hash='';url.searchParams.set('party',r.kind);url.searchParams.set('code',r.code);const text=`${PARTY_NAMES[r.kind]} — stanza ${r.code}\n${url.href}\n${r.locked===false?'Accesso libero.':'Chiedi la password all’host.'}`;try{if(navigator.share)await navigator.share({title:PARTY_NAMES[r.kind],text});else{await navigator.clipboard.writeText(text);partySay('Invito copiato.');}}catch(e){if(e.name!=='AbortError')partySay(text);}};
+    M('party-invite').onclick=async()=>{const r=party.room;if(!r)return;const url=new URL(location.href);url.search='';url.hash='';url.searchParams.set('party',r.kind);url.searchParams.set('code',r.code);const text=`${PARTY_NAMES[r.kind]}: stanza ${r.code}\n${url.href}\n${r.locked===false?'Accesso libero.':'Chiedi la password all’host.'}`;try{if(navigator.share)await navigator.share({title:PARTY_NAMES[r.kind],text});else{await navigator.clipboard.writeText(text);partySay('Invito copiato.');}}catch(e){if(e.name!=='AbortError')partySay(text);}};
     const canvas=M('party-canvas'),ctx=canvas.getContext('2d');let pen=null,penId=0,strokeSerial=0;
     function partyPaintStroke(s){if(s.clear){ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);return;}if(!Array.isArray(s.points)||s.points.length<4||s.points.length%2||!s.points.every(v=>typeof v==='number'&&Number.isFinite(v)&&v>=0&&v<=1))return;ctx.strokeStyle=/^#[0-9a-f]{6}$/i.test(s.color)?s.color:'#000000';ctx.lineWidth=Math.min(25,Math.max(2,s.width));ctx.lineCap='round';ctx.lineJoin='round';ctx.beginPath();ctx.moveTo(s.points[0]*canvas.width,s.points[1]*canvas.height);for(let i=2;i<s.points.length;i+=2)ctx.lineTo(s.points[i]*canvas.width,s.points[i+1]*canvas.height);ctx.stroke();}
     function partyRepaint(){ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);for(const s of party.strokes)partyPaintStroke(s);if(pen)partyPaintStroke(pen);}
@@ -2066,8 +2182,8 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
     let partyAudioKey='',partyAudioSec=-1,partyAutoAt=0;
     function partyTick(){const r=party.room;if(!r||r.state!=='running')return;const sec=partyRemaining(r),key=r.turnKey+':'+r.phase;M('party-timer').textContent=sec===Infinity?'Nessun limite di tempo':`${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`;M('party-timer').classList.toggle('cc-urgent',sec<=10);if(partyAudioKey!==key){partyAudioKey=key;partyAudioSec=-1;}if(partyActor(r)===party.uid&&sec<=10&&sec!==partyAudioSec){partyAudioSec=sec;if(sec===0)window.cosmicGame.timerAlarm();else window.cosmicGame.timerTick();}if((partyExpiredForServer(r)||(r.kind==='draw'&&r.phase==='play'&&r.guessed.length===r.order.length-1))&&!party.busy&&Date.now()-partyAutoAt>2500){partyAutoAt=Date.now();partyAction(()=>partyTx(o=>{if(o.state!=='running'||o.turnKey!==r.turnKey)return null;if(o.phase==='choose'&&!partyOnTime(o))return {phase:'play',card:o.turn*3,startedAt:serverTimestamp()};if(o.phase==='play'&&(!partyOnTime(o)||(o.kind==='draw'&&o.guessed.length===o.order.length-1)))return partyNext(o);return null;}));}}
     setInterval(partyTick,250);
-    function partyRender(){const r=party.room,kind=party.kind;M('party-title').textContent=PARTY_NAMES[kind];M('party-intro').textContent=kind==='draw'?'Disegna una parola a turno. Gli altri provano a indovinare in chat. +100 per chi indovina, +50 al disegnatore.':'Due squadre, un suggeritore a turno. Fai indovinare la parola evitando le cinque parole proibite. Usa la chat oppure una chiamata vocale esterna.';hide('party-entry',!!party.ref);hide('party-room',!r);if(!r)return;const host=partyHost(r),lobby=r.state==='lobby',done=r.state==='finished',running=r.state==='running',draw=r.kind==='draw',actor=running?partyActor(r):null,active=actor===party.uid,mine=partyMember(r),same=running&&mine.team===partyTeam(r);M('party-room-name').textContent=(r.locked===false?'🔓 ':'🔒 ')+r.name;M('party-code').textContent=r.code;M('party-status').textContent=lobby?`Lobby · ${Object.keys(r.players).length}/${r.settings.capacity}`:done?'Partita conclusa':`Turno ${r.turn+1}/${r.order.length*r.settings.rounds} · ${r.players[actor]?.name||'—'}${draw?' disegna':` · ${CC_NAMES[partyTeam(r)]}`}`;const list=M('party-players');list.replaceChildren();const ids=Object.keys(r.players).sort((a,b)=>(r.scores[b]||0)-(r.scores[a]||0));if(!draw&&!lobby)list.append(ccNode('div',`Nebula ${r.teams[0]} · Nova ${r.teams[1]}`,'cc-turn'));for(const id of ids){const p=r.players[id],row=ccNode('div',undefined,'mp-player');row.append(ccNode('div',`${p.name}${id===r.hostUid?' · Host':''}${id===party.uid?' · Tu':''}${draw?'':` · ${CC_NAMES[p.team]}`}${r.guessed.includes(id)?' · ✓':''}`));if(draw&&!lobby)row.append(ccNode('strong',`${r.scores[id]||0} pt`,'mp-score'));if(host&&lobby&&id!==party.uid){const b=ccNode('button','Espelli','icon-btn');b.onclick=()=>partyAction(()=>partyTx(o=>{if(o.state!=='lobby'||!partyHost(o))return null;const players={...o.players};delete players[id];return {players};}));row.append(b);}list.append(row);}hide('party-lobby',!lobby);hide('party-team-label',draw);M('party-team').value=String(mine.team);hide('party-start',!host);M('party-start').disabled=party.busy||ids.length<partyMin(r);hide('party-play',!running);hide('party-result',!done);hide('party-rematch',!done||!host);if(done){const best=draw?Math.max(...Object.values(r.scores)):Math.max(...r.teams);const winners=draw?ids.filter(id=>r.scores[id]===best).map(id=>r.players[id].name):[0,1].filter(t=>r.teams[t]===best).map(t=>CC_NAMES[t]);M('party-result').textContent=`🏆 ${winners.join(' e ')} · ${best} punti${winners.length>1?' · Pareggio':''}`;}partyListenStrokes(r);if(!running)return;const choose=r.phase==='choose',card=partyCard(r),visible=active||(!draw&&!same);M('party-previous').textContent=draw&&r.lastWord?'Parola del turno precedente: '+r.lastWord:'';M('party-word').textContent=choose?(active?'Scegli una parola':'Il disegnatore sta scegliendo…'):visible?card.word:(draw?`Parola: ${card.word.replace(/[A-Z0-9]/g,'_ ').trim()}`:'Indovina la parola del suggeritore');const choices=M('party-choices');choices.replaceChildren();if(choose&&active)for(let i=0;i<3;i++){const b=ccNode('button',r.deck[r.turn*3+i].word,'icon-btn');b.onclick=()=>partyChoose(i);choices.append(b);}hide('party-choices',!choose||!active);hide('party-draw',!draw||choose);hide('party-tools',!active);hide('party-banned',draw||!visible||choose);M('party-banned').textContent=draw?'':`NON DIRE: ${card.banned.join(' · ')}`;hide('party-chat-form',choose||(draw?(active||r.guessed.includes(party.uid)):!same));M('party-text').placeholder=!draw&&active?'Scrivi un indizio':'Scrivi la risposta';hide('party-pass',draw||!active||choose);hide('party-correct',draw||!active||choose);hide('party-foul',draw||same||choose);hide('party-next',choose||!(active||host));M('party-sound').textContent=window.cosmicGame.soundEnabled()?'🔊 Audio':'🔇 Audio';const chat=M('party-chat');chat.replaceChildren();for(const m of r.chat)chat.append(ccNode('div',`${r.players[m.uid]?.name||'—'}: ${m.text}`,m.correct?'correct':''));chat.scrollTop=chat.scrollHeight;partyTick();}
-    const partyInvite=new URL(location.href).searchParams.get('party');if(!inviteCode&&!ccInvite&&PARTY_NAMES[partyInvite]){party.kind=partyInvite;M('party-code-input').value=(new URL(location.href).searchParams.get('code')||'').slice(0,10);hide('party-modal',false);switchMenu('multi');partyRender();}
+    function partyRender(){const r=party.room,kind=party.kind;M('party-title').textContent=PARTY_NAMES[kind];M('party-intro').textContent=kind==='draw'?'A turno, un giocatore sceglie una parola tra tre proposte e la disegna sulla lavagna. Gli altri provano a indovinarla nella chat. Ogni risposta esatta vale 100 punti per chi indovina e 50 per chi disegna. Vince chi totalizza più punti.':'Due squadre si alternano. Il suggeritore fa indovinare una parola senza dire la soluzione né le cinque parole vietate, usando la chat o una chiamata esterna. Ogni risposta corretta vale un punto, una violazione ne sottrae uno. È possibile passare senza penalità. Vince la squadra con più punti.';M('party-guide-text').textContent=M('party-intro').textContent;hide('party-entry',!!party.ref);hide('party-room',!r);if(!r)return;const host=partyHost(r),lobby=r.state==='lobby',done=r.state==='finished',running=r.state==='running',draw=r.kind==='draw',actor=running?partyActor(r):null,active=actor===party.uid,mine=partyMember(r),same=running&&mine.team===partyTeam(r);M('party-room-name').textContent=(r.locked===false?'🔓 ':'🔒 ')+r.name;M('party-code').textContent=r.code;M('party-status').textContent=lobby?`Lobby · ${Object.keys(r.players).length}/${r.settings.capacity}`:done?'Partita conclusa':`Turno ${r.turn+1}/${r.order.length*r.settings.rounds} · ${r.players[actor]?.name||'-'}${draw?' disegna':` · ${CC_NAMES[partyTeam(r)]}`}`;const list=M('party-players');list.replaceChildren();const ids=Object.keys(r.players).sort((a,b)=>(r.scores[b]||0)-(r.scores[a]||0));if(!draw&&!lobby)list.append(ccNode('div',`Nebula ${r.teams[0]} · Nova ${r.teams[1]}`,'cc-turn'));for(const id of ids){const p=r.players[id],row=ccNode('div',undefined,'mp-player');row.append(ccNode('div',`${p.name}${id===r.hostUid?' · Host':''}${id===party.uid?' · Tu':''}${draw?'':` · ${CC_NAMES[p.team]}`}${r.guessed.includes(id)?' · ✓':''}`));if(draw&&!lobby)row.append(ccNode('strong',`${r.scores[id]||0} pt`,'mp-score'));if(host&&lobby&&id!==party.uid){const b=ccNode('button','Espelli','icon-btn');b.onclick=()=>partyAction(()=>partyTx(o=>{if(o.state!=='lobby'||!partyHost(o))return null;const players={...o.players};delete players[id];return {players};}));row.append(b);}list.append(row);}hide('party-lobby',!lobby);hide('party-team-label',draw);M('party-team').value=String(mine.team);hide('party-start',!host);M('party-start').disabled=party.busy||ids.length<partyMin(r);hide('party-play',!running);hide('party-result',!done);hide('party-rematch',!done||!host);if(done){const best=draw?Math.max(...Object.values(r.scores)):Math.max(...r.teams);const winners=draw?ids.filter(id=>r.scores[id]===best).map(id=>r.players[id].name):[0,1].filter(t=>r.teams[t]===best).map(t=>CC_NAMES[t]);M('party-result').textContent=`🏆 ${winners.join(' e ')} · ${best} punti${winners.length>1?' · Pareggio':''}`;}partyListenStrokes(r);if(!running)return;const choose=r.phase==='choose',card=partyCard(r),visible=active||(!draw&&!same);M('party-previous').textContent=draw&&r.lastWord?'Parola del turno precedente: '+r.lastWord:'';M('party-word').textContent=choose?(active?'Scegli una parola':'Il disegnatore sta scegliendo…'):visible?card.word:(draw?`Parola: ${card.word.replace(/[A-Z0-9]/g,'_ ').trim()}`:'Indovina la parola del suggeritore');const choices=M('party-choices');choices.replaceChildren();if(choose&&active)for(let i=0;i<3;i++){const b=ccNode('button',r.deck[r.turn*3+i].word,'icon-btn');b.onclick=()=>partyChoose(i);choices.append(b);}hide('party-choices',!choose||!active);hide('party-draw',!draw||choose);hide('party-tools',!active);hide('party-banned',draw||!visible||choose);M('party-banned').textContent=draw?'':`NON DIRE: ${card.banned.join(' · ')}`;hide('party-chat-form',choose||(draw?(active||r.guessed.includes(party.uid)):!same));M('party-text').placeholder=!draw&&active?'Scrivi un indizio':'Scrivi la risposta';hide('party-pass',draw||!active||choose);hide('party-correct',draw||!active||choose);hide('party-foul',draw||same||choose);hide('party-next',choose||!(active||host));M('party-sound').textContent=window.cosmicGame.soundEnabled()?'🔊 Audio':'🔇 Audio';const chat=M('party-chat');chat.replaceChildren();for(const m of r.chat)chat.append(ccNode('div',`${r.players[m.uid]?.name||'-'}: ${m.text.replace(/\u2212/g,'-')}`,m.correct?'correct':''));chat.scrollTop=chat.scrollHeight;partyTick();}
+    const partyInvite=new URL(location.href).searchParams.get('party');if(!inviteCode&&!ccInvite&&PARTY_NAMES[partyInvite]){party.kind=partyInvite;M('party-code-input').value=(new URL(location.href).searchParams.get('code')||'').slice(0,10);hide('party-create',true);hide('party-join',false);hide('party-modal',false);switchMenu('multi');partyRender();}
 
     // Board games: isolated room collection; fleets are in owner-only documents.
     const BG_PATH=[...MP_PATH.slice(0,-1),'boardRooms'], BG_SESSION='cosmic-eye-board-v1';
@@ -2083,14 +2199,14 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
     function bgRandomFleet(){const ships=[];for(const len of BG_LENGTHS){const choices=[];for(let i=0;i<64;i++)for(const v of [false,true]){const a=bgCells(i,len,v);if(a.length===len&&!a.some(c=>ships.flat().includes(c)))choices.push(a);}if(!choices.length)return bgRandomFleet();ships.push(choices[Math.floor(Math.random()*choices.length)]);}return ships;}
     function bgWinning(marks,last,w,h,k){const set=new Set(marks);for(const [dx,dy] of [[1,0],[0,1],[1,1],[-1,1]])for(let shift=0;shift<k;shift++){const x=last%w-shift*dx,y=Math.floor(last/w)-shift*dy;const line=[];for(let i=0;i<k;i++){const xx=x+i*dx,yy=y+i*dy;if(xx<0||xx>=w||yy<0||yy>=h||!set.has(yy*w+xx))break;line.push(yy*w+xx);}if(line.length===k)return line;}return [];}
     function bgNext(r,alive){for(let i=1;i<=r.order.length;i++){const at=(r.turn+i)%r.order.length;if(alive.includes(r.order[at]))return at;}return r.turn;}
-    function bgOpen(kind){if(mp.ref||cc.ref||party.ref||window.cosmicGame.isSingleActive()||window.cosmicGame.isMultiplayer()){alert('Concludi o abbandona prima la partita in corso.');return;}if(bg.ref&&bg.kind!==kind){alert('Esci prima dalla stanza in corso.');return;}bg.kind=kind;hide('boardgames-modal',false);bgRender();}
-    function bgDetach(msg=''){bg.unsub?.();Object.assign(bg,{ref:null,uid:null,room:null,unsub:null,round:'',fleet:null,draft:[[],[],[],[]],target:'',fetching:false});dropSession(BG_SESSION);bgSay(msg);bgRender();}
+    function bgOpen(kind){if(mp.ref||cc.ref||party.ref||window.cosmicGame.isSingleActive()||window.cosmicGame.isMultiplayer()){alert('Concludi o abbandona prima la partita in corso.');return;}if(bg.ref&&bg.kind!==kind){alert('Esci prima dalla stanza in corso.');return;}bg.kind=kind;hide('bg-create',true);hide('bg-join',true);bgSay('');hide('boardgames-modal',false);bgRender();}
+    function bgDetach(msg=''){bg.unsub?.();Object.assign(bg,{ref:null,uid:null,room:null,unsub:null,round:'',fleet:null,draft:[[],[],[],[]],target:'',fetching:false});dropSession(BG_SESSION);hide('bg-create',true);hide('bg-join',true);bgSay(msg);bgRender();}
     function bgAttach(ref,uid,kind){void syncClock();bg.ref=ref;bg.uid=uid;bg.kind=kind;saveSession(BG_SESSION,{id:ref.id,uid,kind});hide('boardgames-modal',false);bgRender();bg.unsub=onSnapshot(ref,{includeMetadataChanges:true},snap=>{if(bg.ref!==ref||!observeRoom(bg,snap,bgSay))return;const r=snap.exists()?snap.data():null;if(roomExpired(r)){bgDetach('Stanza scaduta dopo 24 ore. Crea una nuova stanza.');return;}if(!r||!r.players[uid]||r.state==='closed'){bgDetach('Stanza chiusa o accesso revocato.');return;}if(bg.round!==r.roundKey){Object.assign(bg,{round:r.roundKey,fleet:null,draft:[[],[],[],[]],target:'',fetching:false});}if(JSON.stringify(bg.room?.pending)!==JSON.stringify(r.pending))bg.pendingSince=Date.now();bg.room=r;bgRender();bgLoadFleet();},e=>bgSay(cloudError(e)));}
     function bgRestore(uid){const s=readSession(BG_SESSION);if(!mp.ref&&!cc.ref&&!party.ref&&!bg.ref&&s?.uid===uid&&/^[a-f0-9]{64}$/.test(s.id)&&BG_NAMES[s.kind])bgAttach(doc(db,...BG_PATH,s.id),uid,s.kind);}
     async function bgAction(fn){if(bg.busy)return;bg.busy=true;bgSay('');try{await fn();}catch(e){bgSay(cloudError(e));console.error('Board games:',e);}finally{bg.busy=false;bgRender();}}
     async function bgTx(change){const ref=bg.ref,uid=bg.uid;if(!ref||uid!==requireOnline())throw Error('Stanza non disponibile.');return runTransaction(db,async t=>{const s=await t.get(ref);if(!s.exists())throw Error('Stanza non trovata.');const r=s.data();assertRoomFresh(r);if(!r.players[uid]||r.state==='closed')throw Error('Stanza non disponibile.');const p=change(r,t,ref);if(p)directoryUpdate(t,ref,r,p);});}
     for(const k of Object.keys(BG_NAMES))M('bg-'+k+'-open').onclick=()=>bgOpen(k);
-    M('bg-close').onclick=()=>{if(bg.ref){bgSay('Usa Esci dalla stanza.');return;}hide('boardgames-modal',true);};
+    M('bg-close').onclick=()=>{if(bg.ref){bgSay('Usa Esci dalla stanza.');return;}hide('bg-create',true);hide('bg-join',true);hide('boardgames-modal',true);};
     M('bg-create').onsubmit=e=>{e.preventDefault();bgAction(async()=>{const uid=requireOnline();if(bg.ref||mp.ref||cc.ref||party.ref)throw Error('Sei già in una stanza.');const kind=bg.kind,name=M('bg-name').value.trim(),capacity=kind==='naval'?+M('bg-cap').value:2;if(!name)throw Error('Inserisci il nome.');const code=bytesHex(crypto.getRandomValues(new Uint8Array(5))).toUpperCase(),password=M('bg-password').value,id=await deriveRoom(code,password),ref=doc(db,...BG_PATH,id);await runTransaction(db,async t=>{if((await t.get(ref)).exists())throw Error('Codice già in uso.');directoryCreate(t,ref,{locked:password!=='',kind,code,name,capacity,hostUid:uid,createdAt:serverTimestamp(),state:'lobby',players:{[uid]:{name:cleanName()}},order:[],roundKey:'',turn:0,marks:{},ready:[],shots:{},hits:{},alive:[],pending:null,last:null,winner:''});});M('bg-password').value='';bgAttach(ref,uid,kind);});};
     M('bg-join').onsubmit=e=>{e.preventDefault();bgAction(async()=>{const uid=requireOnline();if(bg.ref||mp.ref||cc.ref||party.ref)throw Error('Sei già in una stanza.');const kind=bg.kind,id=await deriveRoom(M('bg-code-input').value.trim().toUpperCase(),M('bg-join-password').value),ref=doc(db,...BG_PATH,id);await runTransaction(db,async t=>{const s=await t.get(ref);if(!s.exists())throw Error('Codice o password errati.');const r=s.data();assertRoomFresh(r);if(r.kind!==kind||r.state==='closed')throw Error('Stanza non disponibile per questa modalità.');if(r.players[uid])return;if(r.state!=='lobby'||Object.keys(r.players).length>=r.capacity)throw Error('Stanza piena o partita già iniziata.');directoryUpdate(t,ref,r,{players:{...r.players,[uid]:{name:cleanName()}}});});M('bg-join-password').value='';bgAttach(ref,uid,kind);});};
     M('bg-start').onclick=()=>bgAction(()=>bgTx(r=>{if(!bgHost(r)||r.state!=='lobby'||Object.keys(r.players).length<2)throw Error('Servono almeno due giocatori.');const ids=ccShuffle(Object.keys(r.players));return {state:r.kind==='naval'?'setup':'running',order:ids,roundKey:partyKey(),turn:0,marks:bgBlank(ids),ready:[],shots:bgBlank(ids),hits:bgBlank(ids),alive:ids,pending:null,last:null,winner:''};}));
@@ -2125,12 +2241,12 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
     }
     setInterval(bgResolve,700);
     function bgGrid(id,w,h,fn,cls=''){const node=M(id);node.className='bg-grid '+cls;node.style.gridTemplateColumns=`repeat(${w},minmax(0,1fr))`;node.replaceChildren();for(let i=0;i<w*h;i++){const a=fn(i),b=ccNode('button',a.text||'',a.cls||'');b.type='button';b.disabled=!a.click;b.setAttribute('aria-label',a.label||`${String.fromCharCode(65+i%w)}${Math.floor(i/w)+1}`);if(a.click)b.onclick=a.click;node.append(b);}}
-    function bgRender(){const r=bg.room,kind=bg.kind;M('bg-title').textContent=BG_NAMES[kind];M('bg-intro').textContent=kind==='tris'?'Tre simboli in fila, in orizzontale, verticale o diagonale.':kind==='four'?'Inserisci una pedina nella colonna: quattro allineate vincono.':'2–4 giocatori, quattro navi a testa. Attacca un avversario per turno; vince l’ultima flotta in gioco.';hide('bg-cap-label',kind!=='naval');hide('bg-entry',!!bg.ref);hide('bg-room',!r);if(!r)return;const lobby=r.state==='lobby',setup=r.state==='setup',running=r.state==='running',done=r.state==='finished',naval=kind==='naval',host=bgHost(r),ownTurn=running&&bgActor(r)===bg.uid&&!r.pending;M('bg-room-name').textContent=(r.locked===false?'🔓 ':'🔒 ')+r.name;M('bg-code').textContent=r.code;M('bg-status').textContent=lobby?`Lobby · ${Object.keys(r.players).length}/${r.capacity}`:setup?`Preparazione flotte · ${r.ready.length}/${r.order.length}`:done?'Partita conclusa':r.pending?`Attesa risposta di ${r.players[r.pending.target]?.name||'—'}${r.pending.at?' · '+Math.max(0,Math.ceil((r.pending.at.toMillis()+90000-serverNow())/1000))+' s':''}`:ownTurn?'È il tuo turno':`Turno di ${r.players[bgActor(r)]?.name||'—'}`;const list=M('bg-players');list.replaceChildren();for(const uid of lobby?Object.keys(r.players):r.order){const row=ccNode('div',undefined,'mp-player'),i=r.order.indexOf(uid);row.append(ccNode('span',`${r.players[uid]?.name||'—'}${uid===bg.uid?' · Tu':''}${uid===r.hostUid?' · Host':''}${!lobby&&!naval?(i===0?' · ✕':' · ○'):''}${setup?(r.ready.includes(uid)?' · Pronto':' · In attesa'):''}`));if(naval&&!lobby&&!setup)row.append(ccNode('strong',r.alive.includes(uid)?`${BG_TOTAL-r.hits[uid].length} segmenti`:'Eliminato','mp-score'));if(lobby&&host&&uid!==bg.uid){const b=ccNode('button','Espelli','icon-btn');b.onclick=()=>bgAction(()=>bgTx(o=>{if(o.state!=='lobby'||!bgHost(o))return null;const players={...o.players};delete players[uid];return {players};}));row.append(b);}list.append(row);}hide('bg-start',!lobby||!host);M('bg-start').disabled=bg.busy||Object.keys(r.players).length<2;hide('bg-play',lobby);hide('bg-result',!done);hide('bg-rematch',!done||!host);if(done)M('bg-result').textContent=r.winner==='draw'?'Pareggio!':`🏆 ${r.players[r.winner]?.name||'—'} vince!`;if(lobby)return;
+    function bgRender(){const r=bg.room,kind=bg.kind;M('bg-title').textContent=BG_NAMES[kind];M('bg-intro').textContent=kind==='tris'?'Due giocatori alternano X e O su una griglia 3×3. Scegli una casella libera e cerca di allineare tre dei tuoi simboli in orizzontale, verticale o diagonale. Se la griglia si riempie senza un vincitore, la partita finisce in pareggio.':kind==='four'?'Due giocatori inseriscono a turno una pedina in una delle sette colonne. La pedina cade nella prima casella libera dal basso. Vince chi allinea quattro pedine in orizzontale, verticale o diagonale; a griglia piena senza vincitori è pareggio.':'Da 2 a 4 giocatori dispongono quattro navi nella propria griglia 8×8. A turno scegli un avversario e una casella da colpire sul suo radar. Chi perde tutta la flotta viene eliminato. Vince l’ultimo giocatore rimasto.';M('bg-guide-text').textContent=M('bg-intro').textContent;hide('bg-cap-label',kind!=='naval');hide('bg-entry',!!bg.ref);hide('bg-room',!r);if(!r)return;const lobby=r.state==='lobby',setup=r.state==='setup',running=r.state==='running',done=r.state==='finished',naval=kind==='naval',host=bgHost(r),ownTurn=running&&bgActor(r)===bg.uid&&!r.pending;M('bg-room-name').textContent=(r.locked===false?'🔓 ':'🔒 ')+r.name;M('bg-code').textContent=r.code;M('bg-status').textContent=lobby?`Lobby · ${Object.keys(r.players).length}/${r.capacity}`:setup?`Preparazione flotte · ${r.ready.length}/${r.order.length}`:done?'Partita conclusa':r.pending?`Attesa risposta di ${r.players[r.pending.target]?.name||'-'}${r.pending.at?' · '+Math.max(0,Math.ceil((r.pending.at.toMillis()+90000-serverNow())/1000))+' s':''}`:ownTurn?'È il tuo turno':`Turno di ${r.players[bgActor(r)]?.name||'-'}`;const list=M('bg-players');list.replaceChildren();for(const uid of lobby?Object.keys(r.players):r.order){const row=ccNode('div',undefined,'mp-player'),i=r.order.indexOf(uid);row.append(ccNode('span',`${r.players[uid]?.name||'-'}${uid===bg.uid?' · Tu':''}${uid===r.hostUid?' · Host':''}${!lobby&&!naval?(i===0?' · ✕':' · ○'):''}${setup?(r.ready.includes(uid)?' · Pronto':' · In attesa'):''}`));if(naval&&!lobby&&!setup)row.append(ccNode('strong',r.alive.includes(uid)?`${BG_TOTAL-r.hits[uid].length} segmenti`:'Eliminato','mp-score'));if(lobby&&host&&uid!==bg.uid){const b=ccNode('button','Espelli','icon-btn');b.onclick=()=>bgAction(()=>bgTx(o=>{if(o.state!=='lobby'||!bgHost(o))return null;const players={...o.players};delete players[uid];return {players};}));row.append(b);}list.append(row);}hide('bg-start',!lobby||!host);M('bg-start').disabled=bg.busy||Object.keys(r.players).length<2;hide('bg-play',lobby);hide('bg-result',!done);hide('bg-rematch',!done||!host);if(done)M('bg-result').textContent=r.winner==='draw'?'Pareggio!':`🏆 ${r.players[r.winner]?.name||'-'} vince!`;if(lobby)return;
       hide('bg-setup',!setup||r.ready.includes(bg.uid));hide('bg-own-label',!naval);hide('bg-target-wrap',!naval||setup);if(!naval){const four=kind==='four',w=four?7:3,h=four?6:3,win=done&&r.winner!=='draw'?bgWinning(r.marks[r.winner],r.last.cell,w,h,four?4:3):[];bgGrid('bg-grid',w,h,i=>{const a=r.marks[r.order[0]].includes(i),b=r.marks[r.order[1]].includes(i),free=!a&&!b,can=ownTurn&&!bg.busy&&(four?Array.from({length:6},(_,j)=>j*7+i%7).some(c=>!r.marks[r.order[0]].includes(c)&&!r.marks[r.order[1]].includes(c)):free);return {text:a?'✕':b?'○':'',cls:(a?'bg-a':b?'bg-b':'')+(win.includes(i)?' bg-win':''),click:can?()=>bgPlaceMark(i):null};},four?'bg-four':'');M('bg-legend').textContent=four?'Tocca una colonna per far cadere la pedina.':'Tocca una casella libera.';return;}
       const ships=(bg.fleet||bg.draft).flat(),myHits=r.hits[bg.uid]||[],myShots=r.shots[bg.uid]||[];bgGrid('bg-grid',8,8,i=>({text:myHits.includes(i)?'✕':myShots.includes(i)?'·':ships.includes(i)?'■':'',cls:myHits.includes(i)?'bg-hit':myShots.includes(i)?'bg-miss':ships.includes(i)?'bg-ship':'',click:setup&&!r.ready.includes(bg.uid)&&!bg.busy?()=>bgPlaceShip(i):null}),'bg-naval');M('bg-ready').disabled=bg.busy||bg.draft.some((s,i)=>s.length!==BG_LENGTHS[i]);M('bg-legend').textContent=setup?(r.ready.includes(bg.uid)?'Flotta confermata. Attendi gli altri giocatori.':`Segmenti posizionati: ${ships.length}/${BG_TOTAL}`):'■ Nave · ✕ Colpito · · Acqua. Le posizioni avversarie non sono mostrate.';if(setup)return;
-      const targets=r.order.filter(id=>id!==bg.uid&&(done||r.alive.includes(id)));if(!targets.includes(bg.target))bg.target=targets[0]||'';const select=M('bg-target');select.replaceChildren(...targets.map(id=>new Option(r.players[id].name,id,false,id===bg.target)));select.disabled=!!r.pending||bg.busy;const target=bg.target,shot=r.shots[target]||[],hit=r.hits[target]||[];bgGrid('bg-enemy',8,8,i=>({text:hit.includes(i)?'✕':shot.includes(i)?'·':'',cls:hit.includes(i)?'bg-hit':shot.includes(i)?'bg-miss':'',click:ownTurn&&target&&!bg.busy&&!shot.includes(i)?()=>bgFire(i):null}),'bg-naval');M('bg-shot-status').textContent=r.last?`${r.players[r.last.by]?.name||'—'} → ${r.players[r.last.target]?.name||'—'} ${String.fromCharCode(65+r.last.cell%8)}${Math.floor(r.last.cell/8)+1}: ${r.last.forfeit?'Avversario ritirato per mancata risposta':r.last.hit?'Colpito!':'Acqua'}`:'Seleziona un bersaglio e una casella.';
+      const targets=r.order.filter(id=>id!==bg.uid&&(done||r.alive.includes(id)));if(!targets.includes(bg.target))bg.target=targets[0]||'';const select=M('bg-target');select.replaceChildren(...targets.map(id=>new Option(r.players[id].name,id,false,id===bg.target)));select.disabled=!!r.pending||bg.busy;const target=bg.target,shot=r.shots[target]||[],hit=r.hits[target]||[];bgGrid('bg-enemy',8,8,i=>({text:hit.includes(i)?'✕':shot.includes(i)?'·':'',cls:hit.includes(i)?'bg-hit':shot.includes(i)?'bg-miss':'',click:ownTurn&&target&&!bg.busy&&!shot.includes(i)?()=>bgFire(i):null}),'bg-naval');M('bg-shot-status').textContent=r.last?`${r.players[r.last.by]?.name||'-'} → ${r.players[r.last.target]?.name||'-'} ${String.fromCharCode(65+r.last.cell%8)}${Math.floor(r.last.cell/8)+1}: ${r.last.forfeit?'Avversario ritirato per mancata risposta':r.last.hit?'Colpito!':'Acqua'}`:'Seleziona un bersaglio e una casella.';
     }
-    const bgInvite=new URL(location.href).searchParams.get('board');if(!inviteCode&&!ccInvite&&!partyInvite&&BG_NAMES[bgInvite]){bg.kind=bgInvite;M('bg-code-input').value=(new URL(location.href).searchParams.get('code')||'').slice(0,10);hide('boardgames-modal',false);switchMenu('multi');bgRender();}
+    const bgInvite=new URL(location.href).searchParams.get('board');if(!inviteCode&&!ccInvite&&!partyInvite&&BG_NAMES[bgInvite]){bg.kind=bgInvite;M('bg-code-input').value=(new URL(location.href).searchParams.get('code')||'').slice(0,10);hide('bg-create',true);hide('bg-join',false);hide('boardgames-modal',false);switchMenu('multi');bgRender();}
 
     // Graceful expiration and reconnect. A room is not automatically deleted on expiry.
     const roomsActive=()=>!!(mp.ref||cc.ref||party.ref||bg.ref);
@@ -2140,7 +2256,7 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
         if(roomExpired(cc.room))ccDetach(msg);
         if(roomExpired(party.room))partyDetach(msg);
         if(roomExpired(bg.room))bgDetach(msg);
-        if(bg.room?.pending?.at&&!bg.busy)M('bg-status').textContent=`Attesa risposta di ${bg.room.players[bg.room.pending.target]?.name||'—'} · ${Math.max(0,Math.ceil((bg.room.pending.at.toMillis()+90000-serverNow())/1000))} s`;
+        if(bg.room?.pending?.at&&!bg.busy)M('bg-status').textContent=`Attesa risposta di ${bg.room.players[bg.room.pending.target]?.name||'-'} · ${Math.max(0,Math.ceil((bg.room.pending.at.toMillis()+90000-serverNow())/1000))} s`;
         if(roomsActive())void syncClock();
     },1000);
     window.addEventListener('online',()=>{if(roomsActive()){void syncClock(true);if(mp.pending&&!mp.syncing)void flushReport();}});
@@ -2178,8 +2294,8 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
             name.textContent=(r.locked?'🔒 ':'🔓 ')+r.name;info.className='mode-desc';
             const full=r.count>=r.capacity,status=r.state==='lobby'?(full?'Completa':'In attesa'):r.state==='finished'?'In attesa di rivincita':r.state==='setup'?'Preparazione':'Partita in corso';
             info.textContent=`${r.count}/${r.capacity} giocatori · ${status} · ${r.code}`;left.append(name,info);
-            const b=document.createElement('button');b.type='button';b.className='icon-btn';b.disabled=full||r.state!=='lobby';b.textContent=r.locked?'🔒 Entra':'Entra';
-            b.onclick=()=>{if(directoryActive?.kind!==kind)return;const form=M(pre+'-join'),pw=M(pre+'-join-password');if(pre==='mp'||pre==='cc')M(pre+'-show-join').click();M(pre+'-code-input').value=r.code;pw.value='';if(r.locked){form.scrollIntoView({block:'nearest'});pw.focus();}else form.requestSubmit();};
+            const b=document.createElement('button');b.type='button';b.className='icon-btn';b.disabled=full||r.state!=='lobby';b.textContent=r.locked?'🔒 Unisciti':'Unisciti';
+            b.onclick=()=>{if(directoryActive?.kind!==kind)return;const form=M(pre+'-join'),pw=M(pre+'-join-password');if(M(pre+'-show-join'))M(pre+'-show-join').click();M(pre+'-code-input').value=r.code;pw.value='';if(r.locked){form.scrollIntoView({block:'nearest'});pw.focus();}else form.requestSubmit();};
             row.append(left,b);return row;
         }));
     }
@@ -2648,6 +2764,9 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
             game.attempts = saved.attempts; game.locked = saved.locked;
             game.current = saved.current; game.cursor = saved.cursor; game.active = saved.active;
         }
+        $("game-intro-text").textContent = cfg.type === "word"
+            ? `Indovina la parola italiana di ${cfg.len} lettere entro ${attemptLimit()} tentativi. Inserisci le lettere e premi Verifica. Usa gli indizi colorati per correggere le scelte.`
+            : `Decifra una sequenza di ${cfg.len} colori scegliendo tra ${cfg.colors} disponibili, in ${attemptLimit()} tentativi. ${multiplayer && multiplayer.duplicates ? "I colori possono ripetersi." : "La soluzione non contiene colori ripetuti."} Premi Verifica per ricevere gli indizi.${multiplayer ? " Vince chi ottiene più punti." : " Meno tentativi e meno tempo danno più punti."}`;
         $("hud-mode").textContent = multiplayer ? "Multiplayer" : `${cfg.short} (${cfg.mult.toFixed(1)}x)`;
         $("menu-screen").classList.add("hidden");
         $("game-screen").classList.remove("hidden");
@@ -3337,6 +3456,7 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
     const identity = document.getElementById('identity-bar');
     const dialogs = [...document.querySelectorAll('.modal-backdrop')];
     const sync = () => {
+        chrome.classList.toggle('is-scrolled', window.scrollY > 4);
         document.body.style.setProperty('--identity-bottom', Math.max(0, Math.ceil(identity.getBoundingClientRect().bottom)) + 'px');
         document.body.style.setProperty('--chrome-bottom', Math.max(0, Math.ceil(chrome.getBoundingClientRect().bottom)) + 'px');
         const modalOpen = dialogs.some(el => !el.classList.contains('hidden'));
