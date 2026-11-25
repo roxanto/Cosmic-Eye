@@ -1212,6 +1212,7 @@
 <!-- Firebase SDK (Classifica Globale Online) -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+    import { initializeAppCheck, ReCaptchaEnterpriseProvider } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app-check.js";
     import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
     import { getFirestore, collection, addDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
@@ -1233,6 +1234,13 @@
         const txt = document.getElementById("sync-text");
         try {
             const app = initializeApp(CUSTOM_FIREBASE_CONFIG);
+
+            // Firebase App Check: protezione delle richieste tramite reCAPTCHA Enterprise.
+            initializeAppCheck(app, {
+                provider: new ReCaptchaEnterpriseProvider("6LdxszAuAAAAACzrTxzrhWNM6yL7Q-eruYyGrFDq"),
+                isTokenAutoRefreshEnabled: true
+            });
+
             const auth = getAuth(app);
             db = getFirestore(app);
 
