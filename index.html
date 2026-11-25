@@ -1269,6 +1269,76 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
  .room-entry-controls > .mp-actions > .btn-submit {font-size:.78rem;min-height:44px;padding:6px;}
 }
 
+/* Compact navigation and gameplay */
+#eye-status {display:none!important;}
+:is(#mp-room,#cc-room,#party-room,#bg-room) > .game-guide {display:none;}
+body:has(:is(#mp-modal,#cc-modal,#party-modal,#boardgames-modal):not(.hidden)) #btn-info {display:none!important;}
+.eye-wrapper {width:118px;height:64px;}
+#btn-info,#btn-help,.room-help-btn {font-weight:800;font-size:1rem;color:var(--cyan-glow);}
+.room-help-btn {margin-left:auto;}
+body.mind-playing #btn-info {display:none!important;}
+#btn-avatar {padding:2px;min-width:36px;height:36px;}
+#btn-avatar svg {width:30px;height:30px;display:block;}
+.mini-avatar {display:inline-flex;vertical-align:middle;width:25px;height:25px;flex:0 0 25px;margin-right:6px;align-items:center;justify-content:center;}
+.mini-avatar svg {display:block;width:100%;height:100%;}
+.history-person {font-size:.72rem;color:var(--text-muted);}
+.avatar-preview {width:112px;height:112px;margin:8px auto;}.avatar-preview svg {width:100%;height:100%;}
+#avatar-options {grid-template-columns:repeat(2,minmax(0,1fr));}
+#avatar-options select {width:100%;min-width:0;}
+.about-motto {color:var(--cyan-glow);font-size:1.1rem;text-align:center;margin:8px 0;}
+.about-copy {color:var(--text-main);font-size:.86rem;line-height:1.65;}
+.about-sign {color:var(--cyan-glow);text-align:right;font-weight:700;}
+.auxiliary-modal {z-index:100;}
+#help-modal .game-intro,#help-modal .game-rules {margin:0;}
+.score-modal {max-width:650px;}.score-tabs {flex-shrink:0;}.score-tabs button {font-size:.78rem;}
+.cosmic-mind-title {
+    justify-content: center;
+    text-align: center;
+    color: var(--amber-glow);
+    font-size: 1.05rem;
+    letter-spacing: .1em;
+    margin-bottom: 12px;
+}
+/* The board is the elastic region, the HUD and input remain in view. */
+body.mind-playing {overflow:hidden;}
+body.mind-playing .app-shell {height:100dvh;min-height:0;overflow:hidden;padding-bottom:max(6px,env(safe-area-inset-bottom));}
+body.mind-playing .app-chrome {flex:0 0 auto;}
+body.mind-playing #game-screen {flex:1 1 0;min-height:0;overflow:hidden;}
+body.mind-playing #board-panel {max-height:none;min-height:0;overscroll-behavior:contain;}
+body.mind-playing .game-side {min-height:0;position:static;}
+body.mind-playing #mp-game-panel {min-height:0;overflow:auto;}
+@media(min-width:720px){
+ .eye-wrapper {width:130px;height:71px;}
+ body.mind-playing #game-screen {grid-template-areas:'hud hud' 'board side';grid-template-rows:auto minmax(0,1fr);align-items:stretch;}
+ body.mind-playing .game-side {overflow:auto;}
+}
+@media(max-width:719px){
+ .top-bar {grid-template-columns:minmax(0,1fr) 74px minmax(0,1fr);}
+ .eye-wrapper {width:74px;height:41px;}
+ body.mind-playing .top-bar {grid-template-columns:minmax(0,1fr) 65px minmax(0,1.18fr);}
+ body.mind-playing .eye-wrapper {width:65px;height:36px;}
+ body.mind-playing #game-screen {display:flex;gap:5px;}
+ body.mind-playing .app-shell {gap:4px;}
+ body.mind-playing .app-chrome {padding:2px 0;}
+ body.mind-playing .hud-bar {flex:0 0 auto;padding:4px;gap:4px;}
+ body.mind-playing .hud-cell {padding:3px 4px;}
+ body.mind-playing .hud-val {font-size:.75rem;}
+ body.mind-playing #board-panel {flex:1 1 0;padding:5px;gap:4px;}
+ body.mind-playing .game-side {flex:0 0 auto;gap:4px;}
+ body.mind-playing .input-panel {padding:5px;gap:5px;}
+ body.mind-playing .color-grid {gap:4px;}
+ body.mind-playing .color-btn,body.mind-playing .color-btn.compact-25 {height:clamp(26px,5.2dvh,39px);border-radius:7px;}
+ body.mind-playing .color-name,body.mind-playing .color-btn.compact-25 .color-name {font-size:.49rem;margin-top:0;}
+ body.mind-playing .key-btn {height:clamp(29px,5.6dvh,42px);}
+ body.mind-playing .action-bar {gap:5px;}
+ body.mind-playing .action-bar .action-btn {height:clamp(32px,5.5dvh,42px);}
+ body.mind-playing .attempt-row {padding:3px 4px;gap:3px;}
+ body.mind-playing .slot-box {width:clamp(24px,8vw,38px);height:clamp(24px,5.5dvh,38px);}
+ body.mind-playing #mp-game-panel {max-height:min(20dvh,130px);padding:5px!important;}
+ body.mind-playing #mp-progress {max-height:65px;}
+}
+@media(max-width:360px){.top-bar{grid-template-columns:minmax(0,1fr) 56px minmax(0,1fr);}.eye-wrapper{width:56px;height:31px;}body.mind-playing .top-bar{grid-template-columns:minmax(0,1fr) 48px minmax(0,1.4fr);}body.mind-playing .eye-wrapper{width:48px;height:27px;}}
+@media(max-height:520px) and (orientation:landscape){body.mind-playing #game-screen{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:'hud hud' 'board side';grid-template-rows:auto minmax(0,1fr);}body.mind-playing .game-side{overflow:auto;}body.mind-playing .color-btn,body.mind-playing .color-btn.compact-25{height:26px;}body.mind-playing .key-btn{height:28px;}body.mind-playing .action-bar .action-btn{height:32px;}}
 </style>
 </head>
 <body>
@@ -1325,9 +1395,11 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
         <div class="eye-status-pill" id="eye-status">Mens sana in corpore sano</div>
     </div>
         <div class="header-actions">
-            <button id="btn-leaderboard" class="icon-btn" title="Classifica Globale">🌐</button>
-            <button id="btn-history" class="icon-btn" title="Archivio Storico Punteggi">🏆 <span id="top-best-score">0</span></button>
+            
+            <button id="btn-history" class="icon-btn" title="Storico e classifica globale">🏆 <span id="top-best-score">0</span></button>
             <button id="btn-sound" class="icon-btn" title="Audio">🔊</button>
+            <button id="btn-info" class="icon-btn" title="Informazioni" aria-label="Informazioni su Cosmic Eye">ⓘ</button>
+            <button id="btn-help" class="icon-btn hidden" title="Come si gioca" aria-label="Come si gioca">?</button>
             <button id="btn-home" class="icon-btn hidden" title="Torna alla Home" aria-label="Torna alla Home">
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M3 10.5L12 3l9 7.5"></path>
@@ -1345,11 +1417,12 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
         <div class="profile-controls">
             <div class="section-label">
                 <span>◈ Profilo Esploratore</span>
-                <span class="sync-status"><span class="sync-dot" id="sync-dot"></span><span id="sync-text">Connessione...</span></span>
+                <span class="sync-status"><span class="sync-dot" id="sync-dot"></span><span id="sync-text">Offline</span></span>
             </div>
             <div class="profile-box">
                 <div class="profile-row">
                     <input type="text" id="username-input" class="profile-input" maxlength="18" placeholder="Il tuo Username..." />
+                    <button id="btn-avatar" class="icon-btn" title="Personalizza avatar" aria-label="Personalizza avatar"></button>
                     <button id="btn-save-user" class="icon-btn" style="padding:0 12px; color:var(--cyan-glow);">Salva</button>
                 </div>
             </div>
@@ -1363,7 +1436,12 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
     <main id="menu-screen" class="glass-panel menu-screen">
         <div id="single-modes" class="menu-section" role="tabpanel" aria-labelledby="menu-single">
         <div>
-            <div class="section-label"><span>◈ Modalità Colori (7 Tentativi)</span></div>
+            <h2 class="section-label cosmic-mind-title">
+                <span aria-hidden="true">◈</span>
+                <span>Cosmic Mind</span>
+                <span aria-hidden="true">◈</span>
+            </h2>
+            <div class="section-label"><span>Modalità Colori</span></div>
             <div class="mode-grid">
                 <button class="mode-card" data-mode="color-easy">
                     <div>
@@ -1390,7 +1468,7 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
         </div>
 
         <div>
-            <div class="section-label"><span>◈ Modalità Lessicale (7 Tentativi)</span></div>
+            <div class="section-label"><span>Modalità Lessicale</span></div>
             <div class="mode-grid">
                 <button class="mode-card word-card" data-mode="word">
                     <div>
@@ -1443,7 +1521,7 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
             </div>
         </div>
 
-        <section class="glass-panel game-intro" aria-label="Come si gioca"><strong>Come si gioca: </strong><span id="game-intro-text"></span></section>
+
         <!-- BOARD 7 TENTATIVI -->
         <div class="glass-panel board-panel" id="board-panel"></div>
 
@@ -1457,11 +1535,7 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
                 <button id="btn-submit" class="action-btn btn-submit" disabled>Verifica</button>
             </div>
         </div>
-        <section class="glass-panel rules-box game-rules" aria-label="Legenda dei tentativi">
-            <div class="game-rules-title">◈ Legenda dei tentativi</div>
-            <div><span class="legend-dot legend-green" aria-hidden="true"></span><span><strong>Luce verde:</strong> elemento e posizione esatti; resta bloccato.</span></div>
-            <div><span class="legend-dot legend-yellow" aria-hidden="true"></span><span><strong>Luce gialla:</strong> elemento presente, ma in posizione diversa.</span></div>
-        </section>
+
         <section id="mp-game-panel" class="glass-panel hidden" style="padding:10px">
             <div class="section-label"><span>◈ Avversari</span><button id="mp-game-lobby" class="icon-btn">Stanza</button></div>
             <div id="mp-progress" class="mp-stack"></div>
@@ -1474,13 +1548,16 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
 </div>
 
 <!-- MODALE CLASSIFICA GLOBALE -->
-<div id="leaderboard-modal" class="modal-backdrop hidden">
-    <div class="glass-panel modal-box">
-        <div class="modal-head">
-            <span class="modal-title">🌐 Classifica Globale</span>
-            <button id="btn-close-lb" class="icon-btn">✕</button>
+<div id="history-modal" class="modal-backdrop hidden"><div class="glass-panel modal-box score-modal">
+<div class="modal-head"><span class="modal-title">🏆 Punteggi</span><button id="btn-close-history" class="icon-btn" aria-label="Chiudi">✕</button></div>
+<div class="mode-switch score-tabs" role="tablist"><button type="button" id="score-history-tab" role="tab" aria-selected="true">Storico partite</button><button type="button" id="score-global-tab" role="tab" aria-selected="false">Classifica globale</button></div>
+<section id="score-history-panel" class="mp-stack" role="tabpanel">        <div class="stats-row" id="history-summary"></div>
+        <div class="history-scroll" id="history-list"></div>
+        <div style="display:flex; gap:8px;">
+            <button id="btn-export" class="icon-btn" style="flex:1;">💾 Esporta Backup</button>
+            <button id="btn-reset-history" class="icon-btn" style="border-color:rgba(255,42,95,0.45); color:#fda4af;">🗑️ Azzera</button>
         </div>
-        <div class="filter-tabs" id="lb-tabs">
+</section><section id="score-global-panel" class="mp-stack hidden" role="tabpanel">        <div class="filter-tabs" id="lb-tabs">
             <button class="filter-tab active" data-filter="ALL">Tutte</button>
             <button class="filter-tab" data-filter="Colori - Facile">Facile</button>
             <button class="filter-tab" data-filter="Colori - Medio">Medio</button>
@@ -1490,24 +1567,14 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
         <div class="history-scroll" id="leaderboard-list">
             <div style="text-align:center; padding:18px; font-size:0.78rem; color:var(--text-muted);">Caricamento classifica...</div>
         </div>
-    </div>
-</div>
-
-<!-- MODALE STORICO PUNTEGGI -->
-<div id="history-modal" class="modal-backdrop hidden">
-    <div class="glass-panel modal-box">
-        <div class="modal-head">
-            <span class="modal-title">🏆 Storico Partite</span>
-            <button id="btn-close-history" class="icon-btn">✕</button>
-        </div>
-        <div class="stats-row" id="history-summary"></div>
-        <div class="history-scroll" id="history-list"></div>
-        <div style="display:flex; gap:8px;">
-            <button id="btn-export" class="icon-btn" style="flex:1;">💾 Esporta Backup</button>
-            <button id="btn-reset-history" class="icon-btn" style="border-color:rgba(255,42,95,0.45); color:#fda4af;">🗑️ Azzera</button>
-        </div>
-    </div>
-</div>
+</section></div></div>
+<div id="help-modal" class="modal-backdrop hidden auxiliary-modal"><div class="glass-panel modal-box"><div class="modal-head"><span class="modal-title">Come si gioca</span><button id="close-help" class="icon-btn" aria-label="Chiudi">✕</button></div><div id="help-mind" class="mp-stack">        <section class="glass-panel game-intro" aria-label="Come si gioca"><strong>Come si gioca: </strong><span id="game-intro-text"></span></section>        <section class="glass-panel rules-box game-rules" aria-label="Legenda dei tentativi">
+            <div class="game-rules-title">◈ Legenda dei tentativi</div>
+            <div><span class="legend-dot legend-green" aria-hidden="true"></span><span><strong>Luce verde:</strong> elemento e posizione esatti; resta bloccato.</span></div>
+            <div><span class="legend-dot legend-yellow" aria-hidden="true"></span><span><strong>Luce gialla:</strong> elemento presente, ma in posizione diversa.</span></div>
+        </section></div><p id="help-other" class="room-entry-intro hidden"></p></div></div>
+<div id="info-modal" class="modal-backdrop hidden auxiliary-modal"><div class="glass-panel modal-box"><div class="modal-head"><span class="modal-title">Cosmic Eye</span><button id="close-info" class="icon-btn" aria-label="Chiudi">✕</button></div><h2 class="about-motto">Mens sana in corpore sano</h2><p class="about-copy">Ho creato Cosmic Eye perché volevo un posto in cui allenare la mente e, allo stesso tempo, ritrovare il piacere di giocare insieme. Un piccolo spazio senza complicazioni, dove la curiosità, la logica e la creatività diventano occasioni per mettersi alla prova e condividere un momento con gli amici.</p><p class="about-copy">L'idea è quella di poter aprire il gioco ovunque, anche solo per pochi minuti, e trovare sempre una nuova sfida. Perché divertirsi e tenere la mente attiva possono andare di pari passo.</p><p class="about-sign">~ Roxanto</p></div></div>
+<div id="avatar-modal" class="modal-backdrop hidden auxiliary-modal"><div class="glass-panel modal-box"><div class="modal-head"><span class="modal-title">Crea il tuo avatar</span><button id="close-avatar" class="icon-btn" aria-label="Chiudi">✕</button></div><div id="avatar-preview" class="avatar-preview"></div><div id="avatar-options" class="mp-fields"></div><div class="mp-actions"><button id="avatar-random" class="icon-btn">Casuale</button><button id="avatar-save" class="action-btn btn-submit">Salva avatar</button></div><p class="cc-muted" id="avatar-message" role="status"></p></div></div>
 
 <!-- MODALE CONFERMA RESET -->
 <div id="confirm-reset-modal" class="modal-backdrop hidden">
@@ -1696,6 +1763,180 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
  <div id="bg-result" class="cc-result hidden"></div><button id="bg-rematch" class="action-btn btn-submit hidden">Rivincita</button><button id="bg-leave" class="icon-btn">Esci dalla stanza</button></div>
 </div></div>
 
+<script>
+(() => {
+ const $=id=>document.getElementById(id), hide=(id,v)=>$(id).classList.toggle('hidden',v);
+ const defaults='000000', valid=v=>typeof v==='string'&&/^[0-7]{6}$/.test(v);
+ const palettes={bg:['#1e3a5f','#423267','#23574e','#6a3845','#4a4f25','#263d6f','#673b63','#374151'],skin:['#f6d1a7','#d9a47b','#b97752','#80513f','#f5bc9f','#9f735d','#b6d8ed','#c7b9f7'],hair:['#201d2a','#654832','#ad7446','#dfbd72','#151e3b','#a855f7','#13a6a9','#e5e7eb']};
+ const hairStyles = [
+   { // Frangia
+     front: `
+       <path d="M14 30C12 24 12 16 15 12C19 5 26 3.8 34 4.4C45 4.9 51 11 52 19C53 23 51 28 49 30L48 25C47 22 46 19 45 17C44 19 42 20 39 21C40 19 40 18 40 17C37 20 33 21 28 21C29 20 29 19 30 18C27 20 23 21 20 20C20 19 20 18 21 17C18 19 17 23 16 27Z"/>
+       <path d="M16 19C17 11 25 6 34 6.5C26 8 23 13 20 17ZM24 18C27 12 32 8 38 7.5C34 11 31 16 24 18ZM35 18C39 14 40 10 40 8C43 11 43 15 35 18Z" fill="%light%" opacity=".42"/>
+       <path d="M18 21C20 15 25 10 31 8M23 19C26 15 32 12 35 8M31 19C37 15 38 12 39 9M47 22C47 17 45 13 43 11" fill="none" stroke="%glint%" stroke-width=".46" stroke-linecap="round" opacity=".68"/>
+       <path d="M17 19C17 22 16 26 14 29M48 17C50 20 50 24 49 28M28 20C31 19 33 17 34 16" fill="none" stroke="%shadow%" stroke-width=".7" stroke-linecap="round"/>`
+   },
+   { // Ciuffo
+     front: `
+       <path d="M14 30C12 24 12 19 14 15C16 11 21 9 24 6C28 2.5 34 1.5 39 3C38 3.7 37 4.4 37 5C42 3.8 46 5 49 8C48 8 47 8.5 46 9C52 12 53 17 52 22C52 26 50 29 49 30C49 24 47 21 44 18C42 15 39 14 35 15C28 16 25 20 20 20C18 21 17 25 16 28Z"/>
+       <path d="M16 20C19 12 25 13 30 8C33 5.5 36 4.7 41 5.8C36 6 34 10 31 12C26 16 20 16 16 20ZM25 18C30 14 33 9 42 7C38 9 38 12 33 15Z" fill="%light%" opacity=".64"/>
+       <path d="M17 17C20 12 26 13 31 8C33 6.4 35 5.6 38 5.3M22 18C29 15 31 10 38 8M33 13C37 10 40 9 45 10.5M42 13.5C47 13.5 50 17.6 50 22" fill="none" stroke="%glint%" stroke-width=".52" stroke-linecap="round" opacity=".62"/>
+       <path d="M14 23C18 22 19 19 24 18M39 13C45 12.6 49 16.5 50 21.5M51 23L49.5 27" fill="none" stroke="%shadow%" stroke-width=".8" stroke-linecap="round"/>`
+   },
+   { // Spettinati
+     front: `
+       <path d="M13 29C12 25 11 21 13 17C12 17 11 17 10 18C11 13 14 10 19 9C17 8 16 7 16 5C20 7 23 5 27 5C27 4 26 3 25 2C30 2 34 4 36 6C38 4 41 3 45 4C43 5 43 6 43 7C48 7 52 10 54 14C52 13 50 13 48 13C52 16 53 20 52 24C51 23 50 23 49 22C50 26 49 28 48 29C48 23 45 19 41 16C41 18 41 19 42 21C38 20 35 18 32 15C32 18 33 19 34 21C28 20 25 18 24 15C22 19 19 19 17 21C16 23 16 26 15 29Z"/>
+       <path d="M12 16C15 13 18 12 23 11C21 14 17 16 15 20C15 18 15 17 16 16ZM20 8C25 7 26 6 28 5C28 7 32 8 32 12C28 10 25 9 20 8ZM34 10C37 7 39 6 42 6C40 8 42 10 45 11C41 10 38 10 36 13Z" fill="%light%" opacity=".56"/>
+       <path d="M14 17C16 14 20 14 24 11M21 8C26 8 30 10 32 13M28 12C28 15 30 17 32 19M36 13C37 15 39 17 40 19M40 8C44 8 48 10 50 12M46 15C48 16 50 19 51 21" fill="none" stroke="%glint%" stroke-width=".5" stroke-linecap="round" opacity=".66"/>
+       <path d="M14 23C16 20 20 18 22 15M24 13C25 16 27 18 30 19M34 11C32 8 30 7 28 6M44 16C47 19 48 22 48 25" fill="none" stroke="%shadow%" stroke-width=".74" stroke-linecap="round"/>`
+   },
+   { // Lunghi lisci
+     back: `
+       <path d="M13 18C9 25 7 41 7 52C7 57 10 61 15 63C21 62 29 59 33 55C40 61 48 62 54 62C59 57 58 49 57 43C56 33 55 22 51 16L46 61H18Z"/>`,
+     front: `
+       <path d="M32 5C28.3 4.1 24.1 5.2 20 7.6C14 11 11.5 16.5 10.6 26C9.5 35 11.8 45 10.4 53.5C10 57 9.2 59 8 60C11 61 13 60 15 58C14.4 60 13.8 61 13 62C18 61.6 21.6 57.6 21 52C20.6 47 17.3 41 16.5 33.8C15.6 25.2 16.6 17.5 21.6 14.3C24.4 12.5 29.7 11.8 32 8.2C34.2 12.4 39 12.5 42.5 14.6C48 18 48.3 25.2 47.8 33C47.4 41 45.2 47.4 45 52.5C44.8 57 47 61 52 62C51.3 60.7 50.7 59.7 50.5 58.2C52 60.5 54.2 61 57 60C54.7 57.9 54.4 55.2 54.2 51C53.9 45.5 55.2 39 54.4 29C53.5 17.5 50.6 10.5 44.6 7.4C40.6 5.2 36.6 4.2 32 5Z"/>
+       <path d="M30 7C23 7.4 16.5 11.8 14.5 23C12.5 34 17.5 45.5 15.8 55C18.8 46.4 15 37.4 15.1 29C15.1 15 24.1 11.4 30 7ZM34 6.8C43 7.8 49.5 13.2 51.1 26C52.2 35 50.3 44.5 51 53C48.8 48.6 49.2 41.5 49.7 34C50.8 16.3 43.5 10.8 34 6.8Z" fill="%light%" opacity=".48"/>
+       <path d="M28.5 8.1C16 11.5 13.3 22 13.7 31.5C14 41.3 17.9 49.9 15.4 57M13 24C11.5 34.5 15.3 47.8 12.5 55.8M36 8.2C47 11.5 51.2 20 51.3 31.5C51.4 41.1 47.5 52.6 50.9 58.5M52.7 29.7C54.1 39.5 50.4 53.6 54.5 57.7" fill="none" stroke="%glint%" stroke-width=".48" stroke-linecap="round" opacity=".67"/>
+       <path d="M18 20C13.5 31.8 18.3 43.5 19.1 50.2C19.5 54.1 18.7 57 17.3 58.7M46.7 20.4C51.2 31.4 46.7 41 46.6 50.4C46.5 54.2 47 56.5 48.4 58.6" fill="none" stroke="%shadow%" stroke-width=".9" stroke-linecap="round"/>
+       <path d="M32 5.9Q31.4 7.2 32 8.4" fill="none" stroke="%part%" stroke-width=".68" stroke-linecap="round"/>`
+   },
+   { // Lunghi mossi
+     back: `
+       <path d="M14 16C6 24 11 33 7 43C4 51 8 58 13 60C19 63 25 62 31 57C38 61 46 64 52 61C60 59 60 50 56 42C53 34 59 23 50 15L45 55H19Z"/>`,
+     front: `
+       <path d="M27 6.6C31 3.5 43 4.5 48 9C55 14.8 55.7 22.8 53.6 31C52.4 36 53.8 39.4 56.7 44.1C60 49.3 59.2 56.8 54.8 59.8C52.9 61 50.6 62 47.1 62C50.2 59.8 51.9 55.6 50.1 51.7C48.3 47.8 44.7 44.9 45.1 39.6C45.5 34.6 48 30.8 47.6 25.5C47.2 19.8 44.8 17 40.1 15.7C35.5 14.4 30.5 14.8 27.1 11.3C23.2 18.3 17 18.7 16.3 26.4C15.8 31.5 19.9 36.7 19.6 42C19.4 46.4 15.5 50.5 15.5 54.9C15.5 57.5 16.2 59.8 19.2 61.6C15.2 62.3 11.7 60.5 9.6 57.8C5.8 52.9 8.2 47.7 10.3 42.9C12.8 37.5 9.1 31.8 9.7 24.8C10.5 15.8 17.7 6.2 27 6.6Z"/>
+       <path d="M26.5 8C20.2 12.6 15.7 17 14.1 22.3C11.3 30.9 15.9 35.3 15.7 41.1C15.6 45.6 11.9 49.8 12 54.7C9.7 51 13 46.3 13.6 41.5C14.4 35.9 10.8 31.8 11.9 25C13.6 15.6 20.2 10 26.5 8ZM30.4 7C42.9 6 52.9 14.2 51.1 28C50.2 34.7 49.8 39 53.6 44.8C56.8 49.6 56.8 54.5 53.5 57.9C55.5 53.4 53.6 49.7 50.9 45.8C46.9 40.1 47.3 35.1 48.6 28.4C50.4 18.8 44.4 12.5 37.9 10.6C34.8 9.8 32.2 8.9 30.4 7Z" fill="%light%" opacity=".57"/>
+       <path d="M24.6 10C20 13.7 15.5 17.5 14.2 24.2C12.9 30.8 17.4 35.7 16.8 42.3C16.4 46.8 11 51.3 13.4 57.1M31.8 8C45.2 8.8 52.4 17.5 50.2 29.8C48.4 39.3 50.1 41.5 53.6 47C55.8 50.6 55.5 55 54.1 56.9M34.9 11.3C39.9 12.9 46.7 13.7 49 21.6" fill="none" stroke="%glint%" stroke-width=".56" stroke-linecap="round" opacity=".67"/>
+       <path d="M16 30C16.9 34.5 20 38.2 18.4 44.2C17.7 46.7 14.8 50.5 14.3 53.2M48 31C47.2 35.1 45 39.6 47.5 44.5C49.1 47.6 52.8 50.8 52.6 54.9M26.9 8.1Q26.3 9.6 27.2 11.3" fill="none" stroke="%shadow%" stroke-width=".8" stroke-linecap="round"/>`
+   },
+   { // Corti
+     front: `
+       <path d="M14 30C13.5 27 13.7 25 13.6 22C13.7 16 16.4 10.3 21.1 7.8C24.1 6 28 5.9 31.7 6.1C35.4 5.6 40.8 6.1 44.3 8.5C49.3 11.6 50.9 17.9 50.6 23C50.5 26 50.1 28 49.2 30L47.9 27C47.7 22.5 47.1 18.8 45.5 16C43.4 17 40.7 16.7 38.3 16.2C34.5 15.4 30.8 14.8 26.5 15.6C23.7 16.2 21.6 17.3 18.6 17C17.3 19.8 16.9 24.2 16.7 27L15.2 30Z"/>
+       <path d="M17.4 17C19.9 11.2 25.4 8.1 35.5 8.2C32 9.3 30.9 10.8 27.6 12.1C23.1 13.8 19.5 14.1 17.4 17ZM30 14.3C35 12.2 35.9 10.2 38.7 8.7C43.2 9.2 46 11.9 47.2 15C42.5 11.5 37.1 13.5 30 14.3Z" fill="%light%" opacity=".54"/>
+       <path d="M16 19.5C20.2 14.1 29.6 14.1 34.3 9.1M19.6 14.2C22.5 11.3 26.6 10.2 29.9 9.9M25.7 14.6C31.3 13.2 34.2 12.5 37.4 9.9M34.5 14.5C38.5 13.3 41.2 13.1 45 14.2M47 16.9Q49.5 21 49.2 25.9" fill="none" stroke="%glint%" stroke-width=".46" stroke-linecap="round" opacity=".63"/>
+       <path d="M15.5 22C17 18.5 18.9 17 22 16.4M46.5 16.7C47.5 18.8 48 22 48 24.4" fill="none" stroke="%shadow%" stroke-width=".65" stroke-linecap="round"/>`
+   },
+   { // Ricci lunghi
+     back: `
+       <path d="M14 13C8 14 6 22 8 27C4.5 30 5 36 7 39C4 42 4.7 47 7.5 50C5.3 55 8.6 60 12.2 60C15 64 20.5 63 23.3 60.6C27 62 30 60.2 32 58C35 61 39 62 42 60.8C46 64 51.2 63.3 53.7 60.1C58 59.9 60.4 54.7 57.9 50.4C60.8 47.2 60 42.2 57.9 39.6C60 35 58.9 30.1 56.1 27.6C58.1 23 55.9 15.4 50 13L44 57H20Z"/>`,
+     front: `
+       <path d="M11 22C8.9 18.7 10.4 13.9 14.4 12.5C14.7 8.9 18.4 6.2 22 7.1C23.7 3.7 28.7 3.1 31.5 5.3C34.1 2.6 39.3 2.9 41.2 6.2C45.1 5.4 49.1 7.8 49.6 11.2C54 12.2 55.9 16.8 54.1 20.2C57 23 56.6 27.2 54.8 29.8C57.2 33.1 57 37.1 54.9 39.5C57.8 42.8 57.8 47 55.5 49.5C58.8 53.3 57.5 58.2 54.1 60C52.6 62.5 49.5 62.9 46.7 61.7C44.1 60.3 43.3 57.1 44.6 54.7C46 52.1 48.2 52.1 48.5 49.9C45.4 48.1 45.2 44 47.8 41.2C45.5 39 45.9 35.9 48.1 33.5C46.7 30.8 47.1 27.9 48.7 25.9C46.5 23.3 46.8 20 45.3 18.2C41.7 19.1 39 16.9 38.1 14.1C36.3 15.3 33.3 14.5 32 12.1C30.1 15.4 27.3 16.7 24.4 15.6C23.8 18.7 21 20.2 17.6 19.5C16.2 22.1 18 25 15.7 27.6C17.9 30.6 17.4 34.1 15.5 36.3C18.1 39.2 18.1 42.3 15.6 45C19.3 48.2 18 52.4 16 54.2C19.7 54.8 21.3 57.8 19.8 60.5C18.4 63.2 14.4 63.5 12 61C8 60.2 6.6 56 8.7 52.3C6 49.5 6.6 44.9 9.1 42.3C6.6 39.5 6.6 35.8 9.3 32.7C7 29.2 8 24.6 11 22Z"/>
+       <path d="M12.8 20.1C10.5 17.5 13.9 13.3 17.3 15.2C19.3 16.5 18.8 18.8 16.9 19.3C17.9 17.3 15.1 16.1 14 17.7C13.5 18.4 13.4 19.3 12.8 20.1ZM21 10.8C18.8 8.1 22.8 7.1 24.9 8.3C26.8 9.4 26.5 11.6 24.7 12.4C25.3 10.8 23.4 9.7 21 10.8ZM34 8C34.9 4.8 39.8 4.6 41 8.2C41.6 10.3 39.9 11.3 38.6 11.5C40.6 9.4 38.3 7 36.5 7.8ZM46.7 12.7C48.7 11.6 52 14.3 51.1 17C50.5 19 49.1 19.8 47.9 19.1C50.1 17.8 49.6 14.9 46.7 12.7Z" fill="%light%" opacity=".71"/>
+       <path d="M13 24C9.8 26 9.9 29.9 12.5 30.9C14.4 31.6 15.4 29.2 14.1 28.5M12.7 33.5C10 35.3 9.1 38.7 11 40.2C12.5 41.4 14 40.6 14 39.2M11.5 44.3C8.5 46.6 9 50.4 11.6 51.4C13.7 52.2 15.2 49.6 13.6 48.4M10.5 55.6C9.9 57.4 11.7 60 14.1 59.8C16.3 59.6 16.8 57.1 15.2 56.5M52 22.2C54.7 24.6 54.2 28 52.1 28.8C50.5 29.3 49.1 27.7 50 26.4M52.8 32.1C55.1 34.1 54.4 37.2 52.5 38C51 38.6 49.7 37.5 50.2 36M51.5 41.5C54 41.7 56.1 45.6 53.8 47.4C52.2 48.7 49.5 47.6 50.4 45.7M53.9 51.9C55.8 55 53.9 58.3 51.4 58.4C48.8 58.5 47.4 55.3 49.5 54.3C50.6 53.9 51.5 54.6 51.4 55.5" fill="none" stroke="%light%" stroke-width=".95" stroke-linecap="round" opacity=".86"/>
+       <path d="M16.5 13.1C18 11.2 21.5 11.3 22.1 14.3C22.4 16 21.3 17.2 19.9 17.1M26 6.6C28.9 4.6 32 7.4 30.3 10C29.5 11.3 28 11.7 27.4 10.4M34.3 10.9C34 13 37 13.9 38.2 12.3M41.9 9C44.2 7.7 47.6 9.6 46.1 12.4C45.5 13.7 43.5 14 43.2 12.7M14.6 22.7C12 22.2 9.9 23.6 9.7 25.2M52.4 19.7C54.3 18.1 54 16.4 52.9 15.2M8.1 33.3C6.3 33.8 6.6 36 7.8 36.8M54.9 39.9C57.1 40 58.2 42.4 57 43.1" fill="none" stroke="%glint%" stroke-width=".54" stroke-linecap="round" opacity=".73"/>`
+   },
+   { // Rasati
+     fade: true,
+     front: `
+       <path d="M15 26V24.9C15 14 21.3 8.7 32 8.7C42.7 8.7 49 14.4 49 25V26L47.4 22.4C46.6 19.8 45 18.5 43.4 18.1C41.7 17.6 40 18.1 38.4 17.6C34.3 16.7 29.7 16.7 25.6 17.6C23.7 18.2 21.7 17.5 20 18.3C17.8 19.1 17 21.6 16.5 23.2Z"/>
+       <path d="M23 13h.12m2-1h.12m2-1h.12m2.4 0h.12m2.2-.5h.12m2.55.4h.12m2.2.1h.12m2 1h.12m2.2 1.1h.12M19.7 15.5h.12m2.6-.5h.12m2.6-.8h.12m2.7-.56h.12m2.6-.5h.12m2.9.4h.12m2.6.15h.12m2.6.65h.12m2.6.45h.12m2.1.55h.12M18.1 18.1h.12m3.1-.95h.12m2.7-.2h.12m2.35-.85h.12m2.55-.4h.12m2.75.2h.12m2.7-.15h.12m2.3.45h.12m2.8.55h.12m2.3.25h.12m2.65.5h.12M17.1 20.9h.12M46.4 19.9h.12" fill="none" stroke="%shadow%" stroke-width=".66" stroke-linecap="round" opacity=".76"/>
+       <path d="M21.2 14.1h.12m2.9-.75h.12m2.5-.7h.12m2.5-.4h.12m2.55-.2h.12m2.4.15h.12m2.25.45h.12m2.2.25h.12m2.2.7h.12M20.3 16.6h.12m2.8-.4h.12m2.7-.6h.12m2.55-.7h.12m3.05.2h.12m2.55-.2h.12m2.55.35h.12m2.45.45h.12m2.45.35h.12m2.1.55h.12" fill="none" stroke="%glint%" stroke-width=".59" stroke-linecap="round" opacity=".66"/>`
+   }
+ ];
+ function mixHairColor(color, tint, weight) {
+   const base = Number.parseInt(color.slice(1), 16);
+   const target = Number.parseInt(tint.slice(1), 16);
+   const channels = [16, 8, 0].map(shift => {
+     const from = (base >> shift) & 255;
+     const to = (target >> shift) & 255;
+     return Math.round(from + (to - from) * weight);
+   });
+   return `rgb(${channels.join(', ')})`;
+ }
+ let hairGradientCount = 0;
+ function hairLayers(style, hairColor, skinColor) {
+   const { back = '', front, fade = false } = hairStyles[style];
+   const gradient = 'avatar-hair-' + (++hairGradientCount);
+   const tones = {
+     shadow: mixHairColor(hairColor, '#100b18', .32),
+     light: mixHairColor(hairColor, '#f6dec5', .25),
+     glint: mixHairColor(hairColor, '#fff4df', .43),
+     part: mixHairColor(hairColor, skinColor, .56)
+   };
+   const shading = fade ? `
+     <linearGradient id="${gradient}" gradientUnits="userSpaceOnUse" x1="32" y1="9" x2="32" y2="25">
+       <stop stop-color="${hairColor}" stop-opacity=".93"/>
+       <stop offset=".55" stop-color="${hairColor}" stop-opacity=".76"/>
+       <stop offset="1" stop-color="${hairColor}" stop-opacity=".04"/>
+     </linearGradient>` : `
+     <linearGradient id="${gradient}" gradientUnits="userSpaceOnUse" x1="14" y1="6" x2="51" y2="44">
+       <stop stop-color="${tones.shadow}"/>
+       <stop offset=".24" stop-color="${tones.light}"/>
+       <stop offset=".47" stop-color="${hairColor}"/>
+       <stop offset="1" stop-color="${tones.shadow}"/>
+     </linearGradient>`;
+   const tintedFront = front.replace(/%(shadow|light|glint|part)%/g, (_, tone) => tones[tone]);
+   return {
+     back: back ? `<g fill="${tones.shadow}">${back}</g>` : '',
+     front: `<g fill="url(#${gradient})"><defs>${shading}</defs>${tintedFront}</g>`
+   };
+ }
+ function faceSvg(face){
+   switch(face){
+     case 0: // Sorriso
+       return '<path d="M19 24Q24 21 29 24" stroke="#4a2d2f" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M35 24Q40 21 45 24" stroke="#4a2d2f" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="24" cy="31" r="2.1" fill="#172033"/><circle cx="40" cy="31" r="2.1" fill="#172033"/><path d="M25 40Q32 47 39 40" fill="none" stroke="#6b4345" stroke-width="2.4" stroke-linecap="round"/>';
+     case 1: // Serio
+       return '<path d="M19 24H29" stroke="#4a2d2f" stroke-width="2" stroke-linecap="round"/><path d="M35 24H45" stroke="#4a2d2f" stroke-width="2" stroke-linecap="round"/><circle cx="24" cy="31" r="2.05" fill="#172033"/><circle cx="40" cy="31" r="2.05" fill="#172033"/><path d="M27 41H37" fill="none" stroke="#6b4345" stroke-width="2.2" stroke-linecap="round"/>';
+     case 2: // Triste
+       return '<path d="M18 26L28 22" stroke="#4a2d2f" stroke-width="2.2" stroke-linecap="round"/><path d="M36 22L46 26" stroke="#4a2d2f" stroke-width="2.2" stroke-linecap="round"/><circle cx="24" cy="31" r="2.05" fill="#172033"/><circle cx="40" cy="31" r="2.05" fill="#172033"/><path d="M25 45Q32 39 39 45" fill="none" stroke="#6b4345" stroke-width="2.2" stroke-linecap="round"/>';
+     case 3: // Rilassato
+       return '<path d="M20 25Q24 23 28 25" stroke="#4a2d2f" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M36 25Q40 23 44 25" stroke="#4a2d2f" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M21 31Q24 33 27 31" stroke="#172033" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M37 31Q40 33 43 31" stroke="#172033" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M28 41Q32 43 36 41" fill="none" stroke="#6b4345" stroke-width="2" stroke-linecap="round"/>';
+     case 4: // Felice
+       return '<path d="M19 24Q24 18 29 24" stroke="#4a2d2f" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M35 24Q40 18 45 24" stroke="#4a2d2f" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="24" cy="31" r="2" fill="#172033"/><circle cx="40" cy="31" r="2" fill="#172033"/><path d="M24 39H40L32 46Z" fill="none" stroke="#6b4345" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>';
+     case 5: // Neutro: niente bocca, niente sopracciglia
+       return '<circle cx="24" cy="31" r="2.05" fill="#172033"/><circle cx="40" cy="31" r="2.05" fill="#172033"/>';
+     case 6: // Sorpreso :O
+       return '<path d="M19 24Q24 18 29 24" stroke="#4a2d2f" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M35 24Q40 18 45 24" stroke="#4a2d2f" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="24" cy="31" r="2.25" fill="#172033"/><circle cx="40" cy="31" r="2.25" fill="#172033"/><circle cx="32" cy="42" r="4" fill="none" stroke="#6b4345" stroke-width="2"/>';
+     case 7: // Arrabbiato
+       return '<path d="M18 22L27 26" stroke="#4a2d2f" stroke-width="2.4" stroke-linecap="round"/><path d="M46 22L37 26" stroke="#4a2d2f" stroke-width="2.4" stroke-linecap="round"/><circle cx="24" cy="31" r="2" fill="#172033"/><circle cx="40" cy="31" r="2" fill="#172033"/><path d="M25 44Q32 38 39 44" fill="none" stroke="#6b4345" stroke-width="2.3" stroke-linecap="round"/>';
+     default:
+       return '';
+   }
+ }
+ function accessorySvg(extra){
+   switch(extra){
+     case 0: return '';
+     case 1: return '<g stroke="#182235" stroke-width="2" fill="none"><rect x="17" y="27" width="13" height="9" rx="3"/><rect x="34" y="27" width="13" height="9" rx="3"/><path d="M30 31H34"/></g>';
+     case 2: return '<g fill="#253047"><rect x="17" y="27" width="13" height="8" rx="3"/><rect x="34" y="27" width="13" height="8" rx="3"/><path d="M30 30H34V32H30Z"/></g>';
+     case 3: return '<path d="M29 47H35L37 50L32 61L27 50Z" fill="#ef4444"/><path d="M29 47L32 50L35 47" fill="#fee2e2" opacity=".55"/>';
+     case 4: return '<path d="M15 18Q21 10 33 10Q44 10 49 18V21H15Z" fill="#d97706"/><path d="M41 18Q47 18 51 22Q46 24 39 24Z" fill="#92400e"/><path d="M20 18Q31 15 45 18" stroke="#fde68a" stroke-width="1.5" opacity=".9" fill="none"/>';
+     case 5: return '<circle cx="49" cy="39" r="3" fill="#facc15"/><circle cx="49" cy="39" r="1" fill="#fff7ae"/>';
+     case 6: return '<g><path d="M18 12L24 4L30 12" fill="#8b5e3c"/><path d="M34 12L40 4L46 12" fill="#8b5e3c"/><path d="M20 11L24 7L28 11" fill="#f9a8d4"/><path d="M36 11L40 7L44 11" fill="#f9a8d4"/></g>';
+     case 7: return '<path d="M21 48L27 44L32 49L37 44L43 48L37 53L32 50L27 53Z" fill="#6366f1"/><circle cx="32" cy="49" r="1.6" fill="#e0e7ff"/>';
+     default:return '';
+   }
+ }
+ function svg(code){
+   const [b,skin,hair,style,face,extra]=(valid(code)?code:defaults).split('').map(Number);
+   const skinColor=palettes.skin[skin], hairColor=palettes.hair[hair];
+   const { back, front } = hairLayers(style, hairColor, skinColor);
+   return `<svg viewBox="0 0 64 64" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><rect width="64" height="64" rx="14" fill="${palettes.bg[b]}"/>${back}<path d="M5 64Q7 49 25 47H39Q57 49 59 64" fill="${palettes.hair[(hair+3)%8]}"/><circle cx="15" cy="32" r="5" fill="${skinColor}"/><circle cx="49" cy="32" r="5" fill="${skinColor}"/><rect x="15" y="10" width="34" height="39" rx="17" fill="${skinColor}"/>${front}${faceSvg(face)}${accessorySvg(extra)}</svg>`;
+ }
+ let saved=defaults, configured=false;try{const v=localStorage.getItem('cosmic-avatar-v1');if(valid(v)){saved=v;configured=true;}}catch(e){}
+ let draft=saved;
+ function decorate(el,uid){if(!el)return el;const avatar=document.createElement('span');avatar.className='mini-avatar';avatar.innerHTML=svg(defaults);el.prepend(avatar);if(uid){avatar.dataset.avatarUid=uid;Promise.resolve(window.cosmicLoadAvatar?.(uid)).then(code=>{if(valid(code))avatar.innerHTML=svg(code);});}else avatar.innerHTML=svg(saved);return el;}
+ async function sync(){if(!configured)return false;return !!(await window.cosmicSaveAvatar?.(saved));}
+ window.cosmicAvatar={local:()=>saved,decorate,sync};
+ window.addEventListener('online',()=>{if(configured)void sync();});
+ const labels=['Sfondo','Carnagione','Colore capelli','Acconciatura','Espressione','Accessorio'];
+ const names=[['Blu','Viola','Verde','Rosso','Oliva','Indaco','Prugna','Grigio'],['Chiara','Miele','Ramata','Scura','Pesca','Bronzo','Azzurra','Lilla'],['Nero','Castano','Rame','Biondo','Blu notte','Viola','Turchese','Argento'],['Frangia','Ciuffo','Spettinati','Lunghi lisci','Lunghi mossi','Corti','Ricci lunghi','Rasati'],['Sorriso','Serio','Triste','Rilassato','Felice','Neutro','Sorpreso','Arrabbiato'],['Nessuno','Occhiali','Occhiali scuri','Cravatta','Cappellino','Orecchino','Orecchie da gatto','Papillon']];
+ const options=$('avatar-options'); labels.forEach((label,i)=>{const l=document.createElement('label');l.textContent=label;const select=document.createElement('select');select.id='avatar-part-'+i;names[i].forEach((n,j)=>select.append(new Option(n,String(j))));select.addEventListener('change',()=>{let a=draft.split('');a[i]=select.value;draft=a.join('');preview();});l.append(select);options.append(l);});
+ function preview(){ $('avatar-preview').innerHTML=svg(draft);for(let i=0;i<6;i++)$('avatar-part-'+i).value=draft[i]; }
+ function refreshOwn(){ $('btn-avatar').innerHTML=svg(saved);const uid=window.cosmicOwnUid?.();if(uid)document.querySelectorAll('[data-avatar-uid]').forEach(el=>{if(el.dataset.avatarUid===uid)el.innerHTML=svg(saved);}); }
+ refreshOwn();
+ $('btn-avatar').onclick=()=>{draft=saved;preview();$('avatar-message').textContent='';hide('avatar-modal',false);};
+ $('avatar-random').onclick=()=>{draft=Array.from(crypto.getRandomValues(new Uint8Array(6)),v=>String(v%8)).join('');preview();};
+ $('avatar-save').onclick=async()=>{saved=draft;configured=true;try{localStorage.setItem('cosmic-avatar-v1',saved);}catch(e){}refreshOwn();$('avatar-save').disabled=true;$('avatar-message').textContent='Salvataggio…';try{const ok=await sync();$('avatar-message').textContent=ok?'Avatar sincronizzato.':'Avatar salvato sul dispositivo. Verrà sincronizzato quando disponibile.';if(ok)hide('avatar-modal',true);}finally{$('avatar-save').disabled=false;}};
+ $('btn-save-user').addEventListener('click',()=>{if(configured)void sync();});
+ $('close-avatar').onclick=()=>hide('avatar-modal',true);$('btn-info').onclick=()=>hide('info-modal',false);$('close-info').onclick=()=>hide('info-modal',true);
+ function help(other){hide('help-mind',!!other);hide('help-other',!other);if(other)$('help-other').textContent=other;hide('help-modal',false);}
+ $('btn-help').onclick=()=>help();$('close-help').onclick=()=>hide('help-modal',true);
+ for(const [prefix,modal] of [['mp','mp-modal'],['cc','cc-modal'],['party','party-modal'],['bg','boardgames-modal']]){const close=$(prefix+'-close'),b=document.createElement('button');b.className='icon-btn room-help-btn';b.textContent='?';b.title='Come si gioca';b.setAttribute('aria-label','Come si gioca');b.onclick=()=>{const desc=$(prefix+'-guide-text')?.textContent||$(modal).querySelector('.room-entry-intro')?.textContent||'';if(prefix==='mp'){const text=$('game-intro-text');const previous=text.textContent;text.textContent=desc;help();$('close-help').addEventListener('click',()=>{text.textContent=previous;},{once:true});}else help(desc);};close.before(b);}
+ // Keep the info button home-only, even when multiplayer is represented by a modal.
+ const game=$('game-screen');const update=()=>{document.body.classList.toggle('mind-playing',!game.classList.contains('hidden'));};new MutationObserver(update).observe(game,{attributes:true,attributeFilter:['class']});update();
+})();
+
+</script>
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
     import { initializeAppCheck, ReCaptchaEnterpriseProvider } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app-check.js";
@@ -1713,6 +1954,21 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
 
     let db = null;
     let currentUser = null;
+    const AVATAR_PATH = ["artifacts","occhio-del-cosmo-prod","public","data","avatars"];
+    const avatarCache=new Map(), avatarPending=new Map();
+    const avatarRef=uid=>doc(db,...AVATAR_PATH,uid);
+    window.cosmicOwnUid=()=>currentUser?.uid||'';
+    window.cosmicLoadAvatar=async uid=>{
+        if(!db||!currentUser||typeof uid!=='string'||!/^[A-Za-z0-9_-]{1,128}$/.test(uid))return null;
+        if(uid===currentUser.uid)return window.cosmicAvatar.local();
+        const cached=avatarCache.get(uid);if(cached&&Date.now()-cached.at<300000)return cached.code;
+        if(avatarPending.has(uid))return avatarPending.get(uid);
+        const work=(async()=>{try{const snap=await getDocFromServer(avatarRef(uid));const code=snap.exists()?snap.data().code:null;avatarCache.set(uid,{code,at:Date.now()});return code;}catch(e){avatarCache.set(uid,{code:null,at:Date.now()});return null;}finally{avatarPending.delete(uid);}})();avatarPending.set(uid,work);return work;
+    };
+    window.cosmicSaveAvatar=async code=>{
+        if(!db||!currentUser)return false;
+        try{await setDoc(avatarRef(currentUser.uid),{code});return true;}catch(e){console.warn('Avatar non sincronizzato:',e);return false;}
+    };
     const COLLECTION_PATH = ["artifacts", "occhio-del-cosmo-prod", "public", "data", "leaderboard"];
 
     // Server time: one private document per authenticated user; midpoint estimate.
@@ -1754,8 +2010,7 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
         window.cloudLeaderboardState.error = error;
         document.getElementById("sync-dot").classList.toggle("online", status === "ready");
         document.getElementById("sync-text").textContent = status === "ready"
-            ? "Classifica Online Attiva" : status === "loading"
-            ? "Connessione..." : "Classifica online non disponibile";
+            ? "Online" : "Offline";
         window.renderLeaderboardList?.();
     }
 
@@ -1771,7 +2026,7 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
             onAuthStateChanged(auth, (user) => {
                 currentUser = user;
                 directoryTick();
-                if (user) { window.refreshLeaderboardData(); void Promise.race([syncClock(),new Promise(resolve=>setTimeout(resolve,2500))]).then(()=>{if(currentUser?.uid!==user.uid)return;restoreRoom(user.uid); ccRestore(user.uid); partyRestore(user.uid); bgRestore(user.uid);}); }
+                if (user) { window.cosmicAvatar.sync(); window.refreshLeaderboardData(); void Promise.race([syncClock(),new Promise(resolve=>setTimeout(resolve,2500))]).then(()=>{if(currentUser?.uid!==user.uid)return;restoreRoom(user.uid); ccRestore(user.uid); partyRestore(user.uid); bgRestore(user.uid);}); }
             });
             await auth.authStateReady();
             if (!auth.currentUser) await signInAnonymously(auth);
@@ -1956,7 +2211,7 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
     window.mpLeaveFromGame=leaveRoom;
     function kick(id){if(confirm('Espellere questo giocatore dalla lobby?'))action(()=>tx(r=>{if(r.hostUid!==mp.uid||r.state!=='lobby'||id===mp.uid)throw Error('Espulsione non consentita.');const players={...r.players};delete players[id];return {players}}))}
     function playerRow(id,p,r,rank=null,compact=false){
-        const el=document.createElement('div');el.className='mp-player';const left=document.createElement('div');const name=document.createElement('strong');name.textContent=(rank!==null?`${rank}. `:'')+p.name+(id===r.hostUid?' · Host':'')+(id===mp.uid?' · Tu':'');left.append(name);
+        const el=document.createElement('div');el.className='mp-player';const left=document.createElement('div');const name=document.createElement('strong');name.textContent=(rank!==null?`${rank}. `:'')+p.name+(id===r.hostUid?' · Host':'')+(id===mp.uid?' · Tu':'');window.cosmicAvatar.decorate(name,id);left.append(name);
         const current=actual(p,r);const detail=document.createElement('div');detail.className='mode-desc';
         if(r.state==='lobby')detail.textContent=id===r.hostUid||p.readyRound===r.round+1?'✓ Pronto':'In attesa';
         else detail.textContent=(current.status==='won'?'✓ Risolto':current.status==='lost'?'Non risolto':current.status==='forfeit'?'Ritirato':finished(r)?'Non concluso':'In gioco')+` · ${current.attempts}/${r.settings.attempts} tentativi`+(terminal(current)?` · ${Math.floor(current.seconds/60)}m ${current.seconds%60}s`:'');
@@ -1972,7 +2227,7 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
         const entries=Object.entries(r.players);const rank=(a,b)=>{const x=actual(a[1],r),y=actual(b[1],r);return y.score-x.score||x.attempts-y.attempts||x.seconds-y.seconds};
         if(done)entries.sort(rank);M('mp-players').replaceChildren(...entries.map(([id,p],i)=>playerRow(id,p,r,done?i+1:null)));
         M('mp-progress').replaceChildren(...entries.filter(([id])=>id!==mp.uid).map(([id,p])=>playerRow(id,p,r,null,true)));
-        M('mp-phase').textContent=r.state==='lobby'?`Lobby · ${entries.length}/${s.capacity}`:done?(entries[0]&&actual(entries[0][1],r).score>0?`🏆 ${entries.filter(x=>rank(x,entries[0])===0).map(x=>x[1].name).join(' / ')} · Vincitore/i`:'Round concluso · Nessuna soluzione'):`Round ${r.round} · ${entries.filter(([,p])=>terminal(actual(p,r))).length}/${entries.length} conclusi`;
+        M('mp-phase').textContent=r.state==='lobby'?`Lobby · ${entries.length}/${s.capacity}`:done?(entries[0]&&actual(entries[0][1],r).score>0?`🏆 ${entries.filter(x=>rank(x,entries[0])===0).map(x=>x[1].name).join(' / ')} · Vincitore/i`:'Round concluso · Nessuna soluzione'):`Round ${r.round} · ${entries.filter(([,p])=>terminal(actual(p,r))).length}/${entries.length} conclusi`;if(done&&entries[0]&&actual(entries[0][1],r).score>0){for(const [id] of entries.filter(x=>rank(x,entries[0])===0))window.cosmicAvatar.decorate(M('mp-phase'),id);}
         hide('mp-lobby-settings',!host||r.state!=='lobby');if(mp.editing&&r.state!=='lobby')setForm(false);
         hide('mp-ready-actions',r.state!=='lobby');hide('mp-start',!host);M('mp-start').disabled=mp.busy||entries.length<2||!entries.every(([id,p])=>id===mp.uid||p.readyRound===r.round+1);M('mp-ready').textContent=mine.readyRound===r.round+1?'✓ Pronto (annulla)':'Sono pronto';hide('mp-ready',host);
         hide('mp-resume',r.state!=='running'||done||terminal(actual(mine,r))||!window.cosmicGame.isMultiplayerActive());hide('mp-rematch',!host||!done||r.state!=='finished');hide('mp-end-round',!host||r.state!=='running'||done);
@@ -2111,8 +2366,8 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
     M('cc-invite').onclick=async()=>{if(!cc.room)return;const url=new URL(location.href);url.search='';url.searchParams.set('connections',cc.room.code);url.hash='';const text=`Connessioni Cosmiche: stanza ${cc.room.code}\n${url.href}\n${cc.room.locked===false?'Accesso libero.':'Chiedi la password all’host.'}`;try{if(navigator.share)await navigator.share({title:'Connessioni Cosmiche',text});else{await navigator.clipboard.writeText(text);ccSay(cc.room.locked===false?'Invito copiato.':'Invito copiato. Invia la password separatamente.');}}catch(e){if(e.name!=='AbortError')ccSay(text);}};
     function ccTick(){const r=cc.room;if(!r||r.state!=='running')return;const sec=ccRemaining(r);const phase=r.phase==='clue'?(r.seenTeams.includes(r.turn)?'Indizio master':'Primo indizio master'):'Scelte esploratori';M('cc-timer').textContent=sec===Infinity?`${phase} · Nessun limite di tempo`:`${phase}: ${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`;M('cc-timer').classList.toggle('cc-urgent',sec<=10);ccAudioTick(r,sec);ccUpdateSound();hide('cc-timeout',sec!==0);M('cc-timeout').disabled=cc.busy;const enabled=!cc.busy&&ccCanGuess(r);for(const b of M('cc-board').children)b.disabled=!enabled||r.revealed.includes(+b.dataset.index);M('cc-pass').disabled=!enabled;M('cc-clue-form').querySelector('button').disabled=cc.busy||sec===0;}
     function ccRender(){const r=cc.room;if(!r){hide('cc-room',true);hide('cc-entry',!!cc.ref);return;}const me=ccMine(r);if(!me)return;const lobby=r.state==='lobby',done=r.state==='finished';hide('cc-entry',true);hide('cc-room',false);hide('cc-lobby',!lobby);hide('cc-play',lobby);M('cc-room-name').textContent=(r.locked===false?'🔓 ':'🔒 ')+r.name;M('cc-room-code').textContent=r.code;M('cc-room-settings').textContent=`${r.settings.size}×${r.settings.size} · ${r.settings.teams} squadre · ${Object.keys(r.players).length}/${r.settings.capacity} giocatori · ${r.settings.duration||r.settings.clueDuration||r.settings.firstClueDuration?`Primo master ${ccFormatTime(r.settings.firstClueDuration)} · Master ${ccFormatTime(r.settings.clueDuration)} · Esploratori ${ccFormatTime(r.settings.duration)}`:'Senza timer'} · ${r.settings.wordMode==='custom'?'Solo parole custom':(CC_CUSTOM_LEVELS[r.settings.customPercent]?`${CC_CUSTOM_LEVELS[r.settings.customPercent]} · ${r.settings.customPercent}% lista e griglia (${ccCustomQuota(r.settings)}/${r.settings.size**2} caselle custom)`:r.settings.customWords.length+' parole custom + dizionario')}`;
-        if(lobby){const teams=[];for(let i=0;i<r.settings.teams;i++){const el=ccNode('div',undefined,'cc-team');el.style.setProperty('--team',CC_COLORS[i]);el.append(ccNode('strong',CC_NAMES[i]));for(const [id,p] of Object.entries(r.players).filter(([,p])=>p.team===i)){const line=ccNode('p',`${p.ready===r.round+1?'✓':'○'} ${p.name}${id===r.hostUid?' · Host':''}${id===cc.uid?' · Tu':''} · ${p.role==='captain'?'Capitano':'Esploratore'}`);if(ccHost(r)&&id!==cc.uid){const kick=ccNode('button','✕','icon-btn');kick.style.marginLeft='5px';kick.title='Espelli';kick.onclick=()=>ccAction(()=>ccTx(old=>{if(!ccHost(old)||old.state!=='lobby')throw Error('Lobby non disponibile.');const players={...old.players};delete players[id];return {players};}));line.append(kick);}el.append(line);}teams.push(el);}M('cc-players').replaceChildren(...teams);const select=M('cc-my-team');if(select.options.length!==r.settings.teams)select.replaceChildren(...CC_NAMES.slice(0,r.settings.teams).map((n,i)=>new Option(n,String(i))));select.value=String(me.team);select.disabled=cc.busy;M('cc-my-role').value=me.role;M('cc-my-role').disabled=cc.busy;M('cc-ready').disabled=cc.busy;M('cc-ready').textContent=me.ready===r.round+1?'✓ Pronto (annulla)':'Sono pronto';hide('cc-start',!ccHost(r));let valid=false;try{ccCaptains(r);valid=Object.entries(r.players).every(([id,p])=>id===cc.uid||p.ready===r.round+1)}catch(e){}M('cc-start').disabled=cc.busy||!valid;return;}
-        const scores=[];for(let i=0;i<r.settings.teams;i++){const el=ccNode('div',undefined,'cc-team');el.style.setProperty('--team',CC_COLORS[i]);el.append(ccNode('strong',CC_NAMES[i]+(i===me.team?' · Tu':'')),ccNode('p',r.eliminated.includes(i)?'Eliminata':`${r.scores[i]}/${r.target} segnali`),ccNode('p',`Capitano: ${r.players[r.captains[i]]?.name||'-'}`));scores.push(el);}M('cc-scores').replaceChildren(...scores);M('cc-turn').textContent=done?'Sfida conclusa':`${CC_NAMES[r.turn]} · ${r.phase==='clue'?'Attesa indizio':'Decifrazione'} · Tu: ${ccCaptain(r)?'Capitano':'Esploratore'}`;M('cc-clue-display').textContent=r.clue?`${r.clue} · ${r.clueCount} (scelte rimaste: ${r.left})`:'Nessun indizio ancora';M('cc-board').style.setProperty('--cc-size',r.settings.size);const canSee=done||ccCaptain(r);M('cc-board').replaceChildren(...r.words.map((word,i)=>{const revealed=r.revealed.includes(i),b=ccNode('button',undefined,'cc-cell'+(revealed?' cc-revealed':''));b.type='button';b.dataset.index=i;b.append(ccNode('span',word,'cc-word'));if(canSee||revealed){b.dataset.color=r.roles[i];b.append(ccNode('small',CC_SYMBOLS[r.roles[i]]+' '+(r.roles[i]<4?CC_NAMES[r.roles[i]]:r.roles[i]===4?'Neutro':'Vuoto')));}b.disabled=cc.busy||!ccCanGuess(r)||revealed;b.onclick=()=>ccGuess(i);return b;}));M('cc-legend').textContent=canSee?'Mappa capitano: trova i segnali della tua squadra. Il Vuoto elimina la squadra che lo seleziona.':'Seleziona i segnali della tua squadra. Un segnale neutro o rivale termina il turno; il Vuoto elimina la squadra.';const canClue=!done&&r.phase==='clue'&&ccTeam(r)===r.turn&&ccCaptain(r);hide('cc-clue-form',!canClue);const counts=M('cc-clue-count'),max=r.target-r.scores[r.turn];if(counts.options.length!==max)counts.replaceChildren(...Array.from({length:max},(_,i)=>new Option(String(i+1),String(i+1))));hide('cc-pass',!ccCanGuess(r));hide('cc-result',!done);hide('cc-rematch',!done||!ccHost(r));M('cc-rematch').disabled=cc.busy;if(done){M('cc-result').textContent=`🏆 Vince la squadra ${CC_NAMES[r.winner]}!`;M('cc-timer').textContent='';hide('cc-timeout',true);}else ccTick();
+        if(lobby){const teams=[];for(let i=0;i<r.settings.teams;i++){const el=ccNode('div',undefined,'cc-team');el.style.setProperty('--team',CC_COLORS[i]);el.append(ccNode('strong',CC_NAMES[i]));for(const [id,p] of Object.entries(r.players).filter(([,p])=>p.team===i)){const line=ccNode('p',`${p.ready===r.round+1?'✓':'○'} ${p.name}${id===r.hostUid?' · Host':''}${id===cc.uid?' · Tu':''} · ${p.role==='captain'?'Capitano':'Esploratore'}`);window.cosmicAvatar.decorate(line,id);if(ccHost(r)&&id!==cc.uid){const kick=ccNode('button','✕','icon-btn');kick.style.marginLeft='5px';kick.title='Espelli';kick.onclick=()=>ccAction(()=>ccTx(old=>{if(!ccHost(old)||old.state!=='lobby')throw Error('Lobby non disponibile.');const players={...old.players};delete players[id];return {players};}));line.append(kick);}el.append(line);}teams.push(el);}M('cc-players').replaceChildren(...teams);const select=M('cc-my-team');if(select.options.length!==r.settings.teams)select.replaceChildren(...CC_NAMES.slice(0,r.settings.teams).map((n,i)=>new Option(n,String(i))));select.value=String(me.team);select.disabled=cc.busy;M('cc-my-role').value=me.role;M('cc-my-role').disabled=cc.busy;M('cc-ready').disabled=cc.busy;M('cc-ready').textContent=me.ready===r.round+1?'✓ Pronto (annulla)':'Sono pronto';hide('cc-start',!ccHost(r));let valid=false;try{ccCaptains(r);valid=Object.entries(r.players).every(([id,p])=>id===cc.uid||p.ready===r.round+1)}catch(e){}M('cc-start').disabled=cc.busy||!valid;return;}
+        const scores=[];for(let i=0;i<r.settings.teams;i++){const el=ccNode('div',undefined,'cc-team');el.style.setProperty('--team',CC_COLORS[i]);el.append(ccNode('strong',CC_NAMES[i]+(i===me.team?' · Tu':'')),ccNode('p',r.eliminated.includes(i)?'Eliminata':`${r.scores[i]}/${r.target} segnali`),window.cosmicAvatar.decorate(ccNode('p',`Capitano: ${r.players[r.captains[i]]?.name||'-'}`),r.captains[i]));for(const [uid,p] of Object.entries(r.players).filter(([,p])=>p.team===i&&p.role!=='captain'))el.append(window.cosmicAvatar.decorate(ccNode('p',p.name),uid));scores.push(el);}M('cc-scores').replaceChildren(...scores);M('cc-turn').textContent=done?'Sfida conclusa':`${CC_NAMES[r.turn]} · ${r.phase==='clue'?'Attesa indizio':'Decifrazione'} · Tu: ${ccCaptain(r)?'Capitano':'Esploratore'}`;M('cc-clue-display').textContent=r.clue?`${r.clue} · ${r.clueCount} (scelte rimaste: ${r.left})`:'Nessun indizio ancora';M('cc-board').style.setProperty('--cc-size',r.settings.size);const canSee=done||ccCaptain(r);M('cc-board').replaceChildren(...r.words.map((word,i)=>{const revealed=r.revealed.includes(i),b=ccNode('button',undefined,'cc-cell'+(revealed?' cc-revealed':''));b.type='button';b.dataset.index=i;b.append(ccNode('span',word,'cc-word'));if(canSee||revealed){b.dataset.color=r.roles[i];b.append(ccNode('small',CC_SYMBOLS[r.roles[i]]+' '+(r.roles[i]<4?CC_NAMES[r.roles[i]]:r.roles[i]===4?'Neutro':'Vuoto')));}b.disabled=cc.busy||!ccCanGuess(r)||revealed;b.onclick=()=>ccGuess(i);return b;}));M('cc-legend').textContent=canSee?'Mappa capitano: trova i segnali della tua squadra. Il Vuoto elimina la squadra che lo seleziona.':'Seleziona i segnali della tua squadra. Un segnale neutro o rivale termina il turno; il Vuoto elimina la squadra.';const canClue=!done&&r.phase==='clue'&&ccTeam(r)===r.turn&&ccCaptain(r);hide('cc-clue-form',!canClue);const counts=M('cc-clue-count'),max=r.target-r.scores[r.turn];if(counts.options.length!==max)counts.replaceChildren(...Array.from({length:max},(_,i)=>new Option(String(i+1),String(i+1))));hide('cc-pass',!ccCanGuess(r));hide('cc-result',!done);hide('cc-rematch',!done||!ccHost(r));M('cc-rematch').disabled=cc.busy;if(done){M('cc-result').textContent=`🏆 Vince la squadra ${CC_NAMES[r.winner]}!`;M('cc-timer').textContent='';hide('cc-timeout',true);}else ccTick();
     }
     let ccAutoKey='',ccAutoSince=0,ccAutoAttempt=0,ccAutoPending=false;
     setInterval(async()=>{ccTick();const r=cc.room;if(r?.state!=='running'||!ccExpired(r)||cc.busy||ccAutoPending)return;const key=ccPhaseKey(r),now=Date.now();if(ccAutoKey!==key){ccAutoKey=key;ccAutoSince=now;ccAutoAttempt=0;}const delay=r.captains[r.turn]===cc.uid?200:ccHost(r)?800:1800;if(now-ccAutoSince<delay+750||now-ccAutoAttempt<3000)return;ccAutoAttempt=now;ccAutoPending=true;try{await ccTx(old=>old.state==='running'&&ccPhaseKey(old)===key&&ccExpired(old)?ccTimeoutPatch(old):null);}catch(e){console.warn('Timeout, nuovo tentativo:',cloudError(e));}finally{ccAutoPending=false;}},250);
@@ -2182,7 +2437,7 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
     let partyAudioKey='',partyAudioSec=-1,partyAutoAt=0;
     function partyTick(){const r=party.room;if(!r||r.state!=='running')return;const sec=partyRemaining(r),key=r.turnKey+':'+r.phase;M('party-timer').textContent=sec===Infinity?'Nessun limite di tempo':`${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`;M('party-timer').classList.toggle('cc-urgent',sec<=10);if(partyAudioKey!==key){partyAudioKey=key;partyAudioSec=-1;}if(partyActor(r)===party.uid&&sec<=10&&sec!==partyAudioSec){partyAudioSec=sec;if(sec===0)window.cosmicGame.timerAlarm();else window.cosmicGame.timerTick();}if((partyExpiredForServer(r)||(r.kind==='draw'&&r.phase==='play'&&r.guessed.length===r.order.length-1))&&!party.busy&&Date.now()-partyAutoAt>2500){partyAutoAt=Date.now();partyAction(()=>partyTx(o=>{if(o.state!=='running'||o.turnKey!==r.turnKey)return null;if(o.phase==='choose'&&!partyOnTime(o))return {phase:'play',card:o.turn*3,startedAt:serverTimestamp()};if(o.phase==='play'&&(!partyOnTime(o)||(o.kind==='draw'&&o.guessed.length===o.order.length-1)))return partyNext(o);return null;}));}}
     setInterval(partyTick,250);
-    function partyRender(){const r=party.room,kind=party.kind;M('party-title').textContent=PARTY_NAMES[kind];M('party-intro').textContent=kind==='draw'?'A turno, un giocatore sceglie una parola tra tre proposte e la disegna sulla lavagna. Gli altri provano a indovinarla nella chat. Ogni risposta esatta vale 100 punti per chi indovina e 50 per chi disegna. Vince chi totalizza più punti.':'Due squadre si alternano. Il suggeritore fa indovinare una parola senza dire la soluzione né le cinque parole vietate, usando la chat o una chiamata esterna. Ogni risposta corretta vale un punto, una violazione ne sottrae uno. È possibile passare senza penalità. Vince la squadra con più punti.';M('party-guide-text').textContent=M('party-intro').textContent;hide('party-entry',!!party.ref);hide('party-room',!r);if(!r)return;const host=partyHost(r),lobby=r.state==='lobby',done=r.state==='finished',running=r.state==='running',draw=r.kind==='draw',actor=running?partyActor(r):null,active=actor===party.uid,mine=partyMember(r),same=running&&mine.team===partyTeam(r);M('party-room-name').textContent=(r.locked===false?'🔓 ':'🔒 ')+r.name;M('party-code').textContent=r.code;M('party-status').textContent=lobby?`Lobby · ${Object.keys(r.players).length}/${r.settings.capacity}`:done?'Partita conclusa':`Turno ${r.turn+1}/${r.order.length*r.settings.rounds} · ${r.players[actor]?.name||'-'}${draw?' disegna':` · ${CC_NAMES[partyTeam(r)]}`}`;const list=M('party-players');list.replaceChildren();const ids=Object.keys(r.players).sort((a,b)=>(r.scores[b]||0)-(r.scores[a]||0));if(!draw&&!lobby)list.append(ccNode('div',`Nebula ${r.teams[0]} · Nova ${r.teams[1]}`,'cc-turn'));for(const id of ids){const p=r.players[id],row=ccNode('div',undefined,'mp-player');row.append(ccNode('div',`${p.name}${id===r.hostUid?' · Host':''}${id===party.uid?' · Tu':''}${draw?'':` · ${CC_NAMES[p.team]}`}${r.guessed.includes(id)?' · ✓':''}`));if(draw&&!lobby)row.append(ccNode('strong',`${r.scores[id]||0} pt`,'mp-score'));if(host&&lobby&&id!==party.uid){const b=ccNode('button','Espelli','icon-btn');b.onclick=()=>partyAction(()=>partyTx(o=>{if(o.state!=='lobby'||!partyHost(o))return null;const players={...o.players};delete players[id];return {players};}));row.append(b);}list.append(row);}hide('party-lobby',!lobby);hide('party-team-label',draw);M('party-team').value=String(mine.team);hide('party-start',!host);M('party-start').disabled=party.busy||ids.length<partyMin(r);hide('party-play',!running);hide('party-result',!done);hide('party-rematch',!done||!host);if(done){const best=draw?Math.max(...Object.values(r.scores)):Math.max(...r.teams);const winners=draw?ids.filter(id=>r.scores[id]===best).map(id=>r.players[id].name):[0,1].filter(t=>r.teams[t]===best).map(t=>CC_NAMES[t]);M('party-result').textContent=`🏆 ${winners.join(' e ')} · ${best} punti${winners.length>1?' · Pareggio':''}`;}partyListenStrokes(r);if(!running)return;const choose=r.phase==='choose',card=partyCard(r),visible=active||(!draw&&!same);M('party-previous').textContent=draw&&r.lastWord?'Parola del turno precedente: '+r.lastWord:'';M('party-word').textContent=choose?(active?'Scegli una parola':'Il disegnatore sta scegliendo…'):visible?card.word:(draw?`Parola: ${card.word.replace(/[A-Z0-9]/g,'_ ').trim()}`:'Indovina la parola del suggeritore');const choices=M('party-choices');choices.replaceChildren();if(choose&&active)for(let i=0;i<3;i++){const b=ccNode('button',r.deck[r.turn*3+i].word,'icon-btn');b.onclick=()=>partyChoose(i);choices.append(b);}hide('party-choices',!choose||!active);hide('party-draw',!draw||choose);hide('party-tools',!active);hide('party-banned',draw||!visible||choose);M('party-banned').textContent=draw?'':`NON DIRE: ${card.banned.join(' · ')}`;hide('party-chat-form',choose||(draw?(active||r.guessed.includes(party.uid)):!same));M('party-text').placeholder=!draw&&active?'Scrivi un indizio':'Scrivi la risposta';hide('party-pass',draw||!active||choose);hide('party-correct',draw||!active||choose);hide('party-foul',draw||same||choose);hide('party-next',choose||!(active||host));M('party-sound').textContent=window.cosmicGame.soundEnabled()?'🔊 Audio':'🔇 Audio';const chat=M('party-chat');chat.replaceChildren();for(const m of r.chat)chat.append(ccNode('div',`${r.players[m.uid]?.name||'-'}: ${m.text.replace(/\u2212/g,'-')}`,m.correct?'correct':''));chat.scrollTop=chat.scrollHeight;partyTick();}
+    function partyRender(){const r=party.room,kind=party.kind;M('party-title').textContent=PARTY_NAMES[kind];M('party-intro').textContent=kind==='draw'?'A turno, un giocatore sceglie una parola tra tre proposte e la disegna sulla lavagna. Gli altri provano a indovinarla nella chat. Ogni risposta esatta vale 100 punti per chi indovina e 50 per chi disegna. Vince chi totalizza più punti.':'Due squadre si alternano. Il suggeritore fa indovinare una parola senza dire la soluzione né le cinque parole vietate, usando la chat o una chiamata esterna. Ogni risposta corretta vale un punto, una violazione ne sottrae uno. È possibile passare senza penalità. Vince la squadra con più punti.';M('party-guide-text').textContent=M('party-intro').textContent;hide('party-entry',!!party.ref);hide('party-room',!r);if(!r)return;const host=partyHost(r),lobby=r.state==='lobby',done=r.state==='finished',running=r.state==='running',draw=r.kind==='draw',actor=running?partyActor(r):null,active=actor===party.uid,mine=partyMember(r),same=running&&mine.team===partyTeam(r);M('party-room-name').textContent=(r.locked===false?'🔓 ':'🔒 ')+r.name;M('party-code').textContent=r.code;M('party-status').textContent=lobby?`Lobby · ${Object.keys(r.players).length}/${r.settings.capacity}`:done?'Partita conclusa':`Turno ${r.turn+1}/${r.order.length*r.settings.rounds} · ${r.players[actor]?.name||'-'}${draw?' disegna':` · ${CC_NAMES[partyTeam(r)]}`}`;if(running&&actor)window.cosmicAvatar.decorate(M('party-status'),actor);const list=M('party-players');list.replaceChildren();const ids=Object.keys(r.players).sort((a,b)=>(r.scores[b]||0)-(r.scores[a]||0));if(!draw&&!lobby)list.append(ccNode('div',`Nebula ${r.teams[0]} · Nova ${r.teams[1]}`,'cc-turn'));for(const id of ids){const p=r.players[id],row=ccNode('div',undefined,'mp-player');row.append(window.cosmicAvatar.decorate(ccNode('div',`${p.name}${id===r.hostUid?' · Host':''}${id===party.uid?' · Tu':''}${draw?'':` · ${CC_NAMES[p.team]}`}${r.guessed.includes(id)?' · ✓':''}`),id));if(draw&&!lobby)row.append(ccNode('strong',`${r.scores[id]||0} pt`,'mp-score'));if(host&&lobby&&id!==party.uid){const b=ccNode('button','Espelli','icon-btn');b.onclick=()=>partyAction(()=>partyTx(o=>{if(o.state!=='lobby'||!partyHost(o))return null;const players={...o.players};delete players[id];return {players};}));row.append(b);}list.append(row);}hide('party-lobby',!lobby);hide('party-team-label',draw);M('party-team').value=String(mine.team);hide('party-start',!host);M('party-start').disabled=party.busy||ids.length<partyMin(r);hide('party-play',!running);hide('party-result',!done);hide('party-rematch',!done||!host);if(done){const best=draw?Math.max(...Object.values(r.scores)):Math.max(...r.teams);const winners=draw?ids.filter(id=>r.scores[id]===best).map(id=>r.players[id].name):[0,1].filter(t=>r.teams[t]===best).map(t=>CC_NAMES[t]);M('party-result').textContent=`🏆 ${winners.join(' e ')} · ${best} punti${winners.length>1?' · Pareggio':''}`;if(draw)for(const id of ids.filter(id=>r.scores[id]===best))window.cosmicAvatar.decorate(M('party-result'),id);}partyListenStrokes(r);if(!running)return;const choose=r.phase==='choose',card=partyCard(r),visible=active||(!draw&&!same);M('party-previous').textContent=draw&&r.lastWord?'Parola del turno precedente: '+r.lastWord:'';M('party-word').textContent=choose?(active?'Scegli una parola':'Il disegnatore sta scegliendo…'):visible?card.word:(draw?`Parola: ${card.word.replace(/[A-Z0-9]/g,'_ ').trim()}`:'Indovina la parola del suggeritore');const choices=M('party-choices');choices.replaceChildren();if(choose&&active)for(let i=0;i<3;i++){const b=ccNode('button',r.deck[r.turn*3+i].word,'icon-btn');b.onclick=()=>partyChoose(i);choices.append(b);}hide('party-choices',!choose||!active);hide('party-draw',!draw||choose);hide('party-tools',!active);hide('party-banned',draw||!visible||choose);M('party-banned').textContent=draw?'':`NON DIRE: ${card.banned.join(' · ')}`;hide('party-chat-form',choose||(draw?(active||r.guessed.includes(party.uid)):!same));M('party-text').placeholder=!draw&&active?'Scrivi un indizio':'Scrivi la risposta';hide('party-pass',draw||!active||choose);hide('party-correct',draw||!active||choose);hide('party-foul',draw||same||choose);hide('party-next',choose||!(active||host));M('party-sound').textContent=window.cosmicGame.soundEnabled()?'🔊 Audio':'🔇 Audio';const chat=M('party-chat');chat.replaceChildren();for(const m of r.chat)chat.append(window.cosmicAvatar.decorate(ccNode('div',`${r.players[m.uid]?.name||'-'}: ${m.text.replace(/\u2212/g,'-')}`,m.correct?'correct':''),m.uid));chat.scrollTop=chat.scrollHeight;partyTick();}
     const partyInvite=new URL(location.href).searchParams.get('party');if(!inviteCode&&!ccInvite&&PARTY_NAMES[partyInvite]){party.kind=partyInvite;M('party-code-input').value=(new URL(location.href).searchParams.get('code')||'').slice(0,10);hide('party-create',true);hide('party-join',false);hide('party-modal',false);switchMenu('multi');partyRender();}
 
     // Board games: isolated room collection; fleets are in owner-only documents.
@@ -2241,7 +2496,7 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
     }
     setInterval(bgResolve,700);
     function bgGrid(id,w,h,fn,cls=''){const node=M(id);node.className='bg-grid '+cls;node.style.gridTemplateColumns=`repeat(${w},minmax(0,1fr))`;node.replaceChildren();for(let i=0;i<w*h;i++){const a=fn(i),b=ccNode('button',a.text||'',a.cls||'');b.type='button';b.disabled=!a.click;b.setAttribute('aria-label',a.label||`${String.fromCharCode(65+i%w)}${Math.floor(i/w)+1}`);if(a.click)b.onclick=a.click;node.append(b);}}
-    function bgRender(){const r=bg.room,kind=bg.kind;M('bg-title').textContent=BG_NAMES[kind];M('bg-intro').textContent=kind==='tris'?'Due giocatori alternano X e O su una griglia 3×3. Scegli una casella libera e cerca di allineare tre dei tuoi simboli in orizzontale, verticale o diagonale. Se la griglia si riempie senza un vincitore, la partita finisce in pareggio.':kind==='four'?'Due giocatori inseriscono a turno una pedina in una delle sette colonne. La pedina cade nella prima casella libera dal basso. Vince chi allinea quattro pedine in orizzontale, verticale o diagonale; a griglia piena senza vincitori è pareggio.':'Da 2 a 4 giocatori dispongono quattro navi nella propria griglia 8×8. A turno scegli un avversario e una casella da colpire sul suo radar. Chi perde tutta la flotta viene eliminato. Vince l’ultimo giocatore rimasto.';M('bg-guide-text').textContent=M('bg-intro').textContent;hide('bg-cap-label',kind!=='naval');hide('bg-entry',!!bg.ref);hide('bg-room',!r);if(!r)return;const lobby=r.state==='lobby',setup=r.state==='setup',running=r.state==='running',done=r.state==='finished',naval=kind==='naval',host=bgHost(r),ownTurn=running&&bgActor(r)===bg.uid&&!r.pending;M('bg-room-name').textContent=(r.locked===false?'🔓 ':'🔒 ')+r.name;M('bg-code').textContent=r.code;M('bg-status').textContent=lobby?`Lobby · ${Object.keys(r.players).length}/${r.capacity}`:setup?`Preparazione flotte · ${r.ready.length}/${r.order.length}`:done?'Partita conclusa':r.pending?`Attesa risposta di ${r.players[r.pending.target]?.name||'-'}${r.pending.at?' · '+Math.max(0,Math.ceil((r.pending.at.toMillis()+90000-serverNow())/1000))+' s':''}`:ownTurn?'È il tuo turno':`Turno di ${r.players[bgActor(r)]?.name||'-'}`;const list=M('bg-players');list.replaceChildren();for(const uid of lobby?Object.keys(r.players):r.order){const row=ccNode('div',undefined,'mp-player'),i=r.order.indexOf(uid);row.append(ccNode('span',`${r.players[uid]?.name||'-'}${uid===bg.uid?' · Tu':''}${uid===r.hostUid?' · Host':''}${!lobby&&!naval?(i===0?' · ✕':' · ○'):''}${setup?(r.ready.includes(uid)?' · Pronto':' · In attesa'):''}`));if(naval&&!lobby&&!setup)row.append(ccNode('strong',r.alive.includes(uid)?`${BG_TOTAL-r.hits[uid].length} segmenti`:'Eliminato','mp-score'));if(lobby&&host&&uid!==bg.uid){const b=ccNode('button','Espelli','icon-btn');b.onclick=()=>bgAction(()=>bgTx(o=>{if(o.state!=='lobby'||!bgHost(o))return null;const players={...o.players};delete players[uid];return {players};}));row.append(b);}list.append(row);}hide('bg-start',!lobby||!host);M('bg-start').disabled=bg.busy||Object.keys(r.players).length<2;hide('bg-play',lobby);hide('bg-result',!done);hide('bg-rematch',!done||!host);if(done)M('bg-result').textContent=r.winner==='draw'?'Pareggio!':`🏆 ${r.players[r.winner]?.name||'-'} vince!`;if(lobby)return;
+    function bgRender(){const r=bg.room,kind=bg.kind;M('bg-title').textContent=BG_NAMES[kind];M('bg-intro').textContent=kind==='tris'?'Due giocatori alternano X e O su una griglia 3×3. Scegli una casella libera e cerca di allineare tre dei tuoi simboli in orizzontale, verticale o diagonale. Se la griglia si riempie senza un vincitore, la partita finisce in pareggio.':kind==='four'?'Due giocatori inseriscono a turno una pedina in una delle sette colonne. La pedina cade nella prima casella libera dal basso. Vince chi allinea quattro pedine in orizzontale, verticale o diagonale; a griglia piena senza vincitori è pareggio.':'Da 2 a 4 giocatori dispongono quattro navi nella propria griglia 8×8. A turno scegli un avversario e una casella da colpire sul suo radar. Chi perde tutta la flotta viene eliminato. Vince l’ultimo giocatore rimasto.';M('bg-guide-text').textContent=M('bg-intro').textContent;hide('bg-cap-label',kind!=='naval');hide('bg-entry',!!bg.ref);hide('bg-room',!r);if(!r)return;const lobby=r.state==='lobby',setup=r.state==='setup',running=r.state==='running',done=r.state==='finished',naval=kind==='naval',host=bgHost(r),ownTurn=running&&bgActor(r)===bg.uid&&!r.pending;M('bg-room-name').textContent=(r.locked===false?'🔓 ':'🔒 ')+r.name;M('bg-code').textContent=r.code;M('bg-status').textContent=lobby?`Lobby · ${Object.keys(r.players).length}/${r.capacity}`:setup?`Preparazione flotte · ${r.ready.length}/${r.order.length}`:done?'Partita conclusa':r.pending?`Attesa risposta di ${r.players[r.pending.target]?.name||'-'}${r.pending.at?' · '+Math.max(0,Math.ceil((r.pending.at.toMillis()+90000-serverNow())/1000))+' s':''}`:ownTurn?'È il tuo turno':`Turno di ${r.players[bgActor(r)]?.name||'-'}`;if(running)window.cosmicAvatar.decorate(M('bg-status'),r.pending?.target||bgActor(r));const list=M('bg-players');list.replaceChildren();for(const uid of lobby?Object.keys(r.players):r.order){const row=ccNode('div',undefined,'mp-player'),i=r.order.indexOf(uid);row.append(window.cosmicAvatar.decorate(ccNode('span',`${r.players[uid]?.name||'-'}${uid===bg.uid?' · Tu':''}${uid===r.hostUid?' · Host':''}${!lobby&&!naval?(i===0?' · ✕':' · ○'):''}${setup?(r.ready.includes(uid)?' · Pronto':' · In attesa'):''}`),uid));if(naval&&!lobby&&!setup)row.append(ccNode('strong',r.alive.includes(uid)?`${BG_TOTAL-r.hits[uid].length} segmenti`:'Eliminato','mp-score'));if(lobby&&host&&uid!==bg.uid){const b=ccNode('button','Espelli','icon-btn');b.onclick=()=>bgAction(()=>bgTx(o=>{if(o.state!=='lobby'||!bgHost(o))return null;const players={...o.players};delete players[uid];return {players};}));row.append(b);}list.append(row);}hide('bg-start',!lobby||!host);M('bg-start').disabled=bg.busy||Object.keys(r.players).length<2;hide('bg-play',lobby);hide('bg-result',!done);hide('bg-rematch',!done||!host);if(done)M('bg-result').textContent=r.winner==='draw'?'Pareggio!':`🏆 ${r.players[r.winner]?.name||'-'} vince!`;if(done&&r.winner!=='draw')window.cosmicAvatar.decorate(M('bg-result'),r.winner);if(lobby)return;
       hide('bg-setup',!setup||r.ready.includes(bg.uid));hide('bg-own-label',!naval);hide('bg-target-wrap',!naval||setup);if(!naval){const four=kind==='four',w=four?7:3,h=four?6:3,win=done&&r.winner!=='draw'?bgWinning(r.marks[r.winner],r.last.cell,w,h,four?4:3):[];bgGrid('bg-grid',w,h,i=>{const a=r.marks[r.order[0]].includes(i),b=r.marks[r.order[1]].includes(i),free=!a&&!b,can=ownTurn&&!bg.busy&&(four?Array.from({length:6},(_,j)=>j*7+i%7).some(c=>!r.marks[r.order[0]].includes(c)&&!r.marks[r.order[1]].includes(c)):free);return {text:a?'✕':b?'○':'',cls:(a?'bg-a':b?'bg-b':'')+(win.includes(i)?' bg-win':''),click:can?()=>bgPlaceMark(i):null};},four?'bg-four':'');M('bg-legend').textContent=four?'Tocca una colonna per far cadere la pedina.':'Tocca una casella libera.';return;}
       const ships=(bg.fleet||bg.draft).flat(),myHits=r.hits[bg.uid]||[],myShots=r.shots[bg.uid]||[];bgGrid('bg-grid',8,8,i=>({text:myHits.includes(i)?'✕':myShots.includes(i)?'·':ships.includes(i)?'■':'',cls:myHits.includes(i)?'bg-hit':myShots.includes(i)?'bg-miss':ships.includes(i)?'bg-ship':'',click:setup&&!r.ready.includes(bg.uid)&&!bg.busy?()=>bgPlaceShip(i):null}),'bg-naval');M('bg-ready').disabled=bg.busy||bg.draft.some((s,i)=>s.length!==BG_LENGTHS[i]);M('bg-legend').textContent=setup?(r.ready.includes(bg.uid)?'Flotta confermata. Attendi gli altri giocatori.':`Segmenti posizionati: ${ships.length}/${BG_TOTAL}`):'■ Nave · ✕ Colpito · · Acqua. Le posizioni avversarie non sono mostrate.';if(setup)return;
       const targets=r.order.filter(id=>id!==bg.uid&&(done||r.alive.includes(id)));if(!targets.includes(bg.target))bg.target=targets[0]||'';const select=M('bg-target');select.replaceChildren(...targets.map(id=>new Option(r.players[id].name,id,false,id===bg.target)));select.disabled=!!r.pending||bg.busy;const target=bg.target,shot=r.shots[target]||[],hit=r.hits[target]||[];bgGrid('bg-enemy',8,8,i=>({text:hit.includes(i)?'✕':shot.includes(i)?'·':'',cls:hit.includes(i)?'bg-hit':shot.includes(i)?'bg-miss':'',click:ownTurn&&target&&!bg.busy&&!shot.includes(i)?()=>bgFire(i):null}),'bg-naval');M('bg-shot-status').textContent=r.last?`${r.players[r.last.by]?.name||'-'} → ${r.players[r.last.target]?.name||'-'} ${String.fromCharCode(65+r.last.cell%8)}${Math.floor(r.last.cell/8)+1}: ${r.last.forfeit?'Avversario ritirato per mancata risposta':r.last.hit?'Colpito!':'Acqua'}`:'Seleziona un bersaglio e una casella.';
@@ -2256,7 +2511,7 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
         if(roomExpired(cc.room))ccDetach(msg);
         if(roomExpired(party.room))partyDetach(msg);
         if(roomExpired(bg.room))bgDetach(msg);
-        if(bg.room?.pending?.at&&!bg.busy)M('bg-status').textContent=`Attesa risposta di ${bg.room.players[bg.room.pending.target]?.name||'-'} · ${Math.max(0,Math.ceil((bg.room.pending.at.toMillis()+90000-serverNow())/1000))} s`;
+        if(bg.room?.pending?.at&&!bg.busy){M('bg-status').textContent=`Attesa risposta di ${bg.room.players[bg.room.pending.target]?.name||'-'} · ${Math.max(0,Math.ceil((bg.room.pending.at.toMillis()+90000-serverNow())/1000))} s`;window.cosmicAvatar.decorate(M('bg-status'),bg.room.pending.target);}
         if(roomsActive())void syncClock();
     },1000);
     window.addEventListener('online',()=>{if(roomsActive()){void syncClock(true);if(mp.pending&&!mp.syncing)void flushReport();}});
@@ -2771,6 +3026,7 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
         $("menu-screen").classList.add("hidden");
         $("game-screen").classList.remove("hidden");
         $("btn-home").classList.remove("hidden");
+        $("btn-help").classList.remove("hidden");
         window.scrollTo(0,0);
 
         clearInterval(game.timerId);
@@ -3278,6 +3534,7 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
                 </div>
                 <div style="font-family:var(--font-mono); font-weight:800; font-size:0.9rem; color:var(--emerald-glow);">${Number(item.score || 0).toLocaleString("it-IT")} pt</div>
             `;
+            window.cosmicAvatar.decorate(card.querySelector("strong"),item.uid);
             list.appendChild(card);
         });
     };
@@ -3286,7 +3543,8 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
         soundFX.click();
         if (window.refreshLeaderboardData) window.refreshLeaderboardData();
         window.renderLeaderboardList();
-        $("leaderboard-modal").classList.remove("hidden");
+        showScoreTab("global");
+        $("history-modal").classList.remove("hidden");
     }
 
     document.querySelectorAll("#lb-tabs .filter-tab").forEach(tab => {
@@ -3299,7 +3557,15 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
         });
     });
 
+    function showScoreTab(tab) {
+        const global = tab === "global";
+        $("score-history-panel").classList.toggle("hidden", global);
+        $("score-global-panel").classList.toggle("hidden", !global);
+        $("score-history-tab").setAttribute("aria-selected", String(!global));
+        $("score-global-tab").setAttribute("aria-selected", String(global));
+    }
     function openHistoryModal() {
+        showScoreTab("history");
         soundFX.click();
         const total = store.history.length;
         const wins = store.history.filter(h => h.won).length;
@@ -3327,6 +3593,7 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
                     </div>
                     <div style="font-family:var(--font-mono); font-weight:800; font-size:0.9rem; color:var(--emerald-glow);">${item.score.toLocaleString("it-IT")} pt</div>
                 `;
+                const who=document.createElement("span");who.className="history-person";who.textContent=item.username||store.username;window.cosmicAvatar.decorate(who,window.cosmicOwnUid?.());card.firstElementChild.append(who);
                 list.appendChild(card);
             });
         }
@@ -3345,6 +3612,7 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
         $("game-screen").classList.add("hidden");
         $("menu-screen").classList.remove("hidden");
         $("btn-home").classList.add("hidden");
+        $("btn-help").classList.add("hidden");
         window.scrollTo(0,0);
         setEyeState("cyan", "Mens sana in corpore sano");
     }
@@ -3364,8 +3632,8 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
         if (store.sound) soundFX.click();
     });
 
-    $("btn-leaderboard").addEventListener("click", openLeaderboardModal);
-    $("btn-close-lb").addEventListener("click", () => $("leaderboard-modal").classList.add("hidden"));
+    $("score-global-tab").addEventListener("click", openLeaderboardModal);
+    $("score-history-tab").addEventListener("click", openHistoryModal);
 
     $("btn-history").addEventListener("click", openHistoryModal);
     $("btn-close-history").addEventListener("click", () => $("history-modal").classList.add("hidden"));
@@ -3412,7 +3680,7 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
 
     // Supporto tastiera fisica su computer
     window.addEventListener("keydown", e => {
-        if (!game.active || game.mpBusy || !$("mp-modal").classList.contains("hidden") || !$("mp-countdown").classList.contains("hidden")) return;
+        if (!game.active || game.mpBusy || document.querySelector(".modal-backdrop:not(.hidden)")) return;
         const cfg = MODE_CONFIG[game.modeKey];
         if (e.key === "Backspace" || e.key === "Delete") {
             e.preventDefault();
