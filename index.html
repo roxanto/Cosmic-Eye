@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#04060f">
-    <title>L'Occhio del Cosmo - Mens Sana in Corpore Sano</title>
+    <title>Cosmic Eye - L’occhio delle sfide</title>
     <style>
         /* ==========================================================================
            1. RESET, VARIABILI TEMA COSMICO & TIPOGRAFIA AUTONOMA
@@ -1022,6 +1022,145 @@
 
     .bg-box{max-width:720px}.bg-card{border-color:#60a5fa88;background:linear-gradient(135deg,#132d49,#10192d)}.bg-grid{display:grid;gap:4px;max-width:430px;width:100%;margin:auto}.bg-grid button{min-width:0;aspect-ratio:1;border:1px solid #38516b;background:#14233c;border-radius:7px;color:#f1f5f9;font:700 clamp(12px,4vw,28px) var(--font-sans);padding:0;cursor:pointer;touch-action:manipulation}.bg-grid button:disabled{cursor:default;opacity:1}.bg-grid button.bg-a{color:#22d3ee;background:#133c50;border-color:#22d3ee}.bg-grid button.bg-b{color:#e879f9;background:#4b2259;border-color:#e879f9}.bg-grid button.bg-ship{background:#165e75;border-color:#22d3ee}.bg-grid button.bg-hit{background:#7f1d35;color:#fff;border-color:#ff627d}.bg-grid button.bg-miss{background:#253448;color:#94a3b8}.bg-grid button.bg-win{box-shadow:inset 0 0 0 2px #fbbf24;color:#fbbf24}.bg-grid.bg-four{background:#142c58;border:2px solid #4775aa;padding:6px;border-radius:12px}.bg-grid.bg-four button{border-radius:50%}.bg-grid.bg-four button.bg-a{background:#22d3ee;color:#0b2434}.bg-grid.bg-four button.bg-b{background:#e879f9;color:#3c183e}.bg-grid.bg-naval button{border-radius:4px;font-size:clamp(10px,3vw,18px)}.bg-box select{max-width:100%;min-width:0}.bg-box .mp-actions{flex-wrap:wrap}.bg-box .mp-actions select{flex:1}
 
+
+/* Responsive dashboard / persistent navigation */
+html,body {overflow-x:clip;}
+body {--identity-bottom:0px;--chrome-bottom:0px;}
+.app-shell {width:100%;max-width:1240px;padding:0 clamp(8px,2vw,24px) 20px;gap:12px;min-width:0;}
+.app-chrome {position:sticky;top:0;z-index:12;display:flex;flex-direction:column;gap:7px;padding:8px 0 5px;background:linear-gradient(180deg,#090f21 0%,#090f21 90%,rgba(9,15,33,.95) 100%);border-radius:0 0 15px 15px;}
+.identity-bar {display:grid;grid-template-columns:minmax(0,1fr);gap:8px;min-width:0;}
+.top-bar {min-width:0;min-height:56px;gap:8px;padding:10px 14px;align-items:center;}
+.brand-group {min-width:0;}
+.brand-title {font-size:clamp(.78rem,3.5vw,1.1rem);line-height:1.2;}
+.brand-subtitle {font-size:clamp(.48rem,2vw,.68rem);letter-spacing:.1em;line-height:1.3;}
+.header-actions {flex:0 0 auto;gap:4px;}
+.header-actions .icon-btn {height:34px;min-width:32px;padding:0 6px;}
+.eye-stage {display:flex;flex-direction:column;gap:10px;min-width:0;min-height:110px;padding:12px 14px;justify-content:center;align-items:center;text-align:center;}
+.eye-wrapper {width:132px;height:74px;flex:0 0 auto;margin:0 auto;}
+.eye-status-pill {margin:0 auto;font-size:.78rem;line-height:1.35;white-space:normal;max-width:min(100%,420px);overflow-wrap:anywhere;text-align:center;}
+.menu-controls {display:grid;grid-template-columns:minmax(0,1fr);gap:7px;padding:8px 10px;min-width:0;}
+.profile-controls {min-width:0;}
+.profile-controls .section-label {margin-bottom:5px;gap:7px;align-items:center;font-size:.65rem;}
+.profile-controls .section-label>span:first-child {flex:0 1 auto;}
+.sync-status {flex:0 1 auto;text-align:right;min-width:0;line-height:1.25;font-size:.61rem;}
+.sync-dot {flex:0 0 7px;}
+.profile-box {padding:0;border:0;background:transparent;}
+.profile-input {min-width:0;}
+.profile-row .profile-input {height:36px;font-size:1rem;}
+.profile-row .icon-btn {flex:0 0 auto;}
+.mode-switch {gap:5px;padding:3px;}
+.mode-switch button {min-height:35px;font-size:.78rem;}
+.app-shell:has(#game-screen:not(.hidden)) .menu-controls {display:none;}
+.menu-screen {padding:12px;min-width:0;}
+.menu-section {gap:10px;min-width:0;}
+.mode-card {min-width:0;gap:8px;text-align:left;min-height:66px;}
+.mode-card>div {min-width:0;}
+.mode-title,.mode-desc {overflow-wrap:anywhere;}
+.game-screen {min-width:0;gap:10px;}
+.game-side {display:flex;flex-direction:column;gap:10px;min-width:0;}
+#board-panel {position:relative;min-width:0;max-height:min(50dvh,520px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;}
+#board-panel .attempt-row {flex-shrink:0;}
+.game-rules {padding:10px 12px;gap:7px;font-size:.73rem;}
+.game-rules>div:not(.game-rules-title) {display:flex;align-items:baseline;gap:8px;}
+.game-rules-title {color:var(--cyan-glow);font-weight:800;letter-spacing:.07em;text-transform:uppercase;}
+.legend-dot {display:inline-block;width:9px;height:9px;border-radius:50%;flex:0 0 9px;}
+.legend-green {background:var(--emerald-glow);box-shadow:0 0 7px #00ff8866;}
+.legend-yellow {background:var(--amber-glow);box-shadow:0 0 7px #ffbe0b66;}
+#mp-game-panel .section-label {margin-bottom:7px;}
+#mp-progress {max-height:230px;overflow-y:auto;overscroll-behavior:contain;}
+#mp-progress .mp-player {flex-shrink:0;}
+/* Keep the identity strip visible while dialogs use their own scroll area. */
+.modal-backdrop {top:var(--identity-bottom);padding:8px 12px max(8px,env(safe-area-inset-bottom));align-items:center;overscroll-behavior:contain;}
+.modal-box {max-height:calc(100dvh - var(--identity-bottom) - 24px);padding:12px;overscroll-behavior:contain;scrollbar-width:thin;min-width:0;}
+.modal-box>.modal-head {position:sticky;top:-12px;z-index:5;flex-shrink:0;background:#0c1428;margin:-12px -12px 0;padding:12px;border-bottom:1px solid var(--panel-border);border-radius:17px 17px 0 0;gap:8px;}
+.modal-head .icon-btn {flex:0 0 auto;}
+.room-directory,.room-entry-controls {min-width:0;}
+.room-directory {padding:10px;border:1px solid var(--panel-border);border-radius:12px;background:#0a1225;}
+.room-directory-head {display:flex;justify-content:space-between;align-items:center;gap:8px;}
+.room-directory-head .section-label {margin:0;}
+[id$="-directory-list"] {max-height:240px;overflow-y:auto;overscroll-behavior:contain;}
+.directory-row {flex-shrink:0;}
+.modal-box input,.modal-box select,.modal-box textarea {min-width:0;}
+body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
+/* Tablet and desktop: broad dashboard, compact persistent header, two columns for play. */
+@media (min-width:720px) {
+ .identity-bar {grid-template-columns:minmax(0,1fr);gap:10px;}
+ .top-bar {padding:12px 16px;}
+ .header-actions .icon-btn {height:38px;min-width:38px;padding:0 9px;}
+ .eye-stage {justify-content:center;min-height:132px;padding:16px 18px;}
+ .eye-wrapper {width:170px;height:96px;}
+ .eye-status-pill {font-size:.9rem;}
+ .menu-controls {grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);align-items:end;padding:10px 14px;gap:16px;}
+ .profile-controls .section-label {font-size:.72rem;}
+ .sync-status {font-size:.68rem;}
+ .mode-switch button {min-height:42px;font-size:.9rem;}
+ .menu-screen {padding:18px;}
+ #single-modes,#multi-modes {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start;}
+ #single-modes>div:first-child {grid-column:1/-1;}
+ #single-modes>div:first-child .mode-grid {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+ #single-modes .mode-card {min-height:82px;}
+ #single-modes .records-grid {grid-template-columns:repeat(2,minmax(0,1fr));}
+ #multi-modes>.section-label,#multi-modes>.rules-box {grid-column:1/-1;}
+ #multi-modes .mode-card {height:100%;min-height:85px;}
+ .mode-title {font-size:1rem;}.mode-desc {font-size:.8rem;}
+ .game-screen {display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);grid-template-areas:'hud hud' 'board side';align-items:start;gap:14px;}
+ .game-screen>.hud-bar {grid-area:hud;}
+ #board-panel {grid-area:board;max-height:calc(100dvh - var(--chrome-bottom) - 86px);min-height:180px;}
+ .game-side {grid-area:side;position:sticky;top:calc(var(--chrome-bottom) + 8px);}
+ .slot-box {width:clamp(36px,4.2vw,54px);height:clamp(36px,4.2vw,54px);}
+ .color-btn,.color-btn.compact-25 {height:44px;}
+ .key-btn {max-width:none;height:46px;}
+ .modal-box {max-height:calc(100dvh - var(--identity-bottom) - 30px);}
+ .modal-box:has(> #mp-entry:not(.hidden)),.modal-box:has(> #cc-entry:not(.hidden)),.modal-box:has(> #party-entry:not(.hidden)),.modal-box:has(> #bg-entry:not(.hidden)) {max-width:1040px;}
+ #mp-entry,#cc-entry,#party-entry,#bg-entry {display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start;}
+ [id$="-directory-list"] {max-height:min(50dvh,440px);}
+ .cc-box {max-width:960px;}
+ .cc-cell {font-size:clamp(.69rem,1.3vw,.95rem);}
+ .party-box {max-width:850px;}
+ .party-box #party-canvas {width:min(100%,680px);margin:auto;}
+ .bg-box {max-width:870px;}
+ #bg-play:has(#bg-target-wrap:not(.hidden)) {display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px 16px;align-items:start;}
+ #bg-play:has(#bg-target-wrap:not(.hidden)) #bg-target-wrap {grid-column:1;grid-row:1/4;}
+ #bg-play:has(#bg-target-wrap:not(.hidden)) #bg-own-label {grid-column:2;grid-row:1;}
+ #bg-play:has(#bg-target-wrap:not(.hidden)) #bg-grid {grid-column:2;grid-row:2;}
+ #bg-play:has(#bg-target-wrap:not(.hidden)) #bg-legend {grid-column:1/-1;}
+}
+@media(min-width:1050px) {
+ #multi-modes {grid-template-columns:repeat(12,minmax(0,1fr));}
+ #multi-modes>.mode-card {grid-column:span 3;}
+ #multi-modes>.mode-card.bg-card {grid-column:span 4;}
+ #multi-modes>.mode-card:not(.bg-card) {min-height:106px;}
+ #single-modes .mode-card {padding:16px;}
+ #board-panel.mp-wide .slot-box {width:clamp(35px,3.6vw,48px);height:clamp(35px,3.6vw,48px);}
+ .game-side .input-panel {padding:14px;gap:12px;}
+}
+@media(max-width:719px) {
+ #board-panel:has(.attempt-row:nth-child(8)) {max-height:clamp(140px,32dvh,300px);}
+}
+@media(max-width:390px) {
+ .app-shell {padding-left:6px;padding-right:6px;}
+ .top-bar {padding:8px 8px;}
+ .header-actions .icon-btn {min-width:29px;height:32px;padding:0 5px;font-size:.72rem;}
+ .header-actions {gap:3px;}
+ .brand-title {letter-spacing:.04em;}
+ .brand-subtitle {letter-spacing:.055em;}
+ .menu-controls {padding:7px 8px;}
+ .profile-controls .section-label {letter-spacing:.07em;}
+ .modal-backdrop {padding-left:6px;padding-right:6px;}
+}
+@media(max-height:520px) and (orientation:landscape) {
+ .app-chrome {padding-top:3px;gap:3px;}
+ .identity-bar {grid-template-columns:minmax(0,1fr);gap:4px;}
+ .top-bar {min-height:42px;padding:5px 8px;}
+ .eye-stage {min-height:78px;padding:8px;}
+ .eye-wrapper {width:92px;height:52px;}
+ .menu-controls {grid-template-columns:minmax(0,1fr) minmax(0,1fr);padding:5px 8px;gap:8px;}
+ .mode-switch button {min-height:32px;}
+ #board-panel {max-height:50dvh;}
+ .game-side {position:static;}
+}
+@media(prefers-reduced-motion:reduce) {.eye-ring-spin,.eye-ring-spin-rev {animation:none;}}
+
 </style>
 </head>
 <body>
@@ -1030,11 +1169,13 @@
 <div id="toast" class="toast-banner"></div>
 
 <div class="app-shell">
+  <div class="app-chrome" id="app-chrome">
+    <div class="identity-bar" id="identity-bar">
     <!-- TOP BAR -->
     <header class="glass-panel top-bar">
         <div class="brand-group" id="brand-home" title="Torna alla Home">
-            <span class="brand-title">L'Occhio del Cosmo</span>
-            <span class="brand-subtitle">Mens Sana in Corpore Sano</span>
+            <span class="brand-title">Cosmic Eye</span>
+            <span class="brand-subtitle">L’occhio delle sfide</span>
         </div>
         <div class="header-actions">
             <button id="btn-leaderboard" class="icon-btn" title="Classifica Globale">🌐</button>
@@ -1052,7 +1193,7 @@
 
     <!-- COSMIC EYE STAGE -->
     <section class="glass-panel eye-stage">
-        <div class="eye-wrapper" id="eye-wrapper" title="L'Occhio del Cosmo ti osserva">
+        <div class="eye-wrapper" id="eye-wrapper" title="Cosmic Eye ti osserva">
             <svg class="eye-svg" viewBox="0 0 220 120">
                 <defs>
                     <radialGradient id="irisGrad" cx="50%" cy="50%" r="50%">
@@ -1087,12 +1228,12 @@
                 </g>
             </svg>
         </div>
-        <div class="eye-status-pill" id="eye-status">Scegli una sfida neurale</div>
+        <div class="eye-status-pill" id="eye-status">Mens sana in corpore sano</div>
     </section>
 
-    <!-- SCHERMATA 1: MENU PRINCIPALE -->
-    <main id="menu-screen" class="glass-panel menu-screen">
-        <div>
+    </div>
+    <div class="menu-controls glass-panel" id="menu-controls">
+        <div class="profile-controls">
             <div class="section-label">
                 <span>◈ Profilo Esploratore</span>
                 <span class="sync-status"><span class="sync-dot" id="sync-dot"></span><span id="sync-text">Connessione...</span></span>
@@ -1106,6 +1247,11 @@
         </div>
 
         <div class="mode-switch" role="tablist" aria-label="Modalità di gioco"><button type="button" id="menu-single" role="tab" aria-selected="true" aria-controls="single-modes">◈ Single player</button><button type="button" id="menu-multi" role="tab" aria-selected="false" aria-controls="multi-modes">🌐 Multiplayer</button></div>
+    </div>
+  </div>
+
+    <!-- SCHERMATA 1: MENU PRINCIPALE -->
+    <main id="menu-screen" class="glass-panel menu-screen">
         <div id="single-modes" class="menu-section" role="tabpanel" aria-labelledby="menu-single">
         <div>
             <div class="section-label"><span>◈ Modalità Colori (7 Tentativi)</span></div>
@@ -1154,13 +1300,10 @@
             <div class="records-grid" id="records-grid"></div>
         </div>
 
-        <div class="rules-box">
-            <div>🟢 <strong>Luce Verde:</strong> elemento e posizione esatti: resta <strong>bloccato</strong> nei tentativi successivi.</div>
-            <div>🟡 <strong>Lucina Gialla:</strong> elemento presente nella combinazione ma in posizione diversa.</div>
-        </div>
+
         </div>
         <div id="multi-modes" class="menu-section hidden" role="tabpanel" aria-labelledby="menu-multi">
-          <div class="section-label">◈ Sfide online · Stanze private</div>
+          <div class="section-label">◈ Sfide online · Stanze libere e protette</div>
           <button id="mp-open" class="mode-card mp-card"><div><div class="mode-title">Duello Cromatico</div><div class="mode-desc">Stessa combinazione · Punteggi individuali · 2–16 giocatori</div></div><span class="mult-badge">VS</span></button>
           <button id="cc-open" class="mode-card word-card"><div><div class="mode-title">Connessioni Cosmiche</div><div class="mode-desc">Indizi e parole · 2–4 squadre · 4–16 giocatori</div></div><span class="mult-badge">TEAM</span></button>
           <button id="party-draw-open" class="mode-card party-card"><div><div class="mode-title">Tratti Stellari</div><div class="mode-desc">Disegna e indovina · 2–16 giocatori</div></div><span class="mult-badge">✎</span></button>
@@ -1169,7 +1312,7 @@
           <button id="bg-tris-open" class="mode-card bg-card"><div><div class="mode-title">Tris Orbitale</div><div class="mode-desc">Tre simboli in fila · 2 giocatori</div></div><span class="mult-badge">3×3</span></button>
           <button id="bg-four-open" class="mode-card bg-card"><div><div class="mode-title">Quattro Astrale</div><div class="mode-desc">Quattro pedine allineate · 2 giocatori</div></div><span class="mult-badge">7×6</span></button>
           <button id="bg-naval-open" class="mode-card bg-card"><div><div class="mode-title">Flotte Cosmiche</div><div class="mode-desc">Battaglia navale tutti contro tutti · 2–4 giocatori</div></div><span class="mult-badge">8×8</span></button>
-          <div class="rules-box">Crea una stanza con password e invita gli amici. I risultati multiplayer restano separati dai record personali.</div>
+          <div class="rules-box">Crea una stanza aperta o protetta da password, oppure entra in una stanza disponibile. I risultati multiplayer restano separati dai record personali.</div>
         </div>
     </main>
 
@@ -1191,16 +1334,10 @@
             </div>
         </div>
 
-        <section id="mp-game-panel" class="glass-panel hidden" style="padding:10px">
-            <div class="section-label"><span>◈ Avversari</span><button id="mp-game-lobby" class="icon-btn">Stanza</button></div>
-            <div id="mp-progress" class="mp-stack"></div>
-            <div id="mp-game-message" class="mp-message" role="status"></div>
-            <button id="mp-retry" class="icon-btn hidden">Riprova sincronizzazione</button>
-        </section>
-
         <!-- BOARD 7 TENTATIVI -->
         <div class="glass-panel board-panel" id="board-panel"></div>
 
+        <div class="game-side">
         <!-- PANNELLO INPUT -->
         <div class="glass-panel input-panel">
             <div id="color-input-grid" class="color-grid"></div>
@@ -1209,6 +1346,19 @@
                 <button id="btn-clear" class="action-btn btn-clear">⌫ Cancella</button>
                 <button id="btn-submit" class="action-btn btn-submit" disabled>Verifica</button>
             </div>
+        </div>
+        <section class="glass-panel rules-box game-rules" aria-label="Legenda dei tentativi">
+            <div class="game-rules-title">◈ Legenda dei tentativi</div>
+            <div><span class="legend-dot legend-green" aria-hidden="true"></span><span><strong>Luce verde:</strong> elemento e posizione esatti; resta bloccato.</span></div>
+            <div><span class="legend-dot legend-yellow" aria-hidden="true"></span><span><strong>Luce gialla:</strong> elemento presente, ma in posizione diversa.</span></div>
+        </section>
+        <section id="mp-game-panel" class="glass-panel hidden" style="padding:10px">
+            <div class="section-label"><span>◈ Avversari</span><button id="mp-game-lobby" class="icon-btn">Stanza</button></div>
+            <div id="mp-progress" class="mp-stack"></div>
+            <div id="mp-game-message" class="mp-message" role="status"></div>
+            <button id="mp-retry" class="icon-btn hidden">Riprova sincronizzazione</button>
+        </section>
+
         </div>
     </main>
 </div>
@@ -1287,26 +1437,26 @@
   <div class="glass-panel modal-box mp-modal-box">
     <div class="modal-head"><span class="modal-title">🌐 Multiplayer</span><button id="mp-close" class="icon-btn">✕</button></div>
     <div id="mp-message" class="mp-message" role="status" aria-live="polite"></div>
-    <div id="mp-entry" class="mp-stack">
-      <div class="rules-box">Sfida privata tra amici. Tutti ricevono la stessa sequenza di colori. I risultati non confluiscono nella classifica single player.</div>
+    <div id="mp-entry" class="mp-stack"><section class="room-directory mp-stack" aria-label="Stanze disponibili"><div class="room-directory-head"><div class="section-label">◈ Stanze aperte</div><button id="mp-directory-refresh" type="button" class="icon-btn" title="Aggiorna elenco">↻</button></div><p class="cc-muted">🔓 Libera · 🔒 Con password</p><div id="mp-directory-list" class="mp-stack" role="status" aria-live="polite"><p class="cc-muted">Caricamento…</p></div></section><div class="room-entry-controls mp-stack">
+      <div class="rules-box">Sfida tra esploratori. Tutti ricevono la stessa sequenza di colori. I risultati non confluiscono nella classifica single player.</div>
       <div class="mp-actions"><button id="mp-show-create" class="action-btn btn-submit">Crea stanza</button><button id="mp-show-join" class="action-btn btn-clear">Unisciti</button></div>
       <form id="mp-create" class="mp-stack hidden" autocomplete="off">
         <label>Nome stanza<input id="mp-name" class="profile-input" maxlength="30" value="Sfida cosmica" required></label>
-        <label>Password (min. 8 caratteri)<input id="mp-password" class="profile-input" type="password" minlength="8" maxlength="64" required autocomplete="new-password"></label>
+        <label>Password (vuota = accesso libero; altrimenti 8–64 caratteri)<input id="mp-password" class="profile-input" type="password" minlength="8" maxlength="64" autocomplete="new-password"></label>
         <div class="mp-fields">
           <label>Tentativi<select id="mp-attempts"></select></label><label>Colori<select id="mp-colors"></select></label>
           <label>Caselle<select id="mp-slots"></select></label><label>Giocatori max<select id="mp-capacity"></select></label>
         </div>
         <label>Tempo massimo<select id="mp-duration"><option value="120">2 minuti</option><option value="300" selected>5 minuti</option><option value="600">10 minuti</option><option value="0">Illimitato</option></select></label>
         <label class="mp-check"><input id="mp-duplicates" type="checkbox"> Consenti colori ripetuti</label>
-        <button class="action-btn btn-submit" type="submit">Crea stanza privata</button>
+        <button class="action-btn btn-submit" type="submit">Crea stanza</button>
       </form>
       <form id="mp-join" class="mp-stack hidden" autocomplete="off">
         <label>Codice stanza<input id="mp-code-input" class="profile-input" maxlength="10" placeholder="Es. A1B2C3D4E5" required autocapitalize="characters"></label>
-        <label>Password<input id="mp-join-password" class="profile-input" type="password" minlength="8" maxlength="64" required autocomplete="off"></label>
+        <label>Password (vuota = accesso libero; altrimenti 8–64 caratteri)<input id="mp-join-password" class="profile-input" type="password" minlength="8" maxlength="64" autocomplete="off"></label>
         <button class="action-btn btn-submit" type="submit">Entra nella stanza</button>
       </form>
-    </div>
+    </div></div>
     <div id="mp-room" class="mp-stack hidden">
       <div class="mp-room-header"><div id="mp-room-name" class="mode-title"></div><div id="mp-room-code" class="mp-code"></div><div id="mp-room-settings" class="mode-desc"></div></div>
       <button id="mp-invite" class="icon-btn">Condividi codice / invito</button>
@@ -1328,12 +1478,12 @@
  <section class="glass-panel modal-box cc-box mp-stack">
   <div class="modal-head"><span class="modal-title">✦ Connessioni Cosmiche</span><button id="cc-close" class="icon-btn">✕</button></div>
   <div id="cc-message" class="mp-message" role="status"></div>
-  <div id="cc-entry" class="mp-stack">
+  <div id="cc-entry" class="mp-stack"><section class="room-directory mp-stack" aria-label="Stanze disponibili"><div class="room-directory-head"><div class="section-label">◈ Stanze aperte</div><button id="cc-directory-refresh" type="button" class="icon-btn" title="Aggiorna elenco">↻</button></div><p class="cc-muted">🔓 Libera · 🔒 Con password</p><div id="cc-directory-list" class="mp-stack" role="status" aria-live="polite"><p class="cc-muted">Caricamento…</p></div></section><div class="room-entry-controls mp-stack">
    <p class="cc-muted">Due o più squadre, un capitano per squadra. Collega le parole con indizi e trova tutti i tuoi segnali prima degli altri.</p>
    <div class="mp-actions"><button id="cc-show-create" class="icon-btn">＋ Crea stanza</button><button id="cc-show-join" class="icon-btn">Entra</button></div>
    <form id="cc-create" class="mp-stack hidden">
     <label>Nome stanza<input id="cc-name" class="profile-input" maxlength="30" required value="Connessioni cosmiche"></label>
-    <label>Password (8–64 caratteri)<input id="cc-password" type="password" class="profile-input" minlength="8" maxlength="64" required autocomplete="new-password"></label>
+    <label>Password (vuota = accesso libero; altrimenti 8–64 caratteri)<input id="cc-password" type="password" class="profile-input" minlength="8" maxlength="64" autocomplete="new-password"></label>
     <div class="mp-fields">
      <label>Griglia<select id="cc-size"><option value="4">4 × 4</option><option value="5" selected>5 × 5</option><option value="6">6 × 6</option><option value="7">7 × 7</option></select></label>
      <label>Squadre<select id="cc-teams"><option value="2">2 squadre</option><option value="3">3 squadre</option><option value="4">4 squadre</option></select></label>
@@ -1361,14 +1511,14 @@
     </div>
     <p id="cc-word-count" class="cc-muted" aria-live="polite"></p>
     <label class="mp-check"><input id="cc-rotate" type="checkbox" checked> Ruota i capitani nelle rivincite</label>
-    <button type="submit" class="action-btn btn-submit">Crea stanza privata</button>
+    <button type="submit" class="action-btn btn-submit">Crea stanza</button>
    </form>
    <form id="cc-join" class="mp-stack hidden">
     <label>Codice stanza<input id="cc-code-input" class="profile-input" maxlength="10" required autocapitalize="characters"></label>
-    <label>Password<input id="cc-join-password" class="profile-input" type="password" minlength="8" maxlength="64" required></label>
+    <label>Password (vuota = accesso libero; altrimenti 8–64 caratteri)<input id="cc-join-password" class="profile-input" type="password" minlength="8" maxlength="64"></label>
     <button type="submit" class="action-btn btn-submit">Unisciti</button>
    </form>
-  </div>
+  </div></div>
   <div id="cc-room" class="mp-stack hidden">
    <div class="mp-room-header"><strong id="cc-room-name"></strong><span id="cc-room-code" class="mp-code"></span><span id="cc-room-settings" class="cc-muted"></span><button id="cc-invite" class="icon-btn">Condividi invito</button></div>
    <div id="cc-lobby" class="mp-stack">
@@ -1396,17 +1546,17 @@
 <div id="party-modal" class="modal-backdrop hidden"><div class="glass-panel modal-box cc-box party-box">
  <div class="modal-head"><span id="party-title" class="modal-title"></span><button id="party-close" class="icon-btn">✕</button></div>
  <div id="party-message" class="mp-message" role="status"></div>
- <div id="party-entry" class="mp-stack">
+ <div id="party-entry" class="mp-stack"><section class="room-directory mp-stack" aria-label="Stanze disponibili"><div class="room-directory-head"><div class="section-label">◈ Stanze aperte</div><button id="party-directory-refresh" type="button" class="icon-btn" title="Aggiorna elenco">↻</button></div><p class="cc-muted">🔓 Libera · 🔒 Con password</p><div id="party-directory-list" class="mp-stack" role="status" aria-live="polite"><p class="cc-muted">Caricamento…</p></div></section><div class="room-entry-controls mp-stack">
   <p id="party-intro" class="cc-muted"></p>
-  <form id="party-create" class="mp-stack"><div class="section-label">Crea stanza privata</div>
+  <form id="party-create" class="mp-stack"><div class="section-label">Crea stanza</div>
    <label>Nome stanza<input id="party-name" class="profile-input" maxlength="30" required value="Sfida tra amici"></label>
-   <label>Password (8–64 caratteri)<input id="party-password" class="profile-input" type="password" minlength="8" maxlength="64" required></label>
-   <div class="mp-fields"><label>Giocatori massimi<select id="party-capacity"><option>4</option><option>6</option><option selected>8</option><option>12</option><option>16</option></select></label>
+   <label>Password (vuota = accesso libero; altrimenti 8–64 caratteri)<input id="party-password" class="profile-input" type="password" minlength="8" maxlength="64"></label>
+   <div class="mp-fields"><label>Giocatori massimi<select id="party-capacity"><option>2</option><option>4</option><option>6</option><option selected>8</option><option>12</option><option>16</option></select></label>
    <label>Giri completi<select id="party-rounds"><option>1</option><option selected>2</option><option>3</option><option>4</option></select></label></div>
    <label>Durata turno<select id="party-duration"><option value="30">30 secondi</option><option value="60" selected>60 secondi</option><option value="90">90 secondi</option><option value="120">120 secondi</option><option value="180">180 secondi</option><option value="0">Nessun timer</option></select></label>
    <button class="action-btn btn-submit">Crea stanza</button></form>
-  <form id="party-join" class="mp-stack"><div class="section-label">Unisciti</div><label>Codice stanza<input id="party-code-input" class="profile-input" maxlength="10" required></label><label>Password<input id="party-join-password" class="profile-input" type="password" maxlength="64" required></label><button class="action-btn btn-submit">Entra</button></form>
- </div>
+  <form id="party-join" class="mp-stack"><div class="section-label">Unisciti</div><label>Codice stanza<input id="party-code-input" class="profile-input" maxlength="10" required></label><label>Password (vuota = accesso libero; altrimenti 8–64 caratteri)<input id="party-join-password" class="profile-input" type="password" maxlength="64" minlength="8"></label><button class="action-btn btn-submit">Entra</button></form>
+ </div></div>
  <div id="party-room" class="mp-stack hidden">
   <div class="mp-room-header"><strong id="party-room-name"></strong><span class="mp-code" id="party-code"></span><button id="party-invite" class="icon-btn">Condividi invito</button></div>
   <div id="party-status" class="cc-turn"></div><div id="party-players" class="mp-stack"></div>
@@ -1424,9 +1574,9 @@
 <div id="boardgames-modal" class="modal-backdrop hidden"><div class="glass-panel modal-box cc-box bg-box">
  <div class="modal-head"><span id="bg-title" class="modal-title"></span><button id="bg-close" class="icon-btn">✕</button></div>
  <div id="bg-message" class="mp-message" role="status"></div>
- <div id="bg-entry" class="mp-stack"><p id="bg-intro" class="cc-muted"></p>
- <form id="bg-create" class="mp-stack"><div class="section-label">Crea stanza privata</div><label>Nome stanza<input id="bg-name" class="profile-input" maxlength="30" required value="Sfida tra amici"></label><label>Password (8–64 caratteri)<input id="bg-password" class="profile-input" type="password" minlength="8" maxlength="64" required></label><label id="bg-cap-label">Giocatori massimi<select id="bg-cap"><option>2</option><option>3</option><option selected>4</option></select></label><button class="action-btn btn-submit">Crea stanza</button></form>
- <form id="bg-join" class="mp-stack"><div class="section-label">Unisciti a una stanza</div><label>Codice stanza<input id="bg-code-input" class="profile-input" maxlength="10" required></label><label>Password<input id="bg-join-password" class="profile-input" type="password" minlength="8" maxlength="64" required></label><button class="action-btn btn-submit">Entra</button></form></div>
+ <div id="bg-entry" class="mp-stack"><section class="room-directory mp-stack" aria-label="Stanze disponibili"><div class="room-directory-head"><div class="section-label">◈ Stanze aperte</div><button id="bg-directory-refresh" type="button" class="icon-btn" title="Aggiorna elenco">↻</button></div><p class="cc-muted">🔓 Libera · 🔒 Con password</p><div id="bg-directory-list" class="mp-stack" role="status" aria-live="polite"><p class="cc-muted">Caricamento…</p></div></section><div class="room-entry-controls mp-stack"><p id="bg-intro" class="cc-muted"></p>
+ <form id="bg-create" class="mp-stack"><div class="section-label">Crea stanza</div><label>Nome stanza<input id="bg-name" class="profile-input" maxlength="30" required value="Sfida tra amici"></label><label>Password (vuota = accesso libero; altrimenti 8–64 caratteri)<input id="bg-password" class="profile-input" type="password" minlength="8" maxlength="64"></label><label id="bg-cap-label">Giocatori massimi<select id="bg-cap"><option>2</option><option>3</option><option selected>4</option></select></label><button class="action-btn btn-submit">Crea stanza</button></form>
+ <form id="bg-join" class="mp-stack"><div class="section-label">Unisciti a una stanza</div><label>Codice stanza<input id="bg-code-input" class="profile-input" maxlength="10" required></label><label>Password (vuota = accesso libero; altrimenti 8–64 caratteri)<input id="bg-join-password" class="profile-input" type="password" minlength="8" maxlength="64"></label><button class="action-btn btn-submit">Entra</button></form></div></div>
  <div id="bg-room" class="mp-stack hidden"><div class="mp-room-header"><strong id="bg-room-name"></strong><span class="mp-code" id="bg-code"></span><button id="bg-invite" class="icon-btn">Condividi invito</button></div><div id="bg-status" class="cc-turn" role="status"></div><div id="bg-players" class="mp-stack"></div><button id="bg-start" class="action-btn btn-submit hidden">Avvia partita</button>
  <div id="bg-play" class="mp-stack hidden"><div id="bg-setup" class="mp-stack hidden"><p class="cc-muted">Disponi 4 navi (4, 3, 3, 2 caselle). Seleziona una nave e tocca la casella iniziale. Le navi possono toccarsi ma non sovrapporsi.</p><div class="mp-actions"><select id="bg-ship" aria-label="Nave"><option value="0">Nave 4</option><option value="1">Nave 3 A</option><option value="2">Nave 3 B</option><option value="3">Nave 2</option></select><button id="bg-rotate" class="icon-btn">↔ Orizzontale</button><button id="bg-random" class="icon-btn">Casuale</button><button id="bg-reset" class="icon-btn">Svuota</button></div><button id="bg-ready" class="action-btn btn-submit">Conferma flotta</button></div>
  <div id="bg-target-wrap" class="mp-stack hidden"><label>Bersaglio<select id="bg-target"></select></label><div id="bg-shot-status" class="cc-muted" role="status"></div><div class="section-label">Radar avversario</div><div id="bg-enemy" class="bg-grid"></div></div>
@@ -1438,7 +1588,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
     import { initializeAppCheck, ReCaptchaEnterpriseProvider } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app-check.js";
     import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
-    import { getFirestore, collection, addDoc, getDocsFromServer, getDocFromServer, serverTimestamp, doc, onSnapshot, runTransaction } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocsFromServer, getDocFromServer, serverTimestamp, doc, onSnapshot, runTransaction, setDoc, query, where, orderBy, limit, Timestamp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
     const CUSTOM_FIREBASE_CONFIG = {
         apiKey: "AIzaSyDctdxiEzKSMrxaBLIWmwtgam4OLsung6I",
@@ -1453,6 +1603,34 @@
     let currentUser = null;
     const COLLECTION_PATH = ["artifacts", "occhio-del-cosmo-prod", "public", "data", "leaderboard"];
 
+    // Server time: one private document per authenticated user; midpoint estimate.
+    const CLOCK_PATH = ["artifacts", "occhio-del-cosmo-prod", "public", "data", "clocks"];
+    let clockAnchor=null, clockPending=null, clockLast=0, clockAttempt=-Infinity;
+    const serverNow=()=>clockAnchor ? clockAnchor.ms+performance.now()-clockAnchor.perf : Date.now();
+    window.cosmicServerNow=serverNow;
+    async function syncClock(force=false){
+        if(!db||!currentUser||!navigator.onLine)return;
+        if(clockPending)return clockPending;
+        if(!force&&performance.now()-clockAttempt<60000)return;
+        if(!force&&performance.now()-clockLast<900000&&clockAnchor)return;
+        clockAttempt=performance.now();
+        const uid=currentUser.uid, ref=doc(db,...CLOCK_PATH,uid);
+        clockPending=(async()=>{try{
+            const a=performance.now(); await setDoc(ref,{at:serverTimestamp()}); const b=performance.now();
+            const snap=await getDocFromServer(ref); const at=snap.data()?.at?.toMillis();
+            if(currentUser?.uid===uid&&Number.isFinite(at)&&b-a<5000){clockAnchor={ms:at,perf:(a+b)/2};clockLast=performance.now();}
+        }catch(e){console.warn('Sincronizzazione orologio non riuscita:',e);}
+        finally{clockPending=null;}})();return clockPending;
+    }
+    const ROOM_TTL=86400000;
+    const roomExpired=r=>!!r?.createdAt&&serverNow()>=r.createdAt.toMillis()+ROOM_TTL;
+    function assertRoomFresh(r){if(roomExpired(r))throw Error('Stanza scaduta dopo 24 ore. Crea una nuova stanza.');}
+    function observeRoom(state,snap,message){
+        if(snap.metadata.hasPendingWrites)return false;
+        if(snap.metadata.fromCache){if(!state.reconnecting)message('Connessione in ripristino…');state.reconnecting=true;return false;}
+        if(state.reconnecting){state.reconnecting=false;message('');}
+        return true;
+    }
     window.cloudLeaderboardState = { status: "loading", error: "", saveMessage: "" };
 
     function cloudError(err) {
@@ -1480,7 +1658,8 @@
             db = getFirestore(app);
             onAuthStateChanged(auth, (user) => {
                 currentUser = user;
-                if (user) { window.refreshLeaderboardData(); restoreRoom(user.uid); ccRestore(user.uid); partyRestore(user.uid); bgRestore(user.uid); }
+                directoryTick();
+                if (user) { window.refreshLeaderboardData(); void Promise.race([syncClock(),new Promise(resolve=>setTimeout(resolve,2500))]).then(()=>{if(currentUser?.uid!==user.uid)return;restoreRoom(user.uid); ccRestore(user.uid); partyRestore(user.uid); bgRestore(user.uid);}); }
             });
             await auth.authStateReady();
             if (!auth.currentUser) await signInAnonymously(auth);
@@ -1510,7 +1689,7 @@
                 createdAt: serverTimestamp()
             });
             state.saveMessage = "Punteggio registrato su Firebase.";
-            await window.refreshLeaderboardData();
+            await window.refreshLeaderboardData(true);
         } catch (e) {
             console.error("Errore salvataggio punteggio:", e);
             state.saveMessage = "Punteggio salvato solo in locale. Errore invio: " + cloudError(e);
@@ -1518,10 +1697,11 @@
         }
     };
 
-    let pendingRead = null;
-    window.refreshLeaderboardData = function() {
+    let pendingRead = null, lastLeaderboardRead=0;
+    window.refreshLeaderboardData = function(force=false) {
         if (!db || !currentUser) return Promise.resolve();
         if (pendingRead) return pendingRead;
+        if(!force&&window.cloudLeaderboardState.status==='ready'&&Date.now()-lastLeaderboardRead<10000)return Promise.resolve();
         updateCloudStatus("loading");
         pendingRead = (async () => {
             try {
@@ -1532,6 +1712,7 @@
                 });
                 items.sort((a, b) => b.score - a.score || a.attempts - b.attempts || a.seconds - b.seconds);
                 window.cachedCloudLeaderboard = items;
+                lastLeaderboardRead=Date.now();
                 updateCloudStatus("ready");
             } catch (e) {
                 console.error("Errore lettura classifica:", e);
@@ -1563,12 +1744,13 @@
         return s;
     }
     function fillSettings(s){for(const k of ['attempts','colors','slots','capacity','duration']) M('mp-'+k).value=String(s[k]);M('mp-duplicates').checked=s.duplicates;}
-    function requireOnline(){if(!db||!currentUser)throw Error('Autenticazione Firebase non disponibile. Riprova tra poco.');return currentUser.uid;}
+    function requireOnline(){if(!navigator.onLine)throw Error('Connessione assente. Riprova quando torni online.');if(!db||!currentUser)throw Error('Autenticazione Firebase non disponibile. Riprova tra poco.');return currentUser.uid;}
     function bytesHex(b){return Array.from(b,x=>x.toString(16).padStart(2,'0')).join('');}
     async function deriveRoom(code,password){
         if(!/^[A-F0-9]{10}$/.test(code))throw Error('Il codice stanza deve contenere 10 caratteri esadecimali.');
-        if(password.length<8||password.length>64)throw Error('La password deve avere da 8 a 64 caratteri.');
         const enc=new TextEncoder();
+        if(password==='')return bytesHex(new Uint8Array(await crypto.subtle.digest('SHA-256',enc.encode('cosmic-eye-open-v1:'+code))));
+        if(password.length<8||password.length>64)throw Error('La password deve avere da 8 a 64 caratteri oppure essere vuota.');
         const key=await crypto.subtle.importKey('raw',enc.encode(password),'PBKDF2',false,['deriveBits']);
         const bits=await crypto.subtle.deriveBits({name:'PBKDF2',hash:'SHA-256',salt:enc.encode('cosmic-eye-room-v1:'+code),iterations:150000},key,256);
         return bytesHex(new Uint8Array(bits));
@@ -1578,7 +1760,7 @@
     const isHost=()=>mp.room?.hostUid===mp.uid;
     const own=(r=mp.room)=>r?.players?.[mp.uid];
     const roundStart=r=>r.startedAt?.toMillis()+5000;
-    const expired=r=>r.settings.duration>0&&Date.now()>=roundStart(r)+r.settings.duration*1000+5000;
+    const expired=r=>r.settings.duration>0&&serverNow()>=roundStart(r)+r.settings.duration*1000+15000;
     const actual=(p,r)=>p.round===r.round?p:{...p,status:'idle',attempts:0,seconds:0,score:0};
     const terminal=p=>['won','lost','forfeit'].includes(p.status);
     const allDone=r=>Object.values(r.players).every(p=>terminal(actual(p,r)));
@@ -1586,8 +1768,8 @@
     function setForm(edit=false){
         mp.editing=edit;const form=M('mp-create');
         (edit?M('mp-lobby-settings'):M('mp-entry')).appendChild(form);
-        M('mp-password').parentElement.classList.toggle('hidden',edit);M('mp-password').required=!edit;
-        form.querySelector('button[type=submit]').textContent=edit?'Salva impostazioni':'Crea stanza privata';
+        M('mp-password').parentElement.classList.toggle('hidden',edit);M('mp-password').required=false;
+        form.querySelector('button[type=submit]').textContent=edit?'Salva impostazioni':'Crea stanza';
         if(edit){M('mp-name').value=mp.room.name;fillSettings(mp.room.settings);hide('mp-create',false);}
         else{hide('mp-create',true);M('mp-password').value='';}
     }
@@ -1597,7 +1779,7 @@
     }
     async function tx(change){
         const ref=mp.ref, uid=mp.uid;if(!ref||!uid||uid!==requireOnline())throw Error('Stanza non disponibile.');
-        return runTransaction(db,async t=>{const snap=await t.get(ref);if(!snap.exists())throw Error('Stanza non trovata o chiusa.');const r=snap.data();const patch=change(r);if(patch)t.update(ref,patch);});
+        return runTransaction(db,async t=>{const snap=await t.get(ref);if(!snap.exists())throw Error('Stanza non trovata o chiusa.');const r=snap.data();assertRoomFresh(r);const patch=change(r);if(patch)directoryUpdate(t,ref,r,patch);});
     }
     function openMP(){if(bg.ref){alert("Esci prima dalla stanza di strategia.");return;}if(party.ref){alert("Esci prima dalla stanza party.");return;}if(cc.ref){alert("Esci prima dalla stanza Connessioni Cosmiche.");return;}if(window.cosmicGame.isSingleActive()){say('Termina prima la partita singola.');return;}hide('mp-modal',false);renderRoom()}
     function detach(message=''){
@@ -1605,11 +1787,12 @@
         dropSession(resumeKey);window.cosmicGame.stopMultiplayer();hide('mp-countdown',true);hide('mp-room',true);hide('mp-entry',false);setForm(false);hide('mp-join',true);say(message);
     }
     function attach(ref,uid){
+        void syncClock();
         mp.unsub?.();mp.ref=ref;mp.uid=uid;mp.room=null;mp.roundKey=null;mp.pending=null;mp.closing=false;saveSession(resumeKey,{id:ref.id,uid});
         mp.unsub=onSnapshot(ref,{includeMetadataChanges:true},snap=>{
-            if(mp.ref!==ref||snap.metadata.hasPendingWrites||snap.metadata.fromCache)return;
+            if(mp.ref!==ref||!observeRoom(mp,snap,say))return;
             if(!snap.exists()||!snap.data().players?.[uid]){detach('Stanza chiusa o accesso revocato.');hide('mp-modal',false);return;}
-            mp.room=snap.data();if(mp.room.state==='closed'){detach('La stanza è stata chiusa.');hide('mp-modal',false);return;}
+            mp.room=snap.data();if(roomExpired(mp.room)){detach('Stanza scaduta dopo 24 ore. Crea una nuova stanza.');hide('mp-modal',false);return;}if(mp.room.state==='closed'){detach('La stanza è stata chiusa.');hide('mp-modal',false);return;}
             renderRoom();processRound();
         },e=>{say('Sincronizzazione stanza: '+cloudError(e));gameSay('Sincronizzazione stanza: '+cloudError(e));});
     }
@@ -1625,14 +1808,14 @@
         if(mp.editing){await tx(r=>{if(r.hostUid!==uid||r.state!=='lobby')throw Error('Impostazioni non modificabili.');if(Object.keys(r.players).length>s.capacity)throw Error('La capacità è inferiore ai giocatori presenti.');return {name,settings:s}});setForm(false);return;}
         if(mp.ref)throw Error('Sei già in una stanza.');
         const code=bytesHex(crypto.getRandomValues(new Uint8Array(5))).toUpperCase();
-        const id=await deriveRoom(code,M('mp-password').value);const ref=doc(db,...MP_PATH,id);
-        await runTransaction(db,async t=>{if((await t.get(ref)).exists())throw Error('Codice già usato. Riprova.');t.set(ref,{code,name,hostUid:uid,settings:s,state:'lobby',round:0,pattern:[],startedAt:null,createdAt:serverTimestamp(),players:{[uid]:newPlayer()}})});
+        const password=M('mp-password').value,id=await deriveRoom(code,password);const ref=doc(db,...MP_PATH,id);
+        await runTransaction(db,async t=>{if((await t.get(ref)).exists())throw Error('Codice già usato. Riprova.');directoryCreate(t,ref,{locked:password!=='',code,name,hostUid:uid,settings:s,state:'lobby',round:0,pattern:[],startedAt:null,createdAt:serverTimestamp(),players:{[uid]:newPlayer()}})});
         M('mp-password').value='';hide('mp-create',true);attach(ref,uid);
     })};
     M('mp-join').onsubmit=e=>{e.preventDefault();action(async()=>{
         const uid=requireOnline(),code=M('mp-code-input').value.trim().toUpperCase();if(mp.ref)throw Error('Sei già in una stanza.');
         const id=await deriveRoom(code,M('mp-join-password').value);const ref=doc(db,...MP_PATH,id);
-        await runTransaction(db,async t=>{const snap=await t.get(ref);if(!snap.exists())throw Error('Codice o password non corretti.');const r=snap.data();if(r.state==='closed')throw Error('Stanza chiusa.');if(r.players[uid])return;if(r.state!=='lobby')throw Error('Partita già avviata. Attendi la rivincita.');if(Object.keys(r.players).length>=r.settings.capacity)throw Error('Stanza piena.');t.update(ref,{players:{...r.players,[uid]:newPlayer()}})});
+        await runTransaction(db,async t=>{const snap=await t.get(ref);if(!snap.exists())throw Error('Codice o password non corretti.');const r=snap.data();assertRoomFresh(r);if(r.state==='closed')throw Error('Stanza chiusa.');if(r.players[uid])return;if(r.state!=='lobby')throw Error('Partita già avviata. Attendi la rivincita.');if(Object.keys(r.players).length>=r.settings.capacity)throw Error('Stanza piena.');directoryUpdate(t,ref,r,{players:{...r.players,[uid]:newPlayer()}})});
         M('mp-join-password').value='';hide('mp-join',true);attach(ref,uid);
     })};
     M('mp-edit').onclick=()=>{if(mp.editing)setForm(false);else setForm(true)};
@@ -1645,16 +1828,16 @@
     }));
     M('mp-rematch').onclick=()=>action(async()=>{await tx(r=>{if(r.hostUid!==mp.uid||!finished(r))throw Error('Round non concluso.');if(r.state==='running')return {state:'finished'};return {state:'lobby',pattern:[],startedAt:null}});if(mp.room?.state==='running')return;});
     M('mp-end-round').onclick=()=>{if(confirm('Terminare il round? I giocatori non arrivati al risultato saranno classificati come non conclusi.'))action(()=>tx(r=>{if(r.hostUid!==mp.uid||r.state!=='running')throw Error('Round non disponibile.');return {state:'finished'}}))};
-    M('mp-invite').onclick=async()=>{if(!mp.room)return;const url=new URL(location.href);url.searchParams.delete('connections');url.searchParams.set('room',mp.room.code);url.hash='';const text=`L’Occhio del Cosmo — stanza ${mp.room.code}\n${url.href}\nChiedi la password all’host.`;try{if(navigator.share)await navigator.share({title:'Sfida cosmica',text});else {await navigator.clipboard.writeText(text);say('Invito copiato. Invia la password separatamente.')}}catch(e){if(e.name!=='AbortError')say(text)}};
+    M('mp-invite').onclick=async()=>{if(!mp.room)return;const url=new URL(location.href);url.search='';url.searchParams.set('room',mp.room.code);url.hash='';const text=`L’Occhio del Cosmo — stanza ${mp.room.code}\n${url.href}\n${mp.room.locked===false?'Accesso libero.':'Chiedi la password all’host.'}`;try{if(navigator.share)await navigator.share({title:'Sfida cosmica',text});else {await navigator.clipboard.writeText(text);say(mp.room.locked===false?'Invito copiato.':'Invito copiato. Invia la password separatamente.')}}catch(e){if(e.name!=='AbortError')say(text)}};
     M('mp-leave').onclick=()=>leaveRoom();M('mp-game-lobby').onclick=()=>{hide('mp-modal',false);renderRoom()};M('mp-resume').onclick=()=>{hide('mp-modal',true);processRound()};
     async function leaveRoom(){
         if(!mp.room){detach();hide('mp-modal',true);return;}
-        if(!isHost()&&Date.now()>=mp.room.createdAt.toMillis()+86400000){detach();hide('mp-modal',true);return;}
+        if(!isHost()&&serverNow()>=mp.room.createdAt.toMillis()+86400000){detach();hide('mp-modal',true);return;}
         if(!confirm(isHost()?'Chiudere la stanza per tutti i giocatori?':'Uscire dalla stanza? Durante la sfida equivale al ritiro.'))return;
         await action(async()=>{
             if(isHost()){await tx(r=>({state:'closed'}));}
             else if(mp.room.state==='lobby'){await tx(r=>{const players={...r.players};delete players[mp.uid];return {players}});}
-            else if(mp.room.state==='running'&&!finished(mp.room)&&!terminal(actual(own(),mp.room))){await sendReport({status:'forfeit',attempts:actual(own(),mp.room).attempts,seconds:Math.min(mp.room.settings.duration||86400,Math.max(0,Math.floor((Date.now()-roundStart(mp.room))/1000))),score:0},true);}
+            else if(mp.room.state==='running'&&!finished(mp.room)&&!terminal(actual(own(),mp.room))){await sendReport({status:'forfeit',attempts:actual(own(),mp.room).attempts,seconds:Math.min(mp.room.settings.duration||86400,Math.max(0,Math.floor((serverNow()-roundStart(mp.room))/1000))),score:0},true);}
             detach();hide('mp-modal',true);
         });
     }
@@ -1672,7 +1855,7 @@
     function renderRoom(){
         const r=mp.room;if(!r){hide('mp-entry',!!mp.ref);hide('mp-room',true);return;}
         hide('mp-entry',true);hide('mp-room',false);const done=finished(r),host=isHost(),mine=own(r);if(!mine)return;
-        M('mp-room-name').textContent=r.name;M('mp-room-code').textContent=r.code;
+        M('mp-room-name').textContent=(r.locked===false?'🔓 ':'🔒 ')+r.name;M('mp-room-code').textContent=r.code;
         const s=r.settings;M('mp-room-settings').textContent=`${s.attempts} tentativi · ${s.colors} colori · ${s.slots} caselle · ${s.duration?s.duration/60+' min':'Senza limite'} · ${s.duplicates?'Ripetizioni sì':'Colori unici'}`;
         const entries=Object.entries(r.players);const rank=(a,b)=>{const x=actual(a[1],r),y=actual(b[1],r);return y.score-x.score||x.attempts-y.attempts||x.seconds-y.seconds};
         if(done)entries.sort(rank);M('mp-players').replaceChildren(...entries.map(([id,p],i)=>playerRow(id,p,r,done?i+1:null)));
@@ -1688,13 +1871,15 @@
         const key=mp.roundKey,ref=mp.ref;
         await tx(r=>{
             if(mp.ref!==ref||r.round!==Number(key?.split(':').pop()||r.round)||r.state!=='running')throw Error('Round già concluso.');
-            const old=actual(own(r),r);if(terminal(old)){if(old.status===report.status&&old.attempts===report.attempts&&old.score===report.score)return null;throw Error('Risultato già registrato.');}
+            const old=actual(own(r),r);if(terminal(old)){if(old.status===report.status&&old.attempts===report.attempts)return null;throw Error('Risultato già registrato.');}
             if(!force&&old.attempts===report.attempts&&old.status===report.status&&old.score===report.score)return null;
-            return {players:{...r.players,[mp.uid]:{...own(r),round:r.round,...report}}};
+            const seconds=Math.min(r.settings.duration||86400,Math.max(old.seconds,report.seconds));
+            const score=report.status==='won'?400+(r.settings.attempts-report.attempts+1)*250+Math.max(150,900-seconds*4):0;
+            return {players:{...r.players,[mp.uid]:{...own(r),round:r.round,...report,seconds,score}}};
         });
     }
     async function flushReport(){
-        if(!mp.pending||mp.syncing)return;const pending=mp.pending,key=mp.roundKey;mp.syncing=true;hide('mp-retry',true);gameSay('Sincronizzazione…');
+        if(!mp.pending||mp.syncing||!navigator.onLine)return;const pending=mp.pending,key=mp.roundKey;mp.syncing=true;hide('mp-retry',true);gameSay('Sincronizzazione…');
         try{await sendReport(pending);if(mp.roundKey!==key)return;mp.pending=null;saveSession(key,{game:window.cosmicGame.snapshot(),pending:null});gameSay('Risultato sincronizzato');window.cosmicGame.setMultiplayerBusy(false);if(terminal(pending)){hide('mp-modal',false);say(finished(mp.room)?'Risultato registrato. Round concluso.':'Risultato registrato. Attendi gli altri giocatori.');renderRoom();}}
         catch(e){if(mp.roundKey===key){gameSay('Invio non riuscito: '+cloudError(e));say('Invio non riuscito: '+cloudError(e));hide('mp-retry',false);}}
         finally{if(mp.roundKey===key)mp.syncing=false;}
@@ -1709,7 +1894,7 @@
             if(isHost()&&r.state==='running'&&!mp.closing){mp.closing=true;tx(x=>x.state==='running'&&finished(x)?{state:'finished'}:null).catch(e=>say(cloudError(e))).finally(()=>{mp.closing=false});}return;
         }
         if(r.state!=='running')return;const key=sessionRoundKey(r),start=roundStart(r);if(!Number.isFinite(start))return;
-        if(Date.now()<start){hide('mp-countdown',false);M('mp-count').textContent=String(Math.max(1,Math.ceil((start-Date.now())/1000)));return;}
+        if(serverNow()<start){hide('mp-countdown',false);M('mp-count').textContent=String(Math.max(1,Math.ceil((start-serverNow())/1000)));return;}
         hide('mp-countdown',true);
         if(mp.roundKey===key)return;
         mp.roundKey=key;const old=actual(mine,r),saved=readSession(key);
@@ -1738,7 +1923,7 @@
     const ccCaptain=r=>r.captains[ccTeam(r)]===cc.uid;
     const ccAlive=r=>Array.from({length:r.settings.teams},(_,i)=>i).filter(i=>!r.eliminated.includes(i));
     const ccDuration=r=>r.phase==='clue'?(r.seenTeams.includes(r.turn)?r.settings.clueDuration:r.settings.firstClueDuration):r.settings.duration;
-    const ccRemaining=r=>{const duration=ccDuration(r);return duration===0?Infinity:Math.max(0,Math.ceil((r.turnAt.toMillis()+duration*1000-Date.now())/1000));};
+    const ccRemaining=r=>{const duration=ccDuration(r);return duration===0?Infinity:Math.max(0,Math.ceil((r.turnAt.toMillis()+duration*1000-serverNow())/1000));};
     const ccPhaseKey=r=>`${cc.ref?.id}:${r.round}:${r.turnAt.toMillis()}`;
     const ccFormatTime=s=>s===0?'∞':`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
     function ccParseWords(raw){
@@ -1780,17 +1965,17 @@
     const ccNode=(tag,text,cls)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=text;if(cls)el.className=cls;return el};
     function ccShuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){let j=crypto.getRandomValues(new Uint32Array(1))[0]%(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;}
     async function ccAction(fn){if(cc.busy)return;cc.busy=true;ccSay('');ccRender();try{await fn()}catch(e){ccSay(cloudError(e));console.error('Connessioni:',e)}finally{cc.busy=false;ccRender()}}
-    async function ccTx(change,checkVersion=false){const ref=cc.ref,uid=cc.uid,old=cc.room;if(!ref||uid!==requireOnline())throw Error('Stanza non disponibile.');return runTransaction(db,async t=>{const snap=await t.get(ref);if(!snap.exists())throw Error('Stanza non trovata.');const r=snap.data();if(!r.players[uid])throw Error('Non fai parte della stanza.');if(checkVersion&&(r.round!==old.round||r.state!==old.state||r.turn!==old.turn||r.phase!==old.phase||r.revealed.length!==old.revealed.length||r.turnAt?.toMillis()!==old.turnAt?.toMillis()))throw Error('La partita è cambiata: riprova.');const patch=change(r);if(patch)t.update(ref,patch);});}
+    async function ccTx(change,checkVersion=false){const ref=cc.ref,uid=cc.uid,old=cc.room;if(!ref||uid!==requireOnline())throw Error('Stanza non disponibile.');return runTransaction(db,async t=>{const snap=await t.get(ref);if(!snap.exists())throw Error('Stanza non trovata.');const r=snap.data();assertRoomFresh(r);if(!r.players[uid])throw Error('Non fai parte della stanza.');if(checkVersion&&(r.round!==old.round||r.state!==old.state||r.turn!==old.turn||r.phase!==old.phase||r.revealed.length!==old.revealed.length||r.turnAt?.toMillis()!==old.turnAt?.toMillis()))throw Error('La partita è cambiata: riprova.');const patch=change(r);if(patch)directoryUpdate(t,ref,r,patch);});}
     function ccDetach(message=''){cc.unsub?.();cc.unsub=null;cc.ref=null;cc.room=null;cc.uid=null;dropSession(CC_SESSION);hide('cc-room',true);hide('cc-entry',false);hide('cc-create',true);hide('cc-join',true);ccSay(message);}
-    function ccAttach(ref,uid){cc.unsub?.();cc.ref=ref;cc.uid=uid;cc.room=null;saveSession(CC_SESSION,{id:ref.id,uid});hide('cc-modal',false);hide('cc-entry',true);cc.unsub=onSnapshot(ref,{includeMetadataChanges:true},snap=>{if(cc.ref!==ref||snap.metadata.hasPendingWrites||snap.metadata.fromCache)return;const r=snap.exists()?snap.data():null;if(!r||!r.players[uid]||r.state==='closed'){ccDetach('Stanza chiusa o accesso revocato.');return;}if(cc.room&&r.lastTimeout&&r.lastTimeout[0]===uid){const eventKey=`${cc.ref?.id}:${r.round}:${r.lastTimeout[1].toMillis()}`;const previous=cc.room.lastTimeout;if(!previous||previous[1].toMillis()!==r.lastTimeout[1].toMillis())ccAlarm(eventKey);}cc.room=r;ccRender();},e=>ccSay('Sincronizzazione: '+cloudError(e)));}
+    function ccAttach(ref,uid){void syncClock();cc.unsub?.();cc.ref=ref;cc.uid=uid;cc.room=null;saveSession(CC_SESSION,{id:ref.id,uid});hide('cc-modal',false);hide('cc-entry',true);cc.unsub=onSnapshot(ref,{includeMetadataChanges:true},snap=>{if(cc.ref!==ref||!observeRoom(cc,snap,ccSay))return;const r=snap.exists()?snap.data():null;if(roomExpired(r)){ccDetach('Stanza scaduta dopo 24 ore. Crea una nuova stanza.');return;}if(!r||!r.players[uid]||r.state==='closed'){ccDetach('Stanza chiusa o accesso revocato.');return;}if(cc.room&&r.lastTimeout&&r.lastTimeout[0]===uid){const eventKey=`${cc.ref?.id}:${r.round}:${r.lastTimeout[1].toMillis()}`;const previous=cc.room.lastTimeout;if(!previous||previous[1].toMillis()!==r.lastTimeout[1].toMillis())ccAlarm(eventKey);}cc.room=r;ccRender();},e=>ccSay('Sincronizzazione: '+cloudError(e)));}
     function ccRestore(uid){const s=readSession(CC_SESSION);if(!mp.ref&&!cc.ref&&s?.uid===uid&&/^[a-f0-9]{64}$/.test(s.id)){ccSay('Riconnessione…');ccAttach(doc(db,...CC_PATH,s.id),uid);}}
     function ccOpen(){if(bg.ref||party.ref||mp.ref||window.cosmicGame.isSingleActive()||window.cosmicGame.isMultiplayer()){alert('Concludi o abbandona prima la partita in corso.');return;}hide('cc-modal',false);ccRender();}
     M('cc-open').onclick=ccOpen;
     M('cc-close').onclick=()=>{if(cc.ref&&!cc.room){ccDetach();}else if(cc.ref){ccSay('Usa Esci dalla stanza per tornare al menu.');return;}hide('cc-modal',true);};
     M('cc-show-create').onclick=()=>{hide('cc-create',false);hide('cc-join',true);ccSay()};
     M('cc-show-join').onclick=()=>{hide('cc-create',true);hide('cc-join',false);ccSay()};
-    M('cc-create').onsubmit=e=>{e.preventDefault();ccAction(async()=>{if(cc.ref||mp.ref)throw Error('Sei già in una stanza.');const uid=requireOnline(),name=M('cc-name').value.trim(),settings={size:+M('cc-size').value,teams:+M('cc-teams').value,capacity:+M('cc-capacity').value,duration:ccReadTimer('cc-duration'),clueDuration:ccReadTimer('cc-clue-duration'),firstClueDuration:ccReadTimer('cc-first-duration'),wordMode:M('cc-word-mode').value,customPercent:+M('cc-custom-percent').value,customWords:ccParseWords(M('cc-custom-words').value),rotate:M('cc-rotate').checked};if(!name)throw Error('Inserisci il nome.');if(settings.capacity<settings.teams*2)throw Error('Servono almeno due posti per squadra.');if(settings.wordMode==='custom'&&settings.customWords.length<settings.size**2)throw Error(`Servono almeno ${settings.size**2} parole uniche per questa griglia.`);const code=bytesHex(crypto.getRandomValues(new Uint8Array(5))).toUpperCase(),id=await deriveRoom(code,M('cc-password').value),ref=doc(db,...CC_PATH,id);await runTransaction(db,async t=>{if((await t.get(ref)).exists())throw Error('Codice già in uso.');t.set(ref,{code,name,hostUid:uid,settings,createdAt:serverTimestamp(),state:'lobby',round:0,players:{[uid]:ccNewPlayer()},words:[],roles:[],captains:['','','',''],target:0,revealed:[],scores:[0,0,0,0],eliminated:[],winner:-1,turn:0,phase:'clue',clue:'',clueCount:0,left:0,turnAt:null,lastIndex:-1,seenTeams:[],lastTimeout:null});});M('cc-password').value='';ccAttach(ref,uid);});};
-    M('cc-join').onsubmit=e=>{e.preventDefault();ccAction(async()=>{if(cc.ref||mp.ref)throw Error('Sei già in una stanza.');const uid=requireOnline(),code=M('cc-code-input').value.trim().toUpperCase(),id=await deriveRoom(code,M('cc-join-password').value),ref=doc(db,...CC_PATH,id);await runTransaction(db,async t=>{const snap=await t.get(ref);if(!snap.exists())throw Error('Codice o password errati.');const r=snap.data();if(r.state==='closed')throw Error('Stanza chiusa.');if(!Array.isArray(r.settings.customWords)||!Array.isArray(r.seenTeams))throw Error('Stanza creata con una versione precedente: chiedi all’host di crearne una nuova.');if(r.players[uid])return;if(r.state!=='lobby')throw Error('Partita in corso. Attendi la rivincita.');if(Object.keys(r.players).length>=r.settings.capacity)throw Error('Stanza piena.');const counts=Array.from({length:r.settings.teams},(_,i)=>Object.values(r.players).filter(p=>p.team===i).length);t.update(ref,{players:{...r.players,[uid]:ccNewPlayer(counts.indexOf(Math.min(...counts)))}});});M('cc-join-password').value='';ccAttach(ref,uid);});};
+    M('cc-create').onsubmit=e=>{e.preventDefault();ccAction(async()=>{if(cc.ref||mp.ref)throw Error('Sei già in una stanza.');const uid=requireOnline(),name=M('cc-name').value.trim(),settings={size:+M('cc-size').value,teams:+M('cc-teams').value,capacity:+M('cc-capacity').value,duration:ccReadTimer('cc-duration'),clueDuration:ccReadTimer('cc-clue-duration'),firstClueDuration:ccReadTimer('cc-first-duration'),wordMode:M('cc-word-mode').value,customPercent:+M('cc-custom-percent').value,customWords:ccParseWords(M('cc-custom-words').value),rotate:M('cc-rotate').checked};if(!name)throw Error('Inserisci il nome.');if(settings.capacity<settings.teams*2)throw Error('Servono almeno due posti per squadra.');if(settings.wordMode==='custom'&&settings.customWords.length<settings.size**2)throw Error(`Servono almeno ${settings.size**2} parole uniche per questa griglia.`);const code=bytesHex(crypto.getRandomValues(new Uint8Array(5))).toUpperCase(),password=M('cc-password').value,id=await deriveRoom(code,password),ref=doc(db,...CC_PATH,id);await runTransaction(db,async t=>{if((await t.get(ref)).exists())throw Error('Codice già in uso.');directoryCreate(t,ref,{locked:password!=='',code,name,hostUid:uid,settings,createdAt:serverTimestamp(),state:'lobby',round:0,players:{[uid]:ccNewPlayer()},words:[],roles:[],captains:['','','',''],target:0,revealed:[],scores:[0,0,0,0],eliminated:[],winner:-1,turn:0,phase:'clue',clue:'',clueCount:0,left:0,turnAt:null,lastIndex:-1,seenTeams:[],lastTimeout:null});});M('cc-password').value='';ccAttach(ref,uid);});};
+    M('cc-join').onsubmit=e=>{e.preventDefault();ccAction(async()=>{if(cc.ref||mp.ref)throw Error('Sei già in una stanza.');const uid=requireOnline(),code=M('cc-code-input').value.trim().toUpperCase(),id=await deriveRoom(code,M('cc-join-password').value),ref=doc(db,...CC_PATH,id);await runTransaction(db,async t=>{const snap=await t.get(ref);if(!snap.exists())throw Error('Codice o password errati.');const r=snap.data();assertRoomFresh(r);if(r.state==='closed')throw Error('Stanza chiusa.');if(!Array.isArray(r.settings.customWords)||!Array.isArray(r.seenTeams))throw Error('Stanza creata con una versione precedente: chiedi all’host di crearne una nuova.');if(r.players[uid])return;if(r.state!=='lobby')throw Error('Partita in corso. Attendi la rivincita.');if(Object.keys(r.players).length>=r.settings.capacity)throw Error('Stanza piena.');const counts=Array.from({length:r.settings.teams},(_,i)=>Object.values(r.players).filter(p=>p.team===i).length);directoryUpdate(t,ref,r,{players:{...r.players,[uid]:ccNewPlayer(counts.indexOf(Math.min(...counts)))}});});M('cc-join-password').value='';ccAttach(ref,uid);});};
     function ccChangePlayer(patch){return ccAction(()=>ccTx(r=>{if(r.state!=='lobby')throw Error('La sfida è già iniziata.');return {players:{...r.players,[cc.uid]:{...ccMine(r),...patch}}}}));}
     M('cc-my-team').onchange=()=>ccChangePlayer({team:+M('cc-my-team').value,ready:0});
     M('cc-my-role').onchange=()=>ccChangePlayer({role:M('cc-my-role').value,ready:0});
@@ -1807,14 +1992,14 @@
     M('cc-timeout').onclick=()=>ccAction(()=>ccTx(r=>{if(r.state!=='running'||!ccExpired(r))throw Error('Il tempo non è ancora scaduto.');return ccTimeoutPatch(r);},true));
     M('cc-rematch').onclick=()=>ccAction(()=>ccTx(r=>{if(!ccHost(r)||r.state!=='finished')throw Error('Rivincita non disponibile.');return {state:'lobby'};}));
     M('cc-leave').onclick=()=>ccAction(async()=>{if(!cc.room){ccDetach();hide('cc-modal',true);return;}if(!confirm(ccHost(cc.room)?'Chiudere la stanza per tutti?':'Uscire dalla stanza?'))return;await ccTx(r=>{if(ccHost(r))return {state:'closed'};if(r.state!=='lobby')return null;const players={...r.players};delete players[cc.uid];return {players};});ccDetach();hide('cc-modal',true);});
-    M('cc-invite').onclick=async()=>{if(!cc.room)return;const url=new URL(location.href);url.searchParams.delete('room');url.searchParams.set('connections',cc.room.code);url.hash='';const text=`Connessioni Cosmiche — stanza ${cc.room.code}\n${url.href}\nChiedi la password all’host.`;try{if(navigator.share)await navigator.share({title:'Connessioni Cosmiche',text});else{await navigator.clipboard.writeText(text);ccSay('Invito copiato. Invia la password separatamente.');}}catch(e){if(e.name!=='AbortError')ccSay(text);}};
+    M('cc-invite').onclick=async()=>{if(!cc.room)return;const url=new URL(location.href);url.search='';url.searchParams.set('connections',cc.room.code);url.hash='';const text=`Connessioni Cosmiche — stanza ${cc.room.code}\n${url.href}\n${cc.room.locked===false?'Accesso libero.':'Chiedi la password all’host.'}`;try{if(navigator.share)await navigator.share({title:'Connessioni Cosmiche',text});else{await navigator.clipboard.writeText(text);ccSay(cc.room.locked===false?'Invito copiato.':'Invito copiato. Invia la password separatamente.');}}catch(e){if(e.name!=='AbortError')ccSay(text);}};
     function ccTick(){const r=cc.room;if(!r||r.state!=='running')return;const sec=ccRemaining(r);const phase=r.phase==='clue'?(r.seenTeams.includes(r.turn)?'Indizio master':'Primo indizio master'):'Scelte esploratori';M('cc-timer').textContent=sec===Infinity?`${phase} · Nessun limite di tempo`:`${phase}: ${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`;M('cc-timer').classList.toggle('cc-urgent',sec<=10);ccAudioTick(r,sec);ccUpdateSound();hide('cc-timeout',sec!==0);M('cc-timeout').disabled=cc.busy;const enabled=!cc.busy&&ccCanGuess(r);for(const b of M('cc-board').children)b.disabled=!enabled||r.revealed.includes(+b.dataset.index);M('cc-pass').disabled=!enabled;M('cc-clue-form').querySelector('button').disabled=cc.busy||sec===0;}
-    function ccRender(){const r=cc.room;if(!r){hide('cc-room',true);hide('cc-entry',!!cc.ref);return;}const me=ccMine(r);if(!me)return;const lobby=r.state==='lobby',done=r.state==='finished';hide('cc-entry',true);hide('cc-room',false);hide('cc-lobby',!lobby);hide('cc-play',lobby);M('cc-room-name').textContent=r.name;M('cc-room-code').textContent=r.code;M('cc-room-settings').textContent=`${r.settings.size}×${r.settings.size} · ${r.settings.teams} squadre · ${Object.keys(r.players).length}/${r.settings.capacity} giocatori · ${r.settings.duration||r.settings.clueDuration||r.settings.firstClueDuration?`Primo master ${ccFormatTime(r.settings.firstClueDuration)} · Master ${ccFormatTime(r.settings.clueDuration)} · Esploratori ${ccFormatTime(r.settings.duration)}`:'Senza timer'} · ${r.settings.wordMode==='custom'?'Solo parole custom':(CC_CUSTOM_LEVELS[r.settings.customPercent]?`${CC_CUSTOM_LEVELS[r.settings.customPercent]} · ${r.settings.customPercent}% lista e griglia (${ccCustomQuota(r.settings)}/${r.settings.size**2} caselle custom)`:r.settings.customWords.length+' parole custom + dizionario')}`;
+    function ccRender(){const r=cc.room;if(!r){hide('cc-room',true);hide('cc-entry',!!cc.ref);return;}const me=ccMine(r);if(!me)return;const lobby=r.state==='lobby',done=r.state==='finished';hide('cc-entry',true);hide('cc-room',false);hide('cc-lobby',!lobby);hide('cc-play',lobby);M('cc-room-name').textContent=(r.locked===false?'🔓 ':'🔒 ')+r.name;M('cc-room-code').textContent=r.code;M('cc-room-settings').textContent=`${r.settings.size}×${r.settings.size} · ${r.settings.teams} squadre · ${Object.keys(r.players).length}/${r.settings.capacity} giocatori · ${r.settings.duration||r.settings.clueDuration||r.settings.firstClueDuration?`Primo master ${ccFormatTime(r.settings.firstClueDuration)} · Master ${ccFormatTime(r.settings.clueDuration)} · Esploratori ${ccFormatTime(r.settings.duration)}`:'Senza timer'} · ${r.settings.wordMode==='custom'?'Solo parole custom':(CC_CUSTOM_LEVELS[r.settings.customPercent]?`${CC_CUSTOM_LEVELS[r.settings.customPercent]} · ${r.settings.customPercent}% lista e griglia (${ccCustomQuota(r.settings)}/${r.settings.size**2} caselle custom)`:r.settings.customWords.length+' parole custom + dizionario')}`;
         if(lobby){const teams=[];for(let i=0;i<r.settings.teams;i++){const el=ccNode('div',undefined,'cc-team');el.style.setProperty('--team',CC_COLORS[i]);el.append(ccNode('strong',CC_NAMES[i]));for(const [id,p] of Object.entries(r.players).filter(([,p])=>p.team===i)){const line=ccNode('p',`${p.ready===r.round+1?'✓':'○'} ${p.name}${id===r.hostUid?' · Host':''}${id===cc.uid?' · Tu':''} · ${p.role==='captain'?'Capitano':'Esploratore'}`);if(ccHost(r)&&id!==cc.uid){const kick=ccNode('button','✕','icon-btn');kick.style.marginLeft='5px';kick.title='Espelli';kick.onclick=()=>ccAction(()=>ccTx(old=>{if(!ccHost(old)||old.state!=='lobby')throw Error('Lobby non disponibile.');const players={...old.players};delete players[id];return {players};}));line.append(kick);}el.append(line);}teams.push(el);}M('cc-players').replaceChildren(...teams);const select=M('cc-my-team');if(select.options.length!==r.settings.teams)select.replaceChildren(...CC_NAMES.slice(0,r.settings.teams).map((n,i)=>new Option(n,String(i))));select.value=String(me.team);select.disabled=cc.busy;M('cc-my-role').value=me.role;M('cc-my-role').disabled=cc.busy;M('cc-ready').disabled=cc.busy;M('cc-ready').textContent=me.ready===r.round+1?'✓ Pronto (annulla)':'Sono pronto';hide('cc-start',!ccHost(r));let valid=false;try{ccCaptains(r);valid=Object.entries(r.players).every(([id,p])=>id===cc.uid||p.ready===r.round+1)}catch(e){}M('cc-start').disabled=cc.busy||!valid;return;}
         const scores=[];for(let i=0;i<r.settings.teams;i++){const el=ccNode('div',undefined,'cc-team');el.style.setProperty('--team',CC_COLORS[i]);el.append(ccNode('strong',CC_NAMES[i]+(i===me.team?' · Tu':'')),ccNode('p',r.eliminated.includes(i)?'Eliminata':`${r.scores[i]}/${r.target} segnali`),ccNode('p',`Capitano: ${r.players[r.captains[i]]?.name||'—'}`));scores.push(el);}M('cc-scores').replaceChildren(...scores);M('cc-turn').textContent=done?'Sfida conclusa':`${CC_NAMES[r.turn]} · ${r.phase==='clue'?'Attesa indizio':'Decifrazione'} · Tu: ${ccCaptain(r)?'Capitano':'Esploratore'}`;M('cc-clue-display').textContent=r.clue?`${r.clue} · ${r.clueCount} (scelte rimaste: ${r.left})`:'Nessun indizio ancora';M('cc-board').style.setProperty('--cc-size',r.settings.size);const canSee=done||ccCaptain(r);M('cc-board').replaceChildren(...r.words.map((word,i)=>{const revealed=r.revealed.includes(i),b=ccNode('button',undefined,'cc-cell'+(revealed?' cc-revealed':''));b.type='button';b.dataset.index=i;b.append(ccNode('span',word,'cc-word'));if(canSee||revealed){b.dataset.color=r.roles[i];b.append(ccNode('small',CC_SYMBOLS[r.roles[i]]+' '+(r.roles[i]<4?CC_NAMES[r.roles[i]]:r.roles[i]===4?'Neutro':'Vuoto')));}b.disabled=cc.busy||!ccCanGuess(r)||revealed;b.onclick=()=>ccGuess(i);return b;}));M('cc-legend').textContent=canSee?'Mappa capitano: trova i segnali della tua squadra. Il Vuoto elimina la squadra che lo seleziona.':'Seleziona i segnali della tua squadra. Un segnale neutro o rivale termina il turno; il Vuoto elimina la squadra.';const canClue=!done&&r.phase==='clue'&&ccTeam(r)===r.turn&&ccCaptain(r);hide('cc-clue-form',!canClue);const counts=M('cc-clue-count'),max=r.target-r.scores[r.turn];if(counts.options.length!==max)counts.replaceChildren(...Array.from({length:max},(_,i)=>new Option(String(i+1),String(i+1))));hide('cc-pass',!ccCanGuess(r));hide('cc-result',!done);hide('cc-rematch',!done||!ccHost(r));M('cc-rematch').disabled=cc.busy;if(done){M('cc-result').textContent=`🏆 Vince la squadra ${CC_NAMES[r.winner]}!`;M('cc-timer').textContent='';hide('cc-timeout',true);}else ccTick();
     }
     let ccAutoKey='',ccAutoSince=0,ccAutoAttempt=0,ccAutoPending=false;
-    setInterval(async()=>{ccTick();const r=cc.room;if(r?.state!=='running'||!ccExpired(r)||cc.busy||ccAutoPending)return;const key=ccPhaseKey(r),now=Date.now();if(ccAutoKey!==key){ccAutoKey=key;ccAutoSince=now;ccAutoAttempt=0;}const delay=r.captains[r.turn]===cc.uid?200:ccHost(r)?800:1800;if(now-ccAutoSince<delay||now-ccAutoAttempt<3000)return;ccAutoAttempt=now;ccAutoPending=true;try{await ccTx(old=>old.state==='running'&&ccPhaseKey(old)===key&&ccExpired(old)?ccTimeoutPatch(old):null);}catch(e){console.warn('Timeout, nuovo tentativo:',cloudError(e));}finally{ccAutoPending=false;}},250);
+    setInterval(async()=>{ccTick();const r=cc.room;if(r?.state!=='running'||!ccExpired(r)||cc.busy||ccAutoPending)return;const key=ccPhaseKey(r),now=Date.now();if(ccAutoKey!==key){ccAutoKey=key;ccAutoSince=now;ccAutoAttempt=0;}const delay=r.captains[r.turn]===cc.uid?200:ccHost(r)?800:1800;if(now-ccAutoSince<delay+750||now-ccAutoAttempt<3000)return;ccAutoAttempt=now;ccAutoPending=true;try{await ccTx(old=>old.state==='running'&&ccPhaseKey(old)===key&&ccExpired(old)?ccTimeoutPatch(old):null);}catch(e){console.warn('Timeout, nuovo tentativo:',cloudError(e));}finally{ccAutoPending=false;}},250);
     const ccInvite=new URL(location.href).searchParams.get('connections');if(!inviteCode&&ccInvite&&/^[A-Fa-f0-9]{10}$/.test(ccInvite)){M('cc-code-input').value=ccInvite.toUpperCase();hide('cc-modal',false);hide('cc-join',false);}
     function switchMenu(m){hide('single-modes',m!=='single');hide('multi-modes',m!=='multi');M('menu-single').setAttribute('aria-selected',String(m==='single'));M('menu-multi').setAttribute('aria-selected',String(m==='multi'));}
     M('menu-single').onclick=()=>switchMenu('single');M('menu-multi').onclick=()=>switchMenu('multi');if(ccInvite||inviteCode)switchMenu('multi');
@@ -1832,21 +2017,22 @@
     const partyTeam=r=>r.players[partyActor(r)]?.team;
     const partyCard=r=>r.deck[r.card%r.deck.length];
     const partyKey=()=>bytesHex(crypto.getRandomValues(new Uint8Array(8)));
-    const partyRemaining=r=>r.phase==='choose'?Math.max(0,Math.ceil((r.startedAt.toMillis()+15000-Date.now())/1000)):r.settings.duration===0?Infinity:Math.max(0,Math.ceil((r.startedAt.toMillis()+r.settings.duration*1000-Date.now())/1000));
+    const partyRemaining=r=>r.phase==='choose'?Math.max(0,Math.ceil((r.startedAt.toMillis()+15000-serverNow())/1000)):r.settings.duration===0?Infinity:Math.max(0,Math.ceil((r.startedAt.toMillis()+r.settings.duration*1000-serverNow())/1000));
     const partyOnTime=r=>partyRemaining(r)>0;
+    const partyExpiredForServer=r=>{const seconds=r.phase==='choose'?15:r.settings.duration;return seconds>0&&serverNow()>=r.startedAt.toMillis()+seconds*1000+750;};
     const partyMember=r=>r.players[party.uid];
     const partyMin=r=>r.kind==='draw'?2:4;
     const partyNew=team=>({name:cleanName(),team});
-    function partyOpen(kind){if(bg.ref||mp.ref||cc.ref||window.cosmicGame.isSingleActive()||window.cosmicGame.isMultiplayer()){alert('Concludi o abbandona prima la partita in corso.');return;}if(party.ref&&party.kind!==kind){alert('Esci prima dalla stanza in corso.');return;}party.kind=kind;hide('party-modal',false);partyRender();}
+    function partyOpen(kind){if(bg.ref||mp.ref||cc.ref||window.cosmicGame.isSingleActive()||window.cosmicGame.isMultiplayer()){alert('Concludi o abbandona prima la partita in corso.');return;}if(party.ref&&party.kind!==kind){alert('Esci prima dalla stanza in corso.');return;}party.kind=kind;M('party-capacity').options[0].disabled=kind==='taboo';if(kind==='taboo'&&M('party-capacity').value==='2')M('party-capacity').value='4';hide('party-modal',false);partyRender();}
     function partyDetach(message=''){party.unsub?.();party.strokeUnsub?.();pen=null;Object.assign(party,{ref:null,room:null,uid:null,unsub:null,strokeUnsub:null,strokeKey:'',strokes:[]});dropSession(PARTY_SESSION);partySay(message);partyRender();}
-    function partyAttach(ref,uid,kind){party.kind=kind;party.ref=ref;party.uid=uid;saveSession(PARTY_SESSION,{id:ref.id,uid,kind});hide('party-modal',false);hide('party-entry',true);party.unsub=onSnapshot(ref,{includeMetadataChanges:true},snap=>{if(party.ref!==ref||snap.metadata.hasPendingWrites||snap.metadata.fromCache)return;const r=snap.exists()?snap.data():null;if(!r||!r.players[uid]||r.state==='closed'){partyDetach('Stanza chiusa o accesso revocato.');return;}party.room=r;partyRender();},e=>partySay(cloudError(e)));}
+    function partyAttach(ref,uid,kind){void syncClock();party.kind=kind;party.ref=ref;party.uid=uid;saveSession(PARTY_SESSION,{id:ref.id,uid,kind});hide('party-modal',false);hide('party-entry',true);party.unsub=onSnapshot(ref,{includeMetadataChanges:true},snap=>{if(party.ref!==ref||!observeRoom(party,snap,partySay))return;const r=snap.exists()?snap.data():null;if(roomExpired(r)){partyDetach('Stanza scaduta dopo 24 ore. Crea una nuova stanza.');return;}if(!r||!r.players[uid]||r.state==='closed'){partyDetach('Stanza chiusa o accesso revocato.');return;}party.room=r;partyRender();},e=>partySay(cloudError(e)));}
     function partyRestore(uid){const s=readSession(PARTY_SESSION);if(!mp.ref&&!cc.ref&&!party.ref&&s?.uid===uid&&/^[a-f0-9]{64}$/.test(s.id)&&PARTY_NAMES[s.kind])partyAttach(doc(db,...PARTY_PATH,s.id),uid,s.kind);}
     async function partyAction(fn){if(party.busy)return;party.busy=true;partySay('');try{await fn();}catch(e){partySay(cloudError(e));console.error('Party:',e);}finally{party.busy=false;partyRender();}}
-    async function partyTx(change){const ref=party.ref,uid=party.uid,old=party.room;if(!ref||uid!==requireOnline())throw Error('Stanza non disponibile.');await runTransaction(db,async t=>{const snap=await t.get(ref);if(!snap.exists())throw Error('Stanza non trovata.');const r=snap.data();if(!r.players[uid]||r.state==='closed')throw Error('Stanza non disponibile.');if(old&&old.state==='running'&&(r.turnKey!==old.turnKey||r.card!==old.card||r.phase!==old.phase))throw Error('Il turno è cambiato, riprova.');const patch=change(r);if(patch)t.update(ref,patch);});}
+    async function partyTx(change){const ref=party.ref,uid=party.uid,old=party.room;if(!ref||uid!==requireOnline())throw Error('Stanza non disponibile.');await runTransaction(db,async t=>{const snap=await t.get(ref);if(!snap.exists())throw Error('Stanza non trovata.');const r=snap.data();assertRoomFresh(r);if(!r.players[uid]||r.state==='closed')throw Error('Stanza non disponibile.');if(old&&old.state==='running'&&(r.turnKey!==old.turnKey||r.card!==old.card||r.phase!==old.phase))throw Error('Il turno è cambiato, riprova.');const patch=change(r);if(patch)directoryUpdate(t,ref,r,patch);});}
     M('party-draw-open').onclick=()=>partyOpen('draw');M('party-taboo-open').onclick=()=>partyOpen('taboo');
     M('party-close').onclick=()=>{if(party.ref){partySay('Usa Esci dalla stanza.');return;}hide('party-modal',true);};
-    M('party-create').onsubmit=e=>{e.preventDefault();partyAction(async()=>{const uid=requireOnline();if(party.ref||mp.ref||cc.ref)throw Error('Sei già in una stanza.');const name=M('party-name').value.trim(),settings={capacity:+M('party-capacity').value,rounds:+M('party-rounds').value,duration:+M('party-duration').value};if(!name)throw Error('Inserisci il nome.');const code=bytesHex(crypto.getRandomValues(new Uint8Array(5))).toUpperCase(),id=await deriveRoom(code,M('party-password').value),ref=doc(db,...PARTY_PATH,id),kind=party.kind;await runTransaction(db,async t=>{if((await t.get(ref)).exists())throw Error('Codice già in uso.');t.set(ref,{kind,code,name,hostUid:uid,settings,createdAt:serverTimestamp(),state:'lobby',players:{[uid]:partyNew(0)},order:[],deck:[],turn:0,card:0,turnKey:'',phase:'idle',startedAt:null,guessed:[],scores:{},teams:[0,0],chat:[],lastWord:''});});M('party-password').value='';partyAttach(ref,uid,kind);});};
-    M('party-join').onsubmit=e=>{e.preventDefault();partyAction(async()=>{const uid=requireOnline();if(party.ref||mp.ref||cc.ref)throw Error('Sei già in una stanza.');const id=await deriveRoom(M('party-code-input').value.trim().toUpperCase(),M('party-join-password').value),ref=doc(db,...PARTY_PATH,id);let kind=party.kind;await runTransaction(db,async t=>{const snap=await t.get(ref);if(!snap.exists())throw Error('Codice o password errati.');const r=snap.data();if(r.kind!==kind||r.state==='closed')throw Error('Stanza non disponibile per questa modalità.');if(r.players[uid])return;if(r.state!=='lobby'||Object.keys(r.players).length>=r.settings.capacity)throw Error('Stanza piena o partita già iniziata.');const counts=[0,0];Object.values(r.players).forEach(p=>counts[p.team]++);t.update(ref,{players:{...r.players,[uid]:partyNew(counts[0]<=counts[1]?0:1)}});});M('party-join-password').value='';partyAttach(ref,uid,kind);});};
+    M('party-create').onsubmit=e=>{e.preventDefault();partyAction(async()=>{const uid=requireOnline();if(party.ref||mp.ref||cc.ref)throw Error('Sei già in una stanza.');const name=M('party-name').value.trim(),settings={capacity:+M('party-capacity').value,rounds:+M('party-rounds').value,duration:+M('party-duration').value};if(!name)throw Error('Inserisci il nome.');const code=bytesHex(crypto.getRandomValues(new Uint8Array(5))).toUpperCase(),password=M('party-password').value,id=await deriveRoom(code,password),ref=doc(db,...PARTY_PATH,id),kind=party.kind;await runTransaction(db,async t=>{if((await t.get(ref)).exists())throw Error('Codice già in uso.');directoryCreate(t,ref,{locked:password!=='',kind,code,name,hostUid:uid,settings,createdAt:serverTimestamp(),state:'lobby',players:{[uid]:partyNew(0)},order:[],deck:[],turn:0,card:0,turnKey:'',phase:'idle',startedAt:null,guessed:[],scores:{},teams:[0,0],chat:[],lastWord:''});});M('party-password').value='';partyAttach(ref,uid,kind);});};
+    M('party-join').onsubmit=e=>{e.preventDefault();partyAction(async()=>{const uid=requireOnline();if(party.ref||mp.ref||cc.ref)throw Error('Sei già in una stanza.');const id=await deriveRoom(M('party-code-input').value.trim().toUpperCase(),M('party-join-password').value),ref=doc(db,...PARTY_PATH,id);let kind=party.kind;await runTransaction(db,async t=>{const snap=await t.get(ref);if(!snap.exists())throw Error('Codice o password errati.');const r=snap.data();assertRoomFresh(r);if(r.kind!==kind||r.state==='closed')throw Error('Stanza non disponibile per questa modalità.');if(r.players[uid])return;if(r.state!=='lobby'||Object.keys(r.players).length>=r.settings.capacity)throw Error('Stanza piena o partita già iniziata.');const counts=[0,0];Object.values(r.players).forEach(p=>counts[p.team]++);directoryUpdate(t,ref,r,{players:{...r.players,[uid]:partyNew(counts[0]<=counts[1]?0:1)}});});M('party-join-password').value='';partyAttach(ref,uid,kind);});};
     M('party-team').onchange=()=>partyAction(()=>partyTx(r=>{if(r.state!=='lobby'||r.kind!=='taboo')return null;return {players:{...r.players,[party.uid]:{...partyMember(r),team:+M('party-team').value}}};}));
     function partyOrder(r){const ids=Object.keys(r.players);if(r.kind==='draw')return ccShuffle(ids);const teams=[0,1].map(t=>ccShuffle(ids.filter(id=>r.players[id].team===t)));if(teams.some(a=>a.length<2))throw Error('Servono almeno due giocatori per squadra.');if(teams[0].length!==teams[1].length)throw Error('Le squadre devono avere lo stesso numero di giocatori.');return teams[0].flatMap((id,i)=>[id,teams[1][i]]);}
     function partyDeck(r){if(r.kind==='taboo')return ccShuffle(PARTY_CARDS);const pool=[...new Set([...PARTY_CARDS.map(c=>c.word),...CC_WORDS.map(partyNorm)].filter(w=>/^[A-Z]{3,18}$/.test(w)))];return ccShuffle(pool).slice(0,r.settings.rounds*Object.keys(r.players).length*3).map(word=>({word,banned:[]}));}
@@ -1855,7 +2041,7 @@
     function partyNext(r){const next=r.turn+1,lastWord=partyCard(r).word;if(next>=r.order.length*r.settings.rounds)return {state:'finished',phase:'done',lastWord};return {turn:next,turnKey:partyKey(),phase:r.kind==='draw'?'choose':'play',card:r.kind==='draw'?next*3:(r.card+1)%r.deck.length,startedAt:serverTimestamp(),guessed:[],chat:[],lastWord};}
     function partyCanEnd(r){return !partyOnTime(r)||(r.kind==='draw'&&r.guessed.length===r.order.length-1)||partyActor(r)===party.uid||partyHost(r);}
     M('party-next').onclick=()=>partyAction(()=>partyTx(r=>{if(r.state!=='running'||!partyCanEnd(r))throw Error('Non puoi terminare il turno.');if(r.phase==='choose')return {phase:'play',card:r.turn*3,startedAt:serverTimestamp()};return partyNext(r);}));
-    function partyMessage(r,text,correct=false,answer=''){if(r.chat.length>=100)throw Error('Limite messaggi del turno raggiunto.');return [...r.chat,{uid:party.uid,text,correct,answer}];}
+    function partyMessage(r,text,correct=false,answer=''){return [...r.chat.slice(-99),{uid:party.uid,text,correct,answer}];}
     function partyTabooPatch(r,delta){const teams=[...r.teams];teams[partyTeam(r)]+=delta;return {teams,card:(r.card+1)%r.deck.length,lastWord:partyCard(r).word};}
     function partyBanned(r,text){const tokens=partyNorm(text).replace(/[^A-Z0-9 ]/g,' ').split(/\s+/);return [partyCard(r).word,...partyCard(r).banned].some(w=>tokens.includes(w));}
     M('party-chat-form').onsubmit=e=>{e.preventDefault();const input=M('party-text'),text=partyNorm(input.value);if(!text)return;partyAction(async()=>{await partyTx(r=>{if(r.state!=='running'||r.phase!=='play'||!partyOnTime(r))throw Error('Turno non disponibile.');const actor=partyActor(r),word=partyCard(r).word;if(r.kind==='draw'){if(party.uid===actor||r.guessed.includes(party.uid))throw Error('Hai già finito il turno o sei il disegnatore.');if(text===word){const scores={...r.scores,[party.uid]:r.scores[party.uid]+100,[actor]:r.scores[actor]+50};return {scores,guessed:[...r.guessed,party.uid],chat:partyMessage(r,'HA INDOVINATO!',true,text)};}return {chat:partyMessage(r,text)};}if(partyMember(r).team!==partyTeam(r))throw Error('Attendi il turno della tua squadra.');if(party.uid===actor){if(partyBanned(r,text))return {...partyTabooPatch(r,-1),chat:partyMessage(r,'PAROLA VIETATA: −1',true)};return {chat:partyMessage(r,text)};}if(text===word)return {...partyTabooPatch(r,1),chat:partyMessage(r,'HA INDOVINATO! +1',true,text)};return {chat:partyMessage(r,text)};});input.value='';});};
@@ -1863,14 +2049,14 @@
     M('party-pass').onclick=()=>partyCardAction(0);M('party-correct').onclick=()=>partyCardAction(1);M('party-foul').onclick=()=>partyCardAction(-1,true);
     M('party-rematch').onclick=()=>partyAction(()=>partyTx(r=>partyHost(r)&&r.state==='finished'?{state:'lobby'}:null));
     M('party-leave').onclick=()=>partyAction(async()=>{if(!party.room){partyDetach();hide('party-modal',true);return;}if(!confirm(partyHost(party.room)?'Chiudere la stanza per tutti?':'Uscire dalla stanza?'))return;await partyTx(r=>{if(partyHost(r))return {state:'closed'};if(r.state!=='lobby')return null;const players={...r.players};delete players[party.uid];return {players};});partyDetach();hide('party-modal',true);});
-    M('party-invite').onclick=async()=>{const r=party.room;if(!r)return;const url=new URL(location.href);url.search='';url.hash='';url.searchParams.set('party',r.kind);url.searchParams.set('code',r.code);const text=`${PARTY_NAMES[r.kind]} — stanza ${r.code}\n${url.href}\nChiedi la password all’host.`;try{if(navigator.share)await navigator.share({title:PARTY_NAMES[r.kind],text});else{await navigator.clipboard.writeText(text);partySay('Invito copiato.');}}catch(e){if(e.name!=='AbortError')partySay(text);}};
+    M('party-invite').onclick=async()=>{const r=party.room;if(!r)return;const url=new URL(location.href);url.search='';url.hash='';url.searchParams.set('party',r.kind);url.searchParams.set('code',r.code);const text=`${PARTY_NAMES[r.kind]} — stanza ${r.code}\n${url.href}\n${r.locked===false?'Accesso libero.':'Chiedi la password all’host.'}`;try{if(navigator.share)await navigator.share({title:PARTY_NAMES[r.kind],text});else{await navigator.clipboard.writeText(text);partySay('Invito copiato.');}}catch(e){if(e.name!=='AbortError')partySay(text);}};
     const canvas=M('party-canvas'),ctx=canvas.getContext('2d');let pen=null,penId=0,strokeSerial=0;
     function partyPaintStroke(s){if(s.clear){ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);return;}if(!Array.isArray(s.points)||s.points.length<4||s.points.length%2||!s.points.every(v=>typeof v==='number'&&Number.isFinite(v)&&v>=0&&v<=1))return;ctx.strokeStyle=/^#[0-9a-f]{6}$/i.test(s.color)?s.color:'#000000';ctx.lineWidth=Math.min(25,Math.max(2,s.width));ctx.lineCap='round';ctx.lineJoin='round';ctx.beginPath();ctx.moveTo(s.points[0]*canvas.width,s.points[1]*canvas.height);for(let i=2;i<s.points.length;i+=2)ctx.lineTo(s.points[i]*canvas.width,s.points[i+1]*canvas.height);ctx.stroke();}
     function partyRepaint(){ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);for(const s of party.strokes)partyPaintStroke(s);if(pen)partyPaintStroke(pen);}
-    function partyListenStrokes(r){const key=r?.state==='running'&&r.kind==='draw'&&r.phase==='play'?r.turnKey:'';if(party.strokeKey===key)return;party.strokeUnsub?.();party.strokeUnsub=null;party.strokeKey=key;party.strokes=[];strokeSerial=0;pen=null;partyRepaint();if(!key)return;party.strokeUnsub=onSnapshot(collection(party.ref,'turns',key,'strokes'),snap=>{if(party.strokeKey!==key)return;party.strokes=snap.docs.map(d=>({...d.data(),id:d.id})).sort((a,b)=>a.serial-b.serial||a.id.localeCompare(b.id));strokeSerial=Math.max(strokeSerial,...party.strokes.map(s=>s.serial));partyRepaint();},e=>partySay('Lavagna: '+cloudError(e)));}
-    function partyCanDraw(){const r=party.room;return r?.kind==='draw'&&r.state==='running'&&r.phase==='play'&&partyActor(r)===party.uid&&partyOnTime(r);}
+    function partyListenStrokes(r){const key=r?.state==='running'&&r.kind==='draw'&&r.phase==='play'?r.turnKey:'';if(party.strokeKey===key)return;party.strokeUnsub?.();party.strokeUnsub=null;party.strokeKey=key;party.strokeReady=false;party.strokes=[];strokeSerial=0;pen=null;partyRepaint();if(!key)return;party.strokeUnsub=onSnapshot(collection(party.ref,'turns',key,'strokes'),{includeMetadataChanges:true},snap=>{if(party.strokeKey!==key)return;if(!snap.metadata.fromCache)party.strokeReady=true;party.strokes=snap.docs.map(d=>({...d.data(),id:d.id})).sort((a,b)=>a.serial-b.serial||a.id.localeCompare(b.id));strokeSerial=Math.max(strokeSerial,...party.strokes.map(s=>s.serial));partyRepaint();},e=>partySay('Lavagna: '+cloudError(e)));}
+    function partyCanDraw(){const r=party.room;return r?.kind==='draw'&&r.state==='running'&&r.phase==='play'&&partyActor(r)===party.uid&&partyOnTime(r)&&party.strokeReady&&navigator.onLine;}
     function partyPoint(e){const b=canvas.getBoundingClientRect();return [Math.max(0,Math.min(1,(e.clientX-b.left)/b.width)),Math.max(0,Math.min(1,(e.clientY-b.top)/b.height))];}
-    function partySendStroke(s){if(!partyCanDraw())return;if(strokeSerial>=240){partySay('Limite di 240 tratti per turno raggiunto.');return;}const r=party.room;addDoc(collection(party.ref,'turns',r.turnKey,'strokes'),{uid:party.uid,points:s.points,color:s.color,width:s.width,clear:!!s.clear,serial:++strokeSerial,createdAt:serverTimestamp()}).catch(e=>partySay('Lavagna: '+cloudError(e)));}
+    function partySendStroke(s){if(!partyCanDraw())return;if(strokeSerial>=240){partySay('Limite di 240 tratti per turno raggiunto.');return;}const r=party.room;setDoc(doc(party.ref,'turns',r.turnKey,'strokes',String(++strokeSerial)),{uid:party.uid,points:s.points,color:s.color,width:s.width,clear:!!s.clear,serial:strokeSerial,createdAt:serverTimestamp()}).catch(e=>partySay('Lavagna: '+cloudError(e)));}
     canvas.onpointerdown=e=>{if(!partyCanDraw()||pen)return;if(strokeSerial>=240){partySay('Limite di 240 tratti per turno raggiunto.');return;}e.preventDefault();canvas.setPointerCapture(e.pointerId);penId=e.pointerId;const p=partyPoint(e);pen={points:[...p,...p],color:party.erase?'#ffffff':M('party-ink').value,width:+M('party-width').value};partyPaintStroke(pen);};
     canvas.onpointermove=e=>{if(!pen||e.pointerId!==penId)return;const p=partyPoint(e);const prev=pen.points.slice(-2);pen.points.push(...p);partyPaintStroke({...pen,points:[...prev,...p]});if(pen.points.length>=48){partySendStroke(pen);pen={...pen,points:[...p,...p]};}};
     function partyPenEnd(e){if(!pen||e.pointerId!==penId)return;partySendStroke(pen);pen=null;}
@@ -1878,9 +2064,9 @@
     M('party-eraser').onclick=()=>{party.erase=!party.erase;M('party-eraser').textContent=party.erase?'Gomma attiva':'Gomma';};M('party-ink').oninput=()=>{party.erase=false;M('party-eraser').textContent='Gomma';};M('party-clear').onclick=()=>{if(partyCanDraw()){partySendStroke({points:[],color:'#ffffff',width:2,clear:true});ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);}};
     M('party-sound').onclick=()=>{M('btn-sound').click();partyRender();};
     let partyAudioKey='',partyAudioSec=-1,partyAutoAt=0;
-    function partyTick(){const r=party.room;if(!r||r.state!=='running')return;const sec=partyRemaining(r),key=r.turnKey+':'+r.phase;M('party-timer').textContent=sec===Infinity?'Nessun limite di tempo':`${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`;M('party-timer').classList.toggle('cc-urgent',sec<=10);if(partyAudioKey!==key){partyAudioKey=key;partyAudioSec=-1;}if(partyActor(r)===party.uid&&sec<=10&&sec!==partyAudioSec){partyAudioSec=sec;if(sec===0)window.cosmicGame.timerAlarm();else window.cosmicGame.timerTick();}if((sec===0||(r.kind==='draw'&&r.phase==='play'&&r.guessed.length===r.order.length-1))&&!party.busy&&Date.now()-partyAutoAt>2500){partyAutoAt=Date.now();partyAction(()=>partyTx(o=>{if(o.state!=='running'||o.turnKey!==r.turnKey)return null;if(o.phase==='choose'&&!partyOnTime(o))return {phase:'play',card:o.turn*3,startedAt:serverTimestamp()};if(o.phase==='play'&&(!partyOnTime(o)||(o.kind==='draw'&&o.guessed.length===o.order.length-1)))return partyNext(o);return null;}));}}
+    function partyTick(){const r=party.room;if(!r||r.state!=='running')return;const sec=partyRemaining(r),key=r.turnKey+':'+r.phase;M('party-timer').textContent=sec===Infinity?'Nessun limite di tempo':`${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`;M('party-timer').classList.toggle('cc-urgent',sec<=10);if(partyAudioKey!==key){partyAudioKey=key;partyAudioSec=-1;}if(partyActor(r)===party.uid&&sec<=10&&sec!==partyAudioSec){partyAudioSec=sec;if(sec===0)window.cosmicGame.timerAlarm();else window.cosmicGame.timerTick();}if((partyExpiredForServer(r)||(r.kind==='draw'&&r.phase==='play'&&r.guessed.length===r.order.length-1))&&!party.busy&&Date.now()-partyAutoAt>2500){partyAutoAt=Date.now();partyAction(()=>partyTx(o=>{if(o.state!=='running'||o.turnKey!==r.turnKey)return null;if(o.phase==='choose'&&!partyOnTime(o))return {phase:'play',card:o.turn*3,startedAt:serverTimestamp()};if(o.phase==='play'&&(!partyOnTime(o)||(o.kind==='draw'&&o.guessed.length===o.order.length-1)))return partyNext(o);return null;}));}}
     setInterval(partyTick,250);
-    function partyRender(){const r=party.room,kind=party.kind;M('party-title').textContent=PARTY_NAMES[kind];M('party-intro').textContent=kind==='draw'?'Disegna una parola a turno. Gli altri provano a indovinare in chat. +100 per chi indovina, +50 al disegnatore.':'Due squadre, un suggeritore a turno. Fai indovinare la parola evitando le cinque parole proibite. Usa la chat oppure una chiamata vocale esterna.';hide('party-entry',!!party.ref);hide('party-room',!r);if(!r)return;const host=partyHost(r),lobby=r.state==='lobby',done=r.state==='finished',running=r.state==='running',draw=r.kind==='draw',actor=running?partyActor(r):null,active=actor===party.uid,mine=partyMember(r),same=running&&mine.team===partyTeam(r);M('party-room-name').textContent=r.name;M('party-code').textContent=r.code;M('party-status').textContent=lobby?`Lobby · ${Object.keys(r.players).length}/${r.settings.capacity}`:done?'Partita conclusa':`Turno ${r.turn+1}/${r.order.length*r.settings.rounds} · ${r.players[actor]?.name||'—'}${draw?' disegna':` · ${CC_NAMES[partyTeam(r)]}`}`;const list=M('party-players');list.replaceChildren();const ids=Object.keys(r.players).sort((a,b)=>(r.scores[b]||0)-(r.scores[a]||0));if(!draw&&!lobby)list.append(ccNode('div',`Nebula ${r.teams[0]} · Nova ${r.teams[1]}`,'cc-turn'));for(const id of ids){const p=r.players[id],row=ccNode('div',undefined,'mp-player');row.append(ccNode('div',`${p.name}${id===r.hostUid?' · Host':''}${id===party.uid?' · Tu':''}${draw?'':` · ${CC_NAMES[p.team]}`}${r.guessed.includes(id)?' · ✓':''}`));if(draw&&!lobby)row.append(ccNode('strong',`${r.scores[id]||0} pt`,'mp-score'));if(host&&lobby&&id!==party.uid){const b=ccNode('button','Espelli','icon-btn');b.onclick=()=>partyAction(()=>partyTx(o=>{if(o.state!=='lobby'||!partyHost(o))return null;const players={...o.players};delete players[id];return {players};}));row.append(b);}list.append(row);}hide('party-lobby',!lobby);hide('party-team-label',draw);M('party-team').value=String(mine.team);hide('party-start',!host);M('party-start').disabled=party.busy||ids.length<partyMin(r);hide('party-play',!running);hide('party-result',!done);hide('party-rematch',!done||!host);if(done){const best=draw?Math.max(...Object.values(r.scores)):Math.max(...r.teams);const winners=draw?ids.filter(id=>r.scores[id]===best).map(id=>r.players[id].name):[0,1].filter(t=>r.teams[t]===best).map(t=>CC_NAMES[t]);M('party-result').textContent=`🏆 ${winners.join(' e ')} · ${best} punti${winners.length>1?' · Pareggio':''}`;}partyListenStrokes(r);if(!running)return;const choose=r.phase==='choose',card=partyCard(r),visible=active||(!draw&&!same);M('party-previous').textContent=draw&&r.lastWord?'Parola del turno precedente: '+r.lastWord:'';M('party-word').textContent=choose?(active?'Scegli una parola':'Il disegnatore sta scegliendo…'):visible?card.word:(draw?`Parola: ${card.word.replace(/[A-Z0-9]/g,'_ ').trim()}`:'Indovina la parola del suggeritore');const choices=M('party-choices');choices.replaceChildren();if(choose&&active)for(let i=0;i<3;i++){const b=ccNode('button',r.deck[r.turn*3+i].word,'icon-btn');b.onclick=()=>partyChoose(i);choices.append(b);}hide('party-choices',!choose||!active);hide('party-draw',!draw||choose);hide('party-tools',!active);hide('party-banned',draw||!visible||choose);M('party-banned').textContent=draw?'':`NON DIRE: ${card.banned.join(' · ')}`;hide('party-chat-form',choose||(draw?(active||r.guessed.includes(party.uid)):!same));M('party-text').placeholder=!draw&&active?'Scrivi un indizio':'Scrivi la risposta';hide('party-pass',draw||!active||choose);hide('party-correct',draw||!active||choose);hide('party-foul',draw||same||choose);hide('party-next',choose||!(active||host));M('party-sound').textContent=window.cosmicGame.soundEnabled()?'🔊 Audio':'🔇 Audio';const chat=M('party-chat');chat.replaceChildren();for(const m of r.chat)chat.append(ccNode('div',`${r.players[m.uid]?.name||'—'}: ${m.text}`,m.correct?'correct':''));chat.scrollTop=chat.scrollHeight;partyTick();}
+    function partyRender(){const r=party.room,kind=party.kind;M('party-title').textContent=PARTY_NAMES[kind];M('party-intro').textContent=kind==='draw'?'Disegna una parola a turno. Gli altri provano a indovinare in chat. +100 per chi indovina, +50 al disegnatore.':'Due squadre, un suggeritore a turno. Fai indovinare la parola evitando le cinque parole proibite. Usa la chat oppure una chiamata vocale esterna.';hide('party-entry',!!party.ref);hide('party-room',!r);if(!r)return;const host=partyHost(r),lobby=r.state==='lobby',done=r.state==='finished',running=r.state==='running',draw=r.kind==='draw',actor=running?partyActor(r):null,active=actor===party.uid,mine=partyMember(r),same=running&&mine.team===partyTeam(r);M('party-room-name').textContent=(r.locked===false?'🔓 ':'🔒 ')+r.name;M('party-code').textContent=r.code;M('party-status').textContent=lobby?`Lobby · ${Object.keys(r.players).length}/${r.settings.capacity}`:done?'Partita conclusa':`Turno ${r.turn+1}/${r.order.length*r.settings.rounds} · ${r.players[actor]?.name||'—'}${draw?' disegna':` · ${CC_NAMES[partyTeam(r)]}`}`;const list=M('party-players');list.replaceChildren();const ids=Object.keys(r.players).sort((a,b)=>(r.scores[b]||0)-(r.scores[a]||0));if(!draw&&!lobby)list.append(ccNode('div',`Nebula ${r.teams[0]} · Nova ${r.teams[1]}`,'cc-turn'));for(const id of ids){const p=r.players[id],row=ccNode('div',undefined,'mp-player');row.append(ccNode('div',`${p.name}${id===r.hostUid?' · Host':''}${id===party.uid?' · Tu':''}${draw?'':` · ${CC_NAMES[p.team]}`}${r.guessed.includes(id)?' · ✓':''}`));if(draw&&!lobby)row.append(ccNode('strong',`${r.scores[id]||0} pt`,'mp-score'));if(host&&lobby&&id!==party.uid){const b=ccNode('button','Espelli','icon-btn');b.onclick=()=>partyAction(()=>partyTx(o=>{if(o.state!=='lobby'||!partyHost(o))return null;const players={...o.players};delete players[id];return {players};}));row.append(b);}list.append(row);}hide('party-lobby',!lobby);hide('party-team-label',draw);M('party-team').value=String(mine.team);hide('party-start',!host);M('party-start').disabled=party.busy||ids.length<partyMin(r);hide('party-play',!running);hide('party-result',!done);hide('party-rematch',!done||!host);if(done){const best=draw?Math.max(...Object.values(r.scores)):Math.max(...r.teams);const winners=draw?ids.filter(id=>r.scores[id]===best).map(id=>r.players[id].name):[0,1].filter(t=>r.teams[t]===best).map(t=>CC_NAMES[t]);M('party-result').textContent=`🏆 ${winners.join(' e ')} · ${best} punti${winners.length>1?' · Pareggio':''}`;}partyListenStrokes(r);if(!running)return;const choose=r.phase==='choose',card=partyCard(r),visible=active||(!draw&&!same);M('party-previous').textContent=draw&&r.lastWord?'Parola del turno precedente: '+r.lastWord:'';M('party-word').textContent=choose?(active?'Scegli una parola':'Il disegnatore sta scegliendo…'):visible?card.word:(draw?`Parola: ${card.word.replace(/[A-Z0-9]/g,'_ ').trim()}`:'Indovina la parola del suggeritore');const choices=M('party-choices');choices.replaceChildren();if(choose&&active)for(let i=0;i<3;i++){const b=ccNode('button',r.deck[r.turn*3+i].word,'icon-btn');b.onclick=()=>partyChoose(i);choices.append(b);}hide('party-choices',!choose||!active);hide('party-draw',!draw||choose);hide('party-tools',!active);hide('party-banned',draw||!visible||choose);M('party-banned').textContent=draw?'':`NON DIRE: ${card.banned.join(' · ')}`;hide('party-chat-form',choose||(draw?(active||r.guessed.includes(party.uid)):!same));M('party-text').placeholder=!draw&&active?'Scrivi un indizio':'Scrivi la risposta';hide('party-pass',draw||!active||choose);hide('party-correct',draw||!active||choose);hide('party-foul',draw||same||choose);hide('party-next',choose||!(active||host));M('party-sound').textContent=window.cosmicGame.soundEnabled()?'🔊 Audio':'🔇 Audio';const chat=M('party-chat');chat.replaceChildren();for(const m of r.chat)chat.append(ccNode('div',`${r.players[m.uid]?.name||'—'}: ${m.text}`,m.correct?'correct':''));chat.scrollTop=chat.scrollHeight;partyTick();}
     const partyInvite=new URL(location.href).searchParams.get('party');if(!inviteCode&&!ccInvite&&PARTY_NAMES[partyInvite]){party.kind=partyInvite;M('party-code-input').value=(new URL(location.href).searchParams.get('code')||'').slice(0,10);hide('party-modal',false);switchMenu('multi');partyRender();}
 
     // Board games: isolated room collection; fleets are in owner-only documents.
@@ -1899,18 +2085,18 @@
     function bgNext(r,alive){for(let i=1;i<=r.order.length;i++){const at=(r.turn+i)%r.order.length;if(alive.includes(r.order[at]))return at;}return r.turn;}
     function bgOpen(kind){if(mp.ref||cc.ref||party.ref||window.cosmicGame.isSingleActive()||window.cosmicGame.isMultiplayer()){alert('Concludi o abbandona prima la partita in corso.');return;}if(bg.ref&&bg.kind!==kind){alert('Esci prima dalla stanza in corso.');return;}bg.kind=kind;hide('boardgames-modal',false);bgRender();}
     function bgDetach(msg=''){bg.unsub?.();Object.assign(bg,{ref:null,uid:null,room:null,unsub:null,round:'',fleet:null,draft:[[],[],[],[]],target:'',fetching:false});dropSession(BG_SESSION);bgSay(msg);bgRender();}
-    function bgAttach(ref,uid,kind){bg.ref=ref;bg.uid=uid;bg.kind=kind;saveSession(BG_SESSION,{id:ref.id,uid,kind});hide('boardgames-modal',false);bgRender();bg.unsub=onSnapshot(ref,{includeMetadataChanges:true},snap=>{if(bg.ref!==ref||snap.metadata.hasPendingWrites||snap.metadata.fromCache)return;const r=snap.exists()?snap.data():null;if(!r||!r.players[uid]||r.state==='closed'){bgDetach('Stanza chiusa o accesso revocato.');return;}if(bg.round!==r.roundKey){Object.assign(bg,{round:r.roundKey,fleet:null,draft:[[],[],[],[]],target:'',fetching:false});}if(JSON.stringify(bg.room?.pending)!==JSON.stringify(r.pending))bg.pendingSince=Date.now();bg.room=r;bgRender();bgLoadFleet();},e=>bgSay(cloudError(e)));}
+    function bgAttach(ref,uid,kind){void syncClock();bg.ref=ref;bg.uid=uid;bg.kind=kind;saveSession(BG_SESSION,{id:ref.id,uid,kind});hide('boardgames-modal',false);bgRender();bg.unsub=onSnapshot(ref,{includeMetadataChanges:true},snap=>{if(bg.ref!==ref||!observeRoom(bg,snap,bgSay))return;const r=snap.exists()?snap.data():null;if(roomExpired(r)){bgDetach('Stanza scaduta dopo 24 ore. Crea una nuova stanza.');return;}if(!r||!r.players[uid]||r.state==='closed'){bgDetach('Stanza chiusa o accesso revocato.');return;}if(bg.round!==r.roundKey){Object.assign(bg,{round:r.roundKey,fleet:null,draft:[[],[],[],[]],target:'',fetching:false});}if(JSON.stringify(bg.room?.pending)!==JSON.stringify(r.pending))bg.pendingSince=Date.now();bg.room=r;bgRender();bgLoadFleet();},e=>bgSay(cloudError(e)));}
     function bgRestore(uid){const s=readSession(BG_SESSION);if(!mp.ref&&!cc.ref&&!party.ref&&!bg.ref&&s?.uid===uid&&/^[a-f0-9]{64}$/.test(s.id)&&BG_NAMES[s.kind])bgAttach(doc(db,...BG_PATH,s.id),uid,s.kind);}
     async function bgAction(fn){if(bg.busy)return;bg.busy=true;bgSay('');try{await fn();}catch(e){bgSay(cloudError(e));console.error('Board games:',e);}finally{bg.busy=false;bgRender();}}
-    async function bgTx(change){const ref=bg.ref,uid=bg.uid;if(!ref||uid!==requireOnline())throw Error('Stanza non disponibile.');return runTransaction(db,async t=>{const s=await t.get(ref);if(!s.exists())throw Error('Stanza non trovata.');const r=s.data();if(!r.players[uid]||r.state==='closed')throw Error('Stanza non disponibile.');const p=change(r,t,ref);if(p)t.update(ref,p);});}
+    async function bgTx(change){const ref=bg.ref,uid=bg.uid;if(!ref||uid!==requireOnline())throw Error('Stanza non disponibile.');return runTransaction(db,async t=>{const s=await t.get(ref);if(!s.exists())throw Error('Stanza non trovata.');const r=s.data();assertRoomFresh(r);if(!r.players[uid]||r.state==='closed')throw Error('Stanza non disponibile.');const p=change(r,t,ref);if(p)directoryUpdate(t,ref,r,p);});}
     for(const k of Object.keys(BG_NAMES))M('bg-'+k+'-open').onclick=()=>bgOpen(k);
     M('bg-close').onclick=()=>{if(bg.ref){bgSay('Usa Esci dalla stanza.');return;}hide('boardgames-modal',true);};
-    M('bg-create').onsubmit=e=>{e.preventDefault();bgAction(async()=>{const uid=requireOnline();if(bg.ref||mp.ref||cc.ref||party.ref)throw Error('Sei già in una stanza.');const kind=bg.kind,name=M('bg-name').value.trim(),capacity=kind==='naval'?+M('bg-cap').value:2;if(!name)throw Error('Inserisci il nome.');const code=bytesHex(crypto.getRandomValues(new Uint8Array(5))).toUpperCase(),id=await deriveRoom(code,M('bg-password').value),ref=doc(db,...BG_PATH,id);await runTransaction(db,async t=>{if((await t.get(ref)).exists())throw Error('Codice già in uso.');t.set(ref,{kind,code,name,capacity,hostUid:uid,createdAt:serverTimestamp(),state:'lobby',players:{[uid]:{name:cleanName()}},order:[],roundKey:'',turn:0,marks:{},ready:[],shots:{},hits:{},alive:[],pending:null,last:null,winner:''});});M('bg-password').value='';bgAttach(ref,uid,kind);});};
-    M('bg-join').onsubmit=e=>{e.preventDefault();bgAction(async()=>{const uid=requireOnline();if(bg.ref||mp.ref||cc.ref||party.ref)throw Error('Sei già in una stanza.');const kind=bg.kind,id=await deriveRoom(M('bg-code-input').value.trim().toUpperCase(),M('bg-join-password').value),ref=doc(db,...BG_PATH,id);await runTransaction(db,async t=>{const s=await t.get(ref);if(!s.exists())throw Error('Codice o password errati.');const r=s.data();if(r.kind!==kind||r.state==='closed')throw Error('Stanza non disponibile per questa modalità.');if(r.players[uid])return;if(r.state!=='lobby'||Object.keys(r.players).length>=r.capacity)throw Error('Stanza piena o partita già iniziata.');t.update(ref,{players:{...r.players,[uid]:{name:cleanName()}}});});M('bg-join-password').value='';bgAttach(ref,uid,kind);});};
+    M('bg-create').onsubmit=e=>{e.preventDefault();bgAction(async()=>{const uid=requireOnline();if(bg.ref||mp.ref||cc.ref||party.ref)throw Error('Sei già in una stanza.');const kind=bg.kind,name=M('bg-name').value.trim(),capacity=kind==='naval'?+M('bg-cap').value:2;if(!name)throw Error('Inserisci il nome.');const code=bytesHex(crypto.getRandomValues(new Uint8Array(5))).toUpperCase(),password=M('bg-password').value,id=await deriveRoom(code,password),ref=doc(db,...BG_PATH,id);await runTransaction(db,async t=>{if((await t.get(ref)).exists())throw Error('Codice già in uso.');directoryCreate(t,ref,{locked:password!=='',kind,code,name,capacity,hostUid:uid,createdAt:serverTimestamp(),state:'lobby',players:{[uid]:{name:cleanName()}},order:[],roundKey:'',turn:0,marks:{},ready:[],shots:{},hits:{},alive:[],pending:null,last:null,winner:''});});M('bg-password').value='';bgAttach(ref,uid,kind);});};
+    M('bg-join').onsubmit=e=>{e.preventDefault();bgAction(async()=>{const uid=requireOnline();if(bg.ref||mp.ref||cc.ref||party.ref)throw Error('Sei già in una stanza.');const kind=bg.kind,id=await deriveRoom(M('bg-code-input').value.trim().toUpperCase(),M('bg-join-password').value),ref=doc(db,...BG_PATH,id);await runTransaction(db,async t=>{const s=await t.get(ref);if(!s.exists())throw Error('Codice o password errati.');const r=s.data();assertRoomFresh(r);if(r.kind!==kind||r.state==='closed')throw Error('Stanza non disponibile per questa modalità.');if(r.players[uid])return;if(r.state!=='lobby'||Object.keys(r.players).length>=r.capacity)throw Error('Stanza piena o partita già iniziata.');directoryUpdate(t,ref,r,{players:{...r.players,[uid]:{name:cleanName()}}});});M('bg-join-password').value='';bgAttach(ref,uid,kind);});};
     M('bg-start').onclick=()=>bgAction(()=>bgTx(r=>{if(!bgHost(r)||r.state!=='lobby'||Object.keys(r.players).length<2)throw Error('Servono almeno due giocatori.');const ids=ccShuffle(Object.keys(r.players));return {state:r.kind==='naval'?'setup':'running',order:ids,roundKey:partyKey(),turn:0,marks:bgBlank(ids),ready:[],shots:bgBlank(ids),hits:bgBlank(ids),alive:ids,pending:null,last:null,winner:''};}));
     M('bg-rematch').onclick=()=>bgAction(()=>bgTx(r=>{if(!bgHost(r)||r.state!=='finished')return null;return {state:'lobby'};}));
     M('bg-leave').onclick=()=>bgAction(async()=>{const r=bg.room;if(!r){bgDetach();hide('boardgames-modal',true);return;}if(r.state!=='lobby'&&!bgHost(r)){if(!confirm('Abbandonare la stanza? La partita verrà annullata per tutti.'))return;}await bgTx(o=>{if(bgHost(o)||o.state!=='lobby')return {state:'closed'};const players={...o.players};delete players[bg.uid];return {players};});bgDetach();hide('boardgames-modal',true);});
-    M('bg-invite').onclick=async()=>{const r=bg.room;if(!r)return;const url=new URL(location.href);url.search='';url.searchParams.set('board',r.kind);url.searchParams.set('code',r.code);const text=`${BG_NAMES[r.kind]} · Codice ${r.code}\n${url.href}\nChiedimi la password.`;try{if(navigator.share)await navigator.share({title:BG_NAMES[r.kind],text});else {await navigator.clipboard.writeText(text);bgSay('Invito copiato.');}}catch(e){bgSay('Condividi questo link: '+url.href);}};
+    M('bg-invite').onclick=async()=>{const r=bg.room;if(!r)return;const url=new URL(location.href);url.search='';url.searchParams.set('board',r.kind);url.searchParams.set('code',r.code);const text=`${BG_NAMES[r.kind]} · Codice ${r.code}\n${url.href}\n${r.locked===false?'Accesso libero.':'Chiedimi la password.'}`;try{if(navigator.share)await navigator.share({title:BG_NAMES[r.kind],text});else {await navigator.clipboard.writeText(text);bgSay('Invito copiato.');}}catch(e){bgSay('Condividi questo link: '+url.href);}};
     function bgPlaceMark(cell){const expected=bg.room?.roundKey,turn=bg.room?.turn;bgAction(()=>bgTx(r=>{if(r.roundKey!==expected||r.turn!==turn||r.state!=='running'||r.kind==='naval'||bgActor(r)!==bg.uid)throw Error('Non è il tuo turno.');const four=r.kind==='four',w=four?7:3,h=four?6:3,occupied=Object.values(r.marks).flat();if(four){const col=cell%7;cell=-1;for(let row=5;row>=0;row--)if(!occupied.includes(row*7+col)){cell=row*7+col;break;}}if(cell<0||cell>=w*h||occupied.includes(cell))throw Error('Casella occupata.');const marks={...r.marks,[bg.uid]:[...r.marks[bg.uid],cell]},win=bgWinning(marks[bg.uid],cell,w,h,four?4:3).length>0,draw=occupied.length+1===w*h;return {marks,last:{by:bg.uid,cell},turn:win||draw?r.turn:1-r.turn,state:win||draw?'finished':'running',winner:win?bg.uid:draw?'draw':''};}));}
     async function bgLoadFleet(){const r=bg.room,ref=bg.ref;if(!r||r.kind!=='naval'||!r.ready.includes(bg.uid)||bg.fleet||bg.fetching)return;const key=r.roundKey,uid=bg.uid;bg.fetching=true;try{const snap=await getDocFromServer(bgFleetRef(ref,key,uid));if(bg.ref===ref&&bg.round===key&&snap.exists())bg.fleet=BG_LENGTHS.map((_,i)=>snap.data().ships["s"+i]);}catch(e){if(bg.ref===ref)bgSay('Flotta: '+cloudError(e));}finally{if(bg.ref===ref&&bg.round===key){bg.fetching=false;bgRender();}}}
     M('bg-rotate').onclick=()=>{bg.vertical=!bg.vertical;M('bg-rotate').textContent=bg.vertical?'↕ Verticale':'↔ Orizzontale';};
@@ -1918,19 +2104,103 @@
     function bgPlaceShip(cell){const r=bg.room;if(!r||r.state!=='setup'||r.ready.includes(bg.uid)||bg.busy)return;const i=+M('bg-ship').value,cells=bgCells(cell,BG_LENGTHS[i],bg.vertical);if(cells.length!==BG_LENGTHS[i]||cells.some(c=>bg.draft.some((s,j)=>j!==i&&s.includes(c)))){bgSay('La nave non entra o si sovrappone.');return;}bg.draft[i]=cells;bgSay('');const next=bg.draft.findIndex(s=>!s.length);if(next>=0)M('bg-ship').value=String(next);bgRender();}
     M('bg-ready').onclick=()=>bgAction(async()=>{const ships=bg.draft.map(s=>[...s]),key=bg.room?.roundKey;if(ships.some((s,i)=>s.length!==BG_LENGTHS[i])||new Set(ships.flat()).size!==BG_TOTAL)throw Error('Completa la flotta.');await bgTx((r,t,ref)=>{if(r.state!=='setup'||r.roundKey!==key||r.ready.includes(bg.uid))throw Error('Flotta già confermata o partita cambiata.');t.set(bgFleetRef(ref,key,bg.uid),{ships:Object.fromEntries(ships.map((s,i)=>["s"+i,s])),cells:ships.flat()});const ready=[...r.ready,bg.uid];return {ready,state:ready.length===r.order.length?'running':'setup'};});if(bg.round===key)bg.fleet=ships;});
     M('bg-target').onchange=()=>{bg.target=M('bg-target').value;bgRender();};
-    function bgFire(cell){const target=bg.target,key=bg.room?.roundKey,turn=bg.room?.turn;bgAction(()=>bgTx(r=>{if(r.roundKey!==key||r.turn!==turn||r.kind!=='naval'||r.state!=='running'||r.pending||bgActor(r)!==bg.uid||target===bg.uid||!r.alive.includes(target)||r.shots[target].includes(cell))throw Error('Attacco non disponibile.');return {pending:{by:bg.uid,target,cell}};}));}
-    function bgResolvePatch(r,hit){const p=r.pending;if(!p)throw Error('Nessun colpo in attesa.');const shots={...r.shots,[p.target]:[...r.shots[p.target],p.cell]},hits=hit?{...r.hits,[p.target]:[...r.hits[p.target],p.cell]}:r.hits,alive=hits[p.target].length===BG_TOTAL?r.alive.filter(id=>id!==p.target):r.alive,done=alive.length===1;return {shots,hits,alive,pending:null,last:{...p,hit},state:done?'finished':'running',winner:done?alive[0]:'',turn:done?r.turn:bgNext(r,alive)};}
-    async function bgResolve(){const r=bg.room;if(!r?.pending||r.state!=='running'||r.kind!=='naval'||bg.busy||Date.now()-bg.resolveAt<1200)return;const p=r.pending,key=r.roundKey;const delay=Date.now()-bg.pendingSince;if(bg.uid===p.target&&bg.fleet){/* resolve locally first */}else if(bg.uid===p.by){if(delay<1000)return;}else if(delay<4000)return;bg.resolveAt=Date.now();bg.busy=true;try{const resolve=hit=>bgTx(o=>{if(o.roundKey!==key||!o.pending||o.pending.by!==p.by||o.pending.target!==p.target||o.pending.cell!==p.cell)return null;return bgResolvePatch(o,hit);});if(bg.uid===p.target&&bg.fleet)await resolve(bg.fleet.flat().includes(p.cell));else{try{await resolve(true);}catch(e){if(e.code!=='permission-denied')throw e;await resolve(false);}}}catch(e){bgSay('Verifica colpo: '+cloudError(e));}finally{bg.busy=false;bgRender();}}
+    function bgFire(cell){const target=bg.target,key=bg.room?.roundKey,turn=bg.room?.turn;bgAction(()=>bgTx(r=>{if(r.roundKey!==key||r.turn!==turn||r.kind!=='naval'||r.state!=='running'||r.pending||bgActor(r)!==bg.uid||target===bg.uid||!r.alive.includes(target)||r.shots[target].includes(cell))throw Error('Attacco non disponibile.');return {pending:{by:bg.uid,target,cell,at:serverTimestamp()}};}));}
+    function bgResolvePatch(r,hit){const p=r.pending;if(!p)throw Error('Nessun colpo in attesa.');const shots={...r.shots,[p.target]:[...r.shots[p.target],p.cell]},hits=hit?{...r.hits,[p.target]:[...r.hits[p.target],p.cell]}:r.hits,alive=hits[p.target].length===BG_TOTAL?r.alive.filter(id=>id!==p.target):r.alive,done=alive.length===1;return {shots,hits,alive,pending:null,last:{by:p.by,target:p.target,cell:p.cell,hit},state:done?'finished':'running',winner:done?alive[0]:'',turn:done?r.turn:bgNext(r,alive)};}
+    const NAVAL_REPLY_MS=90000;
+    function bgForfeitPatch(r){const p=r.pending,alive=r.alive.filter(id=>id!==p.target),done=alive.length===1;return {alive,pending:null,last:{by:p.by,target:p.target,cell:p.cell,hit:false,forfeit:true},state:done?'finished':'running',winner:done?alive[0]:'',turn:done?r.turn:bgNext(r,alive)};}
+    async function bgResolve(){
+        const r=bg.room;if(!r?.pending||r.state!=='running'||r.kind!=='naval'||bg.busy||!navigator.onLine||Date.now()-bg.resolveAt<3000)return;
+        const p=r.pending,key=r.roundKey,ownReply=bg.uid===p.target;
+        const expired=p.at&&serverNow()>=p.at.toMillis()+NAVAL_REPLY_MS+1000;
+        if(ownReply&&!bg.fleet){bg.resolveAt=Date.now();await bgLoadFleet();return;}
+        if(!ownReply&&(!expired||!r.alive.includes(bg.uid)))return;
+        bg.resolveAt=Date.now();bg.busy=true;
+        try{await bgTx(o=>{
+            if(o.roundKey!==key||!o.pending||o.pending.by!==p.by||o.pending.target!==p.target||o.pending.cell!==p.cell)return null;
+            if(ownReply)return bgResolvePatch(o,bg.fleet.flat().includes(p.cell));
+            if(!o.pending.at||serverNow()<o.pending.at.toMillis()+NAVAL_REPLY_MS+1000)return null;
+            return bgForfeitPatch(o);
+        });}catch(e){bgSay('Verifica colpo: '+cloudError(e));}
+        finally{bg.busy=false;bgRender();}
+    }
     setInterval(bgResolve,700);
     function bgGrid(id,w,h,fn,cls=''){const node=M(id);node.className='bg-grid '+cls;node.style.gridTemplateColumns=`repeat(${w},minmax(0,1fr))`;node.replaceChildren();for(let i=0;i<w*h;i++){const a=fn(i),b=ccNode('button',a.text||'',a.cls||'');b.type='button';b.disabled=!a.click;b.setAttribute('aria-label',a.label||`${String.fromCharCode(65+i%w)}${Math.floor(i/w)+1}`);if(a.click)b.onclick=a.click;node.append(b);}}
-    function bgRender(){const r=bg.room,kind=bg.kind;M('bg-title').textContent=BG_NAMES[kind];M('bg-intro').textContent=kind==='tris'?'Tre simboli in fila, in orizzontale, verticale o diagonale.':kind==='four'?'Inserisci una pedina nella colonna: quattro allineate vincono.':'2–4 giocatori, quattro navi a testa. Attacca un avversario per turno; vince l’ultima flotta in gioco.';hide('bg-cap-label',kind!=='naval');hide('bg-entry',!!bg.ref);hide('bg-room',!r);if(!r)return;const lobby=r.state==='lobby',setup=r.state==='setup',running=r.state==='running',done=r.state==='finished',naval=kind==='naval',host=bgHost(r),ownTurn=running&&bgActor(r)===bg.uid&&!r.pending;M('bg-room-name').textContent=r.name;M('bg-code').textContent=r.code;M('bg-status').textContent=lobby?`Lobby · ${Object.keys(r.players).length}/${r.capacity}`:setup?`Preparazione flotte · ${r.ready.length}/${r.order.length}`:done?'Partita conclusa':r.pending?'Verifica del colpo…':ownTurn?'È il tuo turno':`Turno di ${r.players[bgActor(r)]?.name||'—'}`;const list=M('bg-players');list.replaceChildren();for(const uid of lobby?Object.keys(r.players):r.order){const row=ccNode('div',undefined,'mp-player'),i=r.order.indexOf(uid);row.append(ccNode('span',`${r.players[uid]?.name||'—'}${uid===bg.uid?' · Tu':''}${uid===r.hostUid?' · Host':''}${!lobby&&!naval?(i===0?' · ✕':' · ○'):''}${setup?(r.ready.includes(uid)?' · Pronto':' · In attesa'):''}`));if(naval&&!lobby&&!setup)row.append(ccNode('strong',r.alive.includes(uid)?`${BG_TOTAL-r.hits[uid].length} segmenti`:'Eliminato','mp-score'));if(lobby&&host&&uid!==bg.uid){const b=ccNode('button','Espelli','icon-btn');b.onclick=()=>bgAction(()=>bgTx(o=>{if(o.state!=='lobby'||!bgHost(o))return null;const players={...o.players};delete players[uid];return {players};}));row.append(b);}list.append(row);}hide('bg-start',!lobby||!host);M('bg-start').disabled=bg.busy||Object.keys(r.players).length<2;hide('bg-play',lobby);hide('bg-result',!done);hide('bg-rematch',!done||!host);if(done)M('bg-result').textContent=r.winner==='draw'?'Pareggio!':`🏆 ${r.players[r.winner]?.name||'—'} vince!`;if(lobby)return;
+    function bgRender(){const r=bg.room,kind=bg.kind;M('bg-title').textContent=BG_NAMES[kind];M('bg-intro').textContent=kind==='tris'?'Tre simboli in fila, in orizzontale, verticale o diagonale.':kind==='four'?'Inserisci una pedina nella colonna: quattro allineate vincono.':'2–4 giocatori, quattro navi a testa. Attacca un avversario per turno; vince l’ultima flotta in gioco.';hide('bg-cap-label',kind!=='naval');hide('bg-entry',!!bg.ref);hide('bg-room',!r);if(!r)return;const lobby=r.state==='lobby',setup=r.state==='setup',running=r.state==='running',done=r.state==='finished',naval=kind==='naval',host=bgHost(r),ownTurn=running&&bgActor(r)===bg.uid&&!r.pending;M('bg-room-name').textContent=(r.locked===false?'🔓 ':'🔒 ')+r.name;M('bg-code').textContent=r.code;M('bg-status').textContent=lobby?`Lobby · ${Object.keys(r.players).length}/${r.capacity}`:setup?`Preparazione flotte · ${r.ready.length}/${r.order.length}`:done?'Partita conclusa':r.pending?`Attesa risposta di ${r.players[r.pending.target]?.name||'—'}${r.pending.at?' · '+Math.max(0,Math.ceil((r.pending.at.toMillis()+90000-serverNow())/1000))+' s':''}`:ownTurn?'È il tuo turno':`Turno di ${r.players[bgActor(r)]?.name||'—'}`;const list=M('bg-players');list.replaceChildren();for(const uid of lobby?Object.keys(r.players):r.order){const row=ccNode('div',undefined,'mp-player'),i=r.order.indexOf(uid);row.append(ccNode('span',`${r.players[uid]?.name||'—'}${uid===bg.uid?' · Tu':''}${uid===r.hostUid?' · Host':''}${!lobby&&!naval?(i===0?' · ✕':' · ○'):''}${setup?(r.ready.includes(uid)?' · Pronto':' · In attesa'):''}`));if(naval&&!lobby&&!setup)row.append(ccNode('strong',r.alive.includes(uid)?`${BG_TOTAL-r.hits[uid].length} segmenti`:'Eliminato','mp-score'));if(lobby&&host&&uid!==bg.uid){const b=ccNode('button','Espelli','icon-btn');b.onclick=()=>bgAction(()=>bgTx(o=>{if(o.state!=='lobby'||!bgHost(o))return null;const players={...o.players};delete players[uid];return {players};}));row.append(b);}list.append(row);}hide('bg-start',!lobby||!host);M('bg-start').disabled=bg.busy||Object.keys(r.players).length<2;hide('bg-play',lobby);hide('bg-result',!done);hide('bg-rematch',!done||!host);if(done)M('bg-result').textContent=r.winner==='draw'?'Pareggio!':`🏆 ${r.players[r.winner]?.name||'—'} vince!`;if(lobby)return;
       hide('bg-setup',!setup||r.ready.includes(bg.uid));hide('bg-own-label',!naval);hide('bg-target-wrap',!naval||setup);if(!naval){const four=kind==='four',w=four?7:3,h=four?6:3,win=done&&r.winner!=='draw'?bgWinning(r.marks[r.winner],r.last.cell,w,h,four?4:3):[];bgGrid('bg-grid',w,h,i=>{const a=r.marks[r.order[0]].includes(i),b=r.marks[r.order[1]].includes(i),free=!a&&!b,can=ownTurn&&!bg.busy&&(four?Array.from({length:6},(_,j)=>j*7+i%7).some(c=>!r.marks[r.order[0]].includes(c)&&!r.marks[r.order[1]].includes(c)):free);return {text:a?'✕':b?'○':'',cls:(a?'bg-a':b?'bg-b':'')+(win.includes(i)?' bg-win':''),click:can?()=>bgPlaceMark(i):null};},four?'bg-four':'');M('bg-legend').textContent=four?'Tocca una colonna per far cadere la pedina.':'Tocca una casella libera.';return;}
       const ships=(bg.fleet||bg.draft).flat(),myHits=r.hits[bg.uid]||[],myShots=r.shots[bg.uid]||[];bgGrid('bg-grid',8,8,i=>({text:myHits.includes(i)?'✕':myShots.includes(i)?'·':ships.includes(i)?'■':'',cls:myHits.includes(i)?'bg-hit':myShots.includes(i)?'bg-miss':ships.includes(i)?'bg-ship':'',click:setup&&!r.ready.includes(bg.uid)&&!bg.busy?()=>bgPlaceShip(i):null}),'bg-naval');M('bg-ready').disabled=bg.busy||bg.draft.some((s,i)=>s.length!==BG_LENGTHS[i]);M('bg-legend').textContent=setup?(r.ready.includes(bg.uid)?'Flotta confermata. Attendi gli altri giocatori.':`Segmenti posizionati: ${ships.length}/${BG_TOTAL}`):'■ Nave · ✕ Colpito · · Acqua. Le posizioni avversarie non sono mostrate.';if(setup)return;
-      const targets=r.order.filter(id=>id!==bg.uid&&(done||r.alive.includes(id)));if(!targets.includes(bg.target))bg.target=targets[0]||'';const select=M('bg-target');select.replaceChildren(...targets.map(id=>new Option(r.players[id].name,id,false,id===bg.target)));select.disabled=!!r.pending||bg.busy;const target=bg.target,shot=r.shots[target]||[],hit=r.hits[target]||[];bgGrid('bg-enemy',8,8,i=>({text:hit.includes(i)?'✕':shot.includes(i)?'·':'',cls:hit.includes(i)?'bg-hit':shot.includes(i)?'bg-miss':'',click:ownTurn&&target&&!bg.busy&&!shot.includes(i)?()=>bgFire(i):null}),'bg-naval');M('bg-shot-status').textContent=r.last?`${r.players[r.last.by]?.name||'—'} → ${r.players[r.last.target]?.name||'—'} ${String.fromCharCode(65+r.last.cell%8)}${Math.floor(r.last.cell/8)+1}: ${r.last.hit?'Colpito!':'Acqua'}`:'Seleziona un bersaglio e una casella.';
+      const targets=r.order.filter(id=>id!==bg.uid&&(done||r.alive.includes(id)));if(!targets.includes(bg.target))bg.target=targets[0]||'';const select=M('bg-target');select.replaceChildren(...targets.map(id=>new Option(r.players[id].name,id,false,id===bg.target)));select.disabled=!!r.pending||bg.busy;const target=bg.target,shot=r.shots[target]||[],hit=r.hits[target]||[];bgGrid('bg-enemy',8,8,i=>({text:hit.includes(i)?'✕':shot.includes(i)?'·':'',cls:hit.includes(i)?'bg-hit':shot.includes(i)?'bg-miss':'',click:ownTurn&&target&&!bg.busy&&!shot.includes(i)?()=>bgFire(i):null}),'bg-naval');M('bg-shot-status').textContent=r.last?`${r.players[r.last.by]?.name||'—'} → ${r.players[r.last.target]?.name||'—'} ${String.fromCharCode(65+r.last.cell%8)}${Math.floor(r.last.cell/8)+1}: ${r.last.forfeit?'Avversario ritirato per mancata risposta':r.last.hit?'Colpito!':'Acqua'}`:'Seleziona un bersaglio e una casella.';
     }
     const bgInvite=new URL(location.href).searchParams.get('board');if(!inviteCode&&!ccInvite&&!partyInvite&&BG_NAMES[bgInvite]){bg.kind=bgInvite;M('bg-code-input').value=(new URL(location.href).searchParams.get('code')||'').slice(0,10);hide('boardgames-modal',false);switchMenu('multi');bgRender();}
 
+    // Graceful expiration and reconnect. A room is not automatically deleted on expiry.
+    const roomsActive=()=>!!(mp.ref||cc.ref||party.ref||bg.ref);
+    setInterval(()=>{
+        const msg='Stanza scaduta dopo 24 ore. Crea una nuova stanza.';
+        if(roomExpired(mp.room)){detach(msg);hide('mp-modal',false);}
+        if(roomExpired(cc.room))ccDetach(msg);
+        if(roomExpired(party.room))partyDetach(msg);
+        if(roomExpired(bg.room))bgDetach(msg);
+        if(bg.room?.pending?.at&&!bg.busy)M('bg-status').textContent=`Attesa risposta di ${bg.room.players[bg.room.pending.target]?.name||'—'} · ${Math.max(0,Math.ceil((bg.room.pending.at.toMillis()+90000-serverNow())/1000))} s`;
+        if(roomsActive())void syncClock();
+    },1000);
+    window.addEventListener('online',()=>{if(roomsActive()){void syncClock(true);if(mp.pending&&!mp.syncing)void flushReport();}});
+    document.addEventListener('visibilitychange',()=>{if(!document.hidden&&roomsActive())void syncClock();});
     window.boardGameActive=()=>!!bg.ref;
+
+    // Public directory stores metadata only; room capabilities stay in a non-readable link.
+    const DIRECTORY_ROOT=MP_PATH.slice(0,-1);
+    const DIRECTORY_MODES={rooms:'duel',connectionsRooms:'connections'};
+    function directoryKind(ref,r){return DIRECTORY_MODES[ref.path.split('/').at(-2)]||r.kind;}
+    function directoryDoc(kind,code){return doc(db,...DIRECTORY_ROOT,'roomDirectory',kind,'entries',code);}
+    function directoryLink(kind,code){return doc(db,...DIRECTORY_ROOT,'roomDirectoryLinks',kind,'entries',code);}
+    function directoryData(r){return {name:r.name,locked:r.locked,capacity:r.capacity??r.settings.capacity,count:Object.keys(r.players).length,state:r.state,createdAt:r.createdAt};}
+    function directoryChanged(a,b){return a.name!==b.name||a.locked!==b.locked||a.capacity!==b.capacity||a.count!==b.count||a.state!==b.state;}
+    function directoryCreate(t,ref,r){const kind=directoryKind(ref,r);t.set(ref,r);t.set(directoryLink(kind,r.code),{roomId:ref.id});t.set(directoryDoc(kind,r.code),directoryData(r));}
+    function directoryUpdate(t,ref,r,patch){
+        t.update(ref,patch);
+        if(typeof r.locked!=='boolean')return; // legacy rooms continue without a directory entry
+        const next={...r,...patch},before=directoryData(r),after=directoryData(next);
+        if(!directoryChanged(before,after))return;
+        const entry=directoryDoc(directoryKind(ref,r),r.code);
+        if(next.state==='closed')t.delete(entry);else t.set(entry,after);
+    }
+    const directoryViews={mp:{modal:'mp-modal',kind:()=> 'duel'},cc:{modal:'cc-modal',kind:()=> 'connections'},party:{modal:'party-modal',kind:()=>party.kind},bg:{modal:'boardgames-modal',kind:()=>bg.kind}};
+    let directoryActive=null,directoryStop=null,directoryRows=[],directoryError='',directoryLoading=false,directoryEpoch=0;
+    function directoryRender(){
+        if(!directoryActive)return;
+        const {pre,kind}=directoryActive, list=M(pre+'-directory-list');
+        if(directoryLoading||directoryError){const msg=document.createElement('p');msg.className='cc-muted';msg.textContent=directoryError||'Caricamento stanze…';list.replaceChildren(msg);return;}
+        const entries=directoryRows.filter(r=>!roomExpired(r)&&r.state!=='closed').sort((a,b)=>Number(b.state==='lobby')-Number(a.state==='lobby')||b.createdAt.toMillis()-a.createdAt.toMillis());
+        if(!entries.length){const msg=document.createElement('p');msg.className='cc-muted';msg.textContent='Nessuna stanza disponibile. Creane una!';list.replaceChildren(msg);return;}
+        list.replaceChildren(...entries.map(r=>{
+            const row=document.createElement('div');row.className='mp-player directory-row';
+            const left=document.createElement('div'),name=document.createElement('strong'),info=document.createElement('div');
+            name.textContent=(r.locked?'🔒 ':'🔓 ')+r.name;info.className='mode-desc';
+            const full=r.count>=r.capacity,status=r.state==='lobby'?(full?'Completa':'In attesa'):r.state==='finished'?'In attesa di rivincita':r.state==='setup'?'Preparazione':'Partita in corso';
+            info.textContent=`${r.count}/${r.capacity} giocatori · ${status} · ${r.code}`;left.append(name,info);
+            const b=document.createElement('button');b.type='button';b.className='icon-btn';b.disabled=full||r.state!=='lobby';b.textContent=r.locked?'🔒 Entra':'Entra';
+            b.onclick=()=>{if(directoryActive?.kind!==kind)return;const form=M(pre+'-join'),pw=M(pre+'-join-password');if(pre==='mp'||pre==='cc')M(pre+'-show-join').click();M(pre+'-code-input').value=r.code;pw.value='';if(r.locked){form.scrollIntoView({block:'nearest'});pw.focus();}else form.requestSubmit();};
+            row.append(left,b);return row;
+        }));
+    }
+    function directoryClose(){directoryEpoch++;directoryStop?.();directoryStop=null;directoryActive=null;directoryRows=[];}
+    function directoryOpen(pre,kind){
+        directoryClose();directoryActive={pre,kind,uid:currentUser.uid};const epoch=directoryEpoch;directoryLoading=true;directoryError='';directoryRender();
+        const q=query(collection(db,...DIRECTORY_ROOT,'roomDirectory',kind,'entries'),where('createdAt','>',Timestamp.fromMillis(serverNow()-ROOM_TTL)),orderBy('createdAt','desc'),limit(50));
+        directoryStop=onSnapshot(q,{includeMetadataChanges:true},snap=>{if(epoch!==directoryEpoch||snap.metadata.hasPendingWrites||snap.metadata.fromCache)return;directoryRows=snap.docs.map(d=>({...d.data(),code:d.id}));directoryLoading=false;directoryError='';directoryRender();},e=>{if(epoch!==directoryEpoch)return;directoryLoading=false;directoryError='Elenco non disponibile: '+cloudError(e);directoryRender();});
+    }
+    function directoryTick(){
+        const visible=Object.entries(directoryViews).find(([pre,v])=>!M(v.modal).classList.contains('hidden')&&!M(pre+'-entry').classList.contains('hidden'));
+        if(!visible||!currentUser||!db){if(directoryActive)directoryClose();return;}
+        const [pre,v]=visible,kind=v.kind();
+        if(directoryActive?.pre!==pre||directoryActive.kind!==kind||directoryActive.uid!==currentUser.uid)directoryOpen(pre,kind);
+    }
+    for(const pre of Object.keys(directoryViews))M(pre+'-directory-refresh').onclick=()=>{if(!db||!currentUser)return;directoryOpen(pre,directoryViews[pre].kind());};
+    // Observe UI transitions without polling Firestore. Periodic local filtering removes expired rows.
+    const directoryObserver=new MutationObserver(directoryTick);
+    for(const [pre,v] of Object.entries(directoryViews)){directoryObserver.observe(M(v.modal),{attributes:true,attributeFilter:['class']});directoryObserver.observe(M(pre+'-entry'),{attributes:true,attributeFilter:['class']});}
+    setInterval(()=>{directoryTick();directoryRender();},30000);
+
     initCloud();
 </script>
 
@@ -2382,12 +2652,13 @@
         $("menu-screen").classList.add("hidden");
         $("game-screen").classList.remove("hidden");
         $("btn-home").classList.remove("hidden");
+        window.scrollTo(0,0);
 
         clearInterval(game.timerId);
         $("hud-timer").textContent = "00:00";
         game.timerId = setInterval(() => {
             if (!game.active) return;
-            game.elapsed = Math.max(0, Math.floor((Date.now() - game.startTime) / 1000));
+            game.elapsed = Math.max(0, Math.floor(((game.multiplayer ? window.cosmicServerNow() : Date.now()) - game.startTime) / 1000));
             $("hud-timer").textContent = formatDuration(game.elapsed);
             if (game.multiplayer && game.multiplayer.duration && game.elapsed >= game.multiplayer.duration && !game.mpBusy) concludeGame(false, true);
         }, 500);
@@ -2519,7 +2790,7 @@
 
     function onSubmitAttempt() {
         if (!game.active || game.mpBusy) return;
-        if (game.multiplayer?.duration && Date.now() >= game.startTime + game.multiplayer.duration * 1000) { concludeGame(false,true); return; }
+        if (game.multiplayer?.duration && window.cosmicServerNow() >= game.startTime + game.multiplayer.duration * 1000) { concludeGame(false,true); return; }
         if (game.current.some(v => v === null)) return;
 
         const cfg = MODE_CONFIG[game.modeKey];
@@ -2576,7 +2847,7 @@
 
         renderBoard();
         updateSubmitButton();
-        if (game.multiplayer) window.mpReport?.({status:"playing",attempts:game.attempts.length,seconds:Math.max(0,Math.floor((Date.now()-game.startTime)/1000)),score:0});
+        if (game.multiplayer) window.mpReport?.({status:"playing",attempts:game.attempts.length,seconds:Math.max(0,Math.floor((window.cosmicServerNow()-game.startTime)/1000)),score:0});
     }
 
     function computeScore(won) {
@@ -2591,7 +2862,7 @@
     function concludeGame(won, timeout = false) {
         game.active = false;
         clearInterval(game.timerId);
-        game.elapsed = Math.floor((Date.now() - game.startTime) / 1000);
+        game.elapsed = Math.floor(((game.multiplayer ? window.cosmicServerNow() : Date.now()) - game.startTime) / 1000);
         $("hud-timer").textContent = formatDuration(game.elapsed);
 
         renderBoard();
@@ -2798,6 +3069,12 @@
 
             board.appendChild(row);
         }
+        const currentRow = board.querySelector('.attempt-row.active') || board.children[Math.max(0, game.attempts.length - 1)];
+        if (currentRow && board.scrollHeight > board.clientHeight) {
+            const top = currentRow.offsetTop, bottom = top + currentRow.offsetHeight;
+            if (top < board.scrollTop) board.scrollTop = Math.max(0, top - 5);
+            else if (bottom > board.scrollTop + board.clientHeight) board.scrollTop = bottom - board.clientHeight + 5;
+        }
     }
 
     function renderColorButtons(count) {
@@ -2949,7 +3226,8 @@
         $("game-screen").classList.add("hidden");
         $("menu-screen").classList.remove("hidden");
         $("btn-home").classList.add("hidden");
-        setEyeState("cyan", "Scegli una sfida neurale");
+        window.scrollTo(0,0);
+        setEyeState("cyan", "Mens sana in corpore sano");
     }
 
     $("btn-clear").addEventListener("click", onClearSlot);
@@ -3051,6 +3329,28 @@
     };
     // Inizializzazione
     refreshMenuUI();
+})();
+</script>
+<script>
+(() => {
+    const chrome = document.getElementById('app-chrome');
+    const identity = document.getElementById('identity-bar');
+    const dialogs = [...document.querySelectorAll('.modal-backdrop')];
+    const sync = () => {
+        document.body.style.setProperty('--identity-bottom', Math.max(0, Math.ceil(identity.getBoundingClientRect().bottom)) + 'px');
+        document.body.style.setProperty('--chrome-bottom', Math.max(0, Math.ceil(chrome.getBoundingClientRect().bottom)) + 'px');
+        const modalOpen = dialogs.some(el => !el.classList.contains('hidden'));
+        chrome.inert = modalOpen;
+        document.getElementById('menu-screen').inert = modalOpen;
+        document.getElementById('game-screen').inert = modalOpen;
+    };
+    const ro = new ResizeObserver(sync);
+    ro.observe(chrome); ro.observe(identity);
+    const observer = new MutationObserver(sync);
+    dialogs.forEach(el => observer.observe(el, {attributes:true,attributeFilter:['class']}));
+    window.addEventListener('resize', sync, {passive:true});
+    window.addEventListener('scroll', sync, {passive:true});
+    sync();
 })();
 </script>
 </body>
