@@ -990,6 +990,34 @@
         #board-panel.mp-wide .slots-container {gap:3px}#board-panel.mp-wide .attempt-row{padding:4px;gap:3px}#board-panel.mp-wide .row-leds{min-width:0;gap:2px}#board-panel.mp-wide .led-pill{padding:2px 3px;font-size:.6rem}#board-panel.mp-wide .row-index{width:14px}
         @media(max-width:360px){#board-panel.mp-wide .slot-box{width:21px;height:23px}#board-panel.mp-wide .row-leds{flex-direction:column}}
 
+        .mode-switch {display:flex;gap:8px;padding:4px;background:#080f20;border:1px solid var(--panel-border);border-radius:13px}
+        .mode-switch button{flex:1;min-height:42px;border:1px solid transparent;border-radius:9px;background:transparent;color:var(--text-muted);font-weight:800;cursor:pointer;font-size:.83rem}
+        .mode-switch button[aria-selected="true"]{color:var(--cyan-glow);background:#123147;border-color:#227e99}
+        .menu-section{display:flex;flex-direction:column;gap:12px}
+        .cc-box{max-width:780px;max-height:94dvh;padding:12px;overflow-y:auto;overscroll-behavior:contain}.cc-box>*{flex-shrink:0}
+        .cc-muted{color:var(--text-muted);font-size:.72rem;line-height:1.45}
+        .cc-team-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+        .cc-team{border:1px solid var(--team);border-radius:10px;padding:7px;background:#111a2d;min-width:0;font-size:.75rem;overflow-wrap:anywhere}
+        .cc-team strong{color:var(--team);display:block;margin-bottom:3px}.cc-team p{margin:4px 0}
+        .cc-turn,.cc-clue{text-align:center;font-weight:800;padding:8px;border:1px solid var(--panel-border);border-radius:10px;background:#111b30;font-size:.85rem}
+        .cc-timer{text-align:center;color:var(--amber-glow);font-family:var(--font-mono);font-size:.9rem;font-weight:700}
+        .cc-timer.cc-urgent{color:#fb7185;text-shadow:0 0 8px #ff2a5f88}
+        #cc-custom-words{width:100%;resize:vertical;min-height:90px;background:#0b1428;border:1px solid var(--panel-border);border-radius:10px;padding:9px;color:var(--text-main);font:inherit;user-select:text}
+        #cc-custom-mix{padding:10px;border:1px solid var(--panel-border);border-radius:10px;background:#0b1428;display:flex;flex-direction:column;gap:6px}
+        #cc-custom-percent{width:100%;accent-color:var(--cyan-glow);cursor:pointer}
+        .cc-mix-labels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;text-align:center;font-size:.68rem;color:var(--text-muted)}
+        .cc-mix-labels span.active{color:var(--cyan-glow);font-weight:800}
+        #cc-custom-level{color:var(--cyan-glow);font-weight:800;font-size:.84rem}
+        #cc-timer-settings .mp-fields label{min-width:0;overflow-wrap:anywhere} #cc-timer-settings input{width:100%;min-width:0}
+        #cc-sound{align-self:flex-end}
+        .cc-board{display:grid;grid-template-columns:repeat(var(--cc-size,5),minmax(0,1fr));gap:4px}
+        .cc-cell{min-width:0;min-height:52px;aspect-ratio:1.2;border:1px solid #354765;border-radius:8px;background:#121d33;color:#f1f5f9;font-weight:800;font-size:clamp(.55rem,1.9vw,.81rem);overflow-wrap:anywhere;padding:3px;cursor:pointer;line-height:1.15;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px}
+        .cc-cell:disabled{cursor:default;opacity:1}.cc-cell:not(:disabled):hover{border-color:#fff;transform:translateY(-1px)}
+        .cc-cell[data-color="0"]{background:#113e53;border-color:#22d3ee}.cc-cell[data-color="1"]{background:#4b2259;border-color:#e879f9}.cc-cell[data-color="2"]{background:#4d3511;border-color:#fbbf24}.cc-cell[data-color="3"]{background:#104b3b;border-color:#34d399}.cc-cell[data-color="4"]{background:#384153;border-color:#778399}.cc-cell[data-color="5"]{background:#07090f;border-color:#fb7185;color:#fda4af}
+        .cc-cell small{font-size:.56rem;font-weight:600;color:#e2e8f0}.cc-cell.cc-revealed{box-shadow:inset 0 0 0 1px #ffffff44}.cc-cell.cc-revealed .cc-word{text-decoration:line-through;opacity:.82}
+        .cc-result{font-size:1.05rem;color:var(--amber-glow);font-weight:800;text-align:center;padding:12px}
+        @media(max-width:420px){.cc-box{padding:9px}.cc-board{gap:3px}.cc-cell{min-height:42px;padding:2px;border-radius:5px}.cc-cell small{font-size:.48rem}}
+
     </style>
 </head>
 <body>
@@ -1073,6 +1101,8 @@
             </div>
         </div>
 
+        <div class="mode-switch" role="tablist" aria-label="Modalità di gioco"><button type="button" id="menu-single" role="tab" aria-selected="true" aria-controls="single-modes">◈ Single player</button><button type="button" id="menu-multi" role="tab" aria-selected="false" aria-controls="multi-modes">🌐 Multiplayer</button></div>
+        <div id="single-modes" class="menu-section" role="tabpanel" aria-labelledby="menu-single">
         <div>
             <div class="section-label"><span>◈ Modalità Colori (7 Tentativi)</span></div>
             <div class="mode-grid">
@@ -1113,11 +1143,6 @@
             </div>
         </div>
 
-    <div>
-        <div class="section-label">◈ Sfide online</div>
-        <button id="mp-open" class="mode-card mp-card"><div><div class="mode-title">🌐 Multiplayer</div><div class="mode-desc">Stanze private · Stessa combinazione · Vince il migliore</div></div><span class="mult-badge">VS</span></button>
-    </div>
-
         <div>
             <div class="section-label">
                 <span>◈ Record Personali (Salvati in Automatico)</span>
@@ -1128,6 +1153,13 @@
         <div class="rules-box">
             <div>🟢 <strong>Luce Verde:</strong> elemento e posizione esatti: resta <strong>bloccato</strong> nei tentativi successivi.</div>
             <div>🟡 <strong>Lucina Gialla:</strong> elemento presente nella combinazione ma in posizione diversa.</div>
+        </div>
+        </div>
+        <div id="multi-modes" class="menu-section hidden" role="tabpanel" aria-labelledby="menu-multi">
+          <div class="section-label">◈ Sfide online · Stanze private</div>
+          <button id="mp-open" class="mode-card mp-card"><div><div class="mode-title">Duello Cromatico</div><div class="mode-desc">Stessa combinazione · Punteggi individuali · 2–16 giocatori</div></div><span class="mult-badge">VS</span></button>
+          <button id="cc-open" class="mode-card word-card"><div><div class="mode-title">Connessioni Cosmiche</div><div class="mode-desc">Indizi e parole · 2–4 squadre · 4–16 giocatori</div></div><span class="mult-badge">TEAM</span></button>
+          <div class="rules-box">Crea una stanza con password e invita gli amici. I risultati multiplayer restano separati dai record personali.</div>
         </div>
     </main>
 
@@ -1282,6 +1314,75 @@
 </div>
 <div id="mp-countdown" class="modal-backdrop hidden"><div class="glass-panel modal-box mp-room-header"><div class="section-label">La sfida sta iniziando</div><div id="mp-count" class="mp-code" style="font-size:3rem">5</div><div class="mode-desc">Stessa sequenza per tutti gli esploratori</div></div></div>
 
+<div id="cc-modal" class="modal-backdrop hidden">
+ <section class="glass-panel modal-box cc-box mp-stack">
+  <div class="modal-head"><span class="modal-title">✦ Connessioni Cosmiche</span><button id="cc-close" class="icon-btn">✕</button></div>
+  <div id="cc-message" class="mp-message" role="status"></div>
+  <div id="cc-entry" class="mp-stack">
+   <p class="cc-muted">Due o più squadre, un capitano per squadra. Collega le parole con indizi e trova tutti i tuoi segnali prima degli altri.</p>
+   <div class="mp-actions"><button id="cc-show-create" class="icon-btn">＋ Crea stanza</button><button id="cc-show-join" class="icon-btn">Entra</button></div>
+   <form id="cc-create" class="mp-stack hidden">
+    <label>Nome stanza<input id="cc-name" class="profile-input" maxlength="30" required value="Connessioni cosmiche"></label>
+    <label>Password (8–64 caratteri)<input id="cc-password" type="password" class="profile-input" minlength="8" maxlength="64" required autocomplete="new-password"></label>
+    <div class="mp-fields">
+     <label>Griglia<select id="cc-size"><option value="4">4 × 4</option><option value="5" selected>5 × 5</option><option value="6">6 × 6</option><option value="7">7 × 7</option></select></label>
+     <label>Squadre<select id="cc-teams"><option value="2">2 squadre</option><option value="3">3 squadre</option><option value="4">4 squadre</option></select></label>
+     <label>Posti<select id="cc-capacity"><option value="4">4</option><option value="8" selected>8</option><option value="12">12</option><option value="16">16</option></select></label>
+    </div>
+    <div class="section-label">◈ Timer della partita</div>
+    <label class="mp-check"><input id="cc-timer-enabled" type="checkbox" checked> Attiva timer</label>
+    <div id="cc-timer-settings" class="mp-stack">
+      <div class="mp-fields">
+       <label>Primo indizio di ogni master (secondi)<input id="cc-first-duration" type="number" min="0" max="1800" step="1" value="180" class="profile-input" required></label>
+       <label>Indizi successivi (secondi)<input id="cc-clue-duration" type="number" min="0" max="1800" step="1" value="60" class="profile-input" required></label>
+       <label>Scelte degli esploratori (secondi)<input id="cc-duration" type="number" min="0" max="1800" step="1" value="120" class="profile-input" required></label>
+      </div>
+      <p class="cc-muted">0 = nessun limite per quella fase. Ogni fase ha un proprio conto alla rovescia. Il master attivo sente il ticchettio negli ultimi 10 secondi e l’allarme allo scadere.</p>
+    </div>
+    <div class="section-label">◈ Parole personalizzate</div>
+    <label>Dizionario<select id="cc-word-mode"><option value="mixed">Parole personalizzate + dizionario italiano</option><option value="custom">Solo parole personalizzate</option></select></label>
+    <label>Le tue parole (una per riga o separate da virgola)<textarea id="cc-custom-words" rows="5" maxlength="6500" placeholder="MESSINA, PIZZA, STAR WARS, ..." spellcheck="false"></textarea></label>
+    <div id="cc-custom-mix">
+      <label for="cc-custom-percent">Presenza delle parole personalizzate</label>
+      <output id="cc-custom-level" for="cc-custom-percent">Risonanza · 40%</output>
+      <input id="cc-custom-percent" type="range" min="20" max="60" step="20" value="40" aria-describedby="cc-word-count" aria-valuetext="Risonanza, 40%">
+      <div class="cc-mix-labels" aria-hidden="true"><span data-percent="20">Traccia<br>20%</span><span data-percent="40">Risonanza<br>40%</span><span data-percent="60">Dominio<br>60%</span></div>
+      <p class="cc-muted">Percentuale delle caselle occupate dalle tue parole, arrotondata al numero intero più vicino. Le parole vengono estratte a caso a ogni round.</p>
+    </div>
+    <p id="cc-word-count" class="cc-muted" aria-live="polite"></p>
+    <label class="mp-check"><input id="cc-rotate" type="checkbox" checked> Ruota i capitani nelle rivincite</label>
+    <button type="submit" class="action-btn btn-submit">Crea stanza privata</button>
+   </form>
+   <form id="cc-join" class="mp-stack hidden">
+    <label>Codice stanza<input id="cc-code-input" class="profile-input" maxlength="10" required autocapitalize="characters"></label>
+    <label>Password<input id="cc-join-password" class="profile-input" type="password" minlength="8" maxlength="64" required></label>
+    <button type="submit" class="action-btn btn-submit">Unisciti</button>
+   </form>
+  </div>
+  <div id="cc-room" class="mp-stack hidden">
+   <div class="mp-room-header"><strong id="cc-room-name"></strong><span id="cc-room-code" class="mp-code"></span><span id="cc-room-settings" class="cc-muted"></span><button id="cc-invite" class="icon-btn">Condividi invito</button></div>
+   <div id="cc-lobby" class="mp-stack">
+    <div class="section-label">Squadre e ruoli</div><div id="cc-players" class="cc-team-grid"></div>
+    <div class="mp-fields"><label>La tua squadra<select id="cc-my-team"></select></label><label>Ruolo preferito<select id="cc-my-role"><option value="agent">Esploratore</option><option value="captain">Capitano</option></select></label></div>
+    <button id="cc-ready" class="icon-btn">Sono pronto</button><button id="cc-start" class="action-btn btn-submit">Avvia sfida</button>
+    <p class="cc-muted">Servono almeno un capitano e un esploratore per squadra. Il capitano vede la mappa completa. Nelle rivincite può essere ruotato automaticamente.</p>
+   </div>
+   <div id="cc-play" class="mp-stack hidden">
+    <div id="cc-scores" class="cc-team-grid"></div>
+    <div id="cc-turn" class="cc-turn" role="status"></div><div id="cc-timer" class="cc-timer"></div><button id="cc-sound" class="icon-btn" type="button" title="Audio del gioco">🔊 Audio</button>
+    <div id="cc-clue-display" class="cc-clue"></div><div id="cc-board" class="cc-board"></div>
+    <div id="cc-legend" class="cc-muted"></div>
+    <form id="cc-clue-form" class="mp-stack hidden"><div class="mp-fields"><label>Indizio (una parola)<input id="cc-clue" class="profile-input" maxlength="24" required autocomplete="off"></label><label>Numero di parole<select id="cc-clue-count"></select></label></div><button type="submit" class="action-btn btn-submit">Trasmetti indizio</button></form>
+    <button id="cc-pass" class="icon-btn hidden">Termina turno</button>
+    <button id="cc-timeout" class="icon-btn hidden">Tempo scaduto · Prossimo turno</button>
+    <p id="cc-result" class="cc-result hidden"></p>
+    <button id="cc-rematch" class="action-btn btn-submit hidden">Rivincita</button>
+   </div>
+   <button id="cc-leave" class="icon-btn" style="color:#fda4af">Esci dalla stanza</button>
+  </div>
+ </section>
+</div>
+
 <!-- Firebase SDK (Classifica Globale Online) -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
@@ -1329,7 +1430,7 @@
             db = getFirestore(app);
             onAuthStateChanged(auth, (user) => {
                 currentUser = user;
-                if (user) { window.refreshLeaderboardData(); restoreRoom(user.uid); }
+                if (user) { window.refreshLeaderboardData(); restoreRoom(user.uid); ccRestore(user.uid); }
             });
             await auth.authStateReady();
             if (!auth.currentUser) await signInAnonymously(auth);
@@ -1448,7 +1549,7 @@
         const ref=mp.ref, uid=mp.uid;if(!ref||!uid||uid!==requireOnline())throw Error('Stanza non disponibile.');
         return runTransaction(db,async t=>{const snap=await t.get(ref);if(!snap.exists())throw Error('Stanza non trovata o chiusa.');const r=snap.data();const patch=change(r);if(patch)t.update(ref,patch);});
     }
-    function openMP(){if(window.cosmicGame.isSingleActive()){say('Termina prima la partita singola.');return;}hide('mp-modal',false);renderRoom()}
+    function openMP(){if(cc.ref){alert("Esci prima dalla stanza Connessioni Cosmiche.");return;}if(window.cosmicGame.isSingleActive()){say('Termina prima la partita singola.');return;}hide('mp-modal',false);renderRoom()}
     function detach(message=''){
         mp.unsub?.();mp.unsub=null;mp.ref=null;mp.room=null;mp.uid=null;mp.roundKey=null;mp.pending=null;mp.syncing=false;mp.closing=false;
         dropSession(resumeKey);window.cosmicGame.stopMultiplayer();hide('mp-countdown',true);hide('mp-room',true);hide('mp-entry',false);setForm(false);hide('mp-join',true);say(message);
@@ -1494,7 +1595,7 @@
     }));
     M('mp-rematch').onclick=()=>action(async()=>{await tx(r=>{if(r.hostUid!==mp.uid||!finished(r))throw Error('Round non concluso.');if(r.state==='running')return {state:'finished'};return {state:'lobby',pattern:[],startedAt:null}});if(mp.room?.state==='running')return;});
     M('mp-end-round').onclick=()=>{if(confirm('Terminare il round? I giocatori non arrivati al risultato saranno classificati come non conclusi.'))action(()=>tx(r=>{if(r.hostUid!==mp.uid||r.state!=='running')throw Error('Round non disponibile.');return {state:'finished'}}))};
-    M('mp-invite').onclick=async()=>{if(!mp.room)return;const url=new URL(location.href);url.searchParams.set('room',mp.room.code);url.hash='';const text=`L’Occhio del Cosmo — stanza ${mp.room.code}\n${url.href}\nChiedi la password all’host.`;try{if(navigator.share)await navigator.share({title:'Sfida cosmica',text});else {await navigator.clipboard.writeText(text);say('Invito copiato. Invia la password separatamente.')}}catch(e){if(e.name!=='AbortError')say(text)}};
+    M('mp-invite').onclick=async()=>{if(!mp.room)return;const url=new URL(location.href);url.searchParams.delete('connections');url.searchParams.set('room',mp.room.code);url.hash='';const text=`L’Occhio del Cosmo — stanza ${mp.room.code}\n${url.href}\nChiedi la password all’host.`;try{if(navigator.share)await navigator.share({title:'Sfida cosmica',text});else {await navigator.clipboard.writeText(text);say('Invito copiato. Invia la password separatamente.')}}catch(e){if(e.name!=='AbortError')say(text)}};
     M('mp-leave').onclick=()=>leaveRoom();M('mp-game-lobby').onclick=()=>{hide('mp-modal',false);renderRoom()};M('mp-resume').onclick=()=>{hide('mp-modal',true);processRound()};
     async function leaveRoom(){
         if(!mp.room){detach();hide('mp-modal',true);return;}
@@ -1571,6 +1672,102 @@
     }
     setInterval(()=>{if(mp.room?.state==='running'){processRound();}},500);
     const inviteCode=new URL(location.href).searchParams.get('room');if(inviteCode&&/^[A-Fa-f0-9]{10}$/.test(inviteCode)){M('mp-code-input').value=inviteCode.toUpperCase();hide('mp-modal',false);hide('mp-join',false);}
+
+    // Connessioni Cosmiche: collection separata e transazioni atomiche per ogni azione.
+    const CC_PATH=[...MP_PATH.slice(0,-1),'connectionsRooms'];
+    const cc={ref:null,room:null,uid:null,unsub:null,busy:false};
+    const CC_SESSION='cosmic-eye-connections-v2';
+    const CC_NAMES=['Nebula','Nova','Solaria','Aurora'];
+    const CC_COLORS=['#22d3ee','#e879f9','#fbbf24','#34d399'];
+    const CC_SYMBOLS=['◆','✦','▲','●','○','⚠'];
+    const CC_WORDS=["ACQUA","ALBERO","ALBA","ALBUM","ALI","AMBRA","AMICO","AMORE","ANELLO","ANGOLO","ANIMA","ANTENNA","APICE","APE","AQUILA","ARANCIA","ARCO","ARGENTO","ARIA","ARPA","ARTE","ASINO","ASTRO","ATLANTE","AURORA","AUTO","AVVENTURA","BALENA","BALLO","BANANA","BANCA","BANCO","BANDIERA","BARBA","BARCA","BASTONE","BAULE","BICCHIERE","BICI","BILANCIA","BINARIO","BISCOTTO","BOSCO","BOTTIGLIA","BRACCIO","BRACE","BRINA","BRONZO","BUSSOLA","CACAO","CAFFÈ","CALAMITA","CALENDARIO","CAMICIA","CAMPANA","CAMPO","CANALE","CANARINO","CANDELA","CANE","CANNONE","CANTO","CAPELLO","CAPRA","CARBONE","CARTA","CASA","CASCO","CASTELLO","CATENA","CAVALLO","CAVERNA","CAVO","CENERE","CERCHIO","CERVO","CHIAVE","CHIESA","CHITARRA","CICOGNA","CIELO","CILIEGIA","CIMA","CINEMA","CIPOLLA","CIRCO","CITTADELLA","CLAVA","CLIMA","CODA","COFANO","COLLINA","COLOMBA","COLORE","COMETA","COMPASSO","CONCHIGLIA","CONIGLIO","COPERTA","CORALLO","CORDA","CORNA","CORONA","CORPO","CORRENTE","CORVO","COSTA","COTONE","CREMA","CRESTA","CRISTALLO","CUCCIA","CUORE","CURVA","CUSCINO","DADO","DAMA","DANZA","DELFINO","DENTE","DESERTO","DIAMANTE","DIARIO","DITO","DIVANO","DOMINO","DRAGO","DUCA","ECO","EDICOLA","ELEFANTE","ELICA","ELISIR","ERBA","EREMITA","ERRORE","ETERE","ETNA","FABBRO","FALCO","FALCE","FARFALLA","FARINA","FARO","FATA","FAVOLA","FELCE","FERRO","FESTA","FIASCO","FICO","FILO","FINESTRA","FIORE","FIUME","FIUTO","FLAUTO","FOGLIA","FONTE","FORBICE","FORESTA","FORNO","FORTEZZA","FOSSA","FOTO","FRAGOLA","FRANA","FRATE","FRECCIA","FRENO","FRONTE","FRUTTO","FUCINA","FUMO","FUNGO","FUOCO","GABBIA","GALASSIA","GALLO","GAMBA","GANCIO","GARA","GATTO","GAZZELLA","GELATO","GEMMA","GESSO","GHIACCIO","GHIANDA","GIADA","GIAGUARO","GIGANTE","GINESTRA","GIOCO","GIORNO","GIRAFFA","GIRASOLE","GIRO","GLOBO","GOLFO","GOMMA","GONG","GRANO","GRATA","GRILLO","GROTTA","GRU","GUANTO","GUFO","GUSCIO","IDEA","IGLOO","IMBUTO","IMPRONTA","INCENSO","INCHIOSTRO","INCONTRO","INDICE","INFERNO","INGRESSO","INSETTO","ISOLA","ISTANTE","LABIRINTO","LAGO","LAMA","LAMPADA","LANA","LANCIA","LANTERNA","LATTE","LAVA","LEONE","LETTO","LIBRO","LICHENE","LIMONE","LINEA","LINGUA","LIQUIRIZIA","LISTA","LOMBRICO","LOTO","LUCE","LUCCIOLA","LUNA","LUPO","MACCHIA","MADRE","MAGIA","MAGLIA","MAGO","MAIS","MANDORLA","MANO","MAPPA","MARE","MARGHERITA","MARMELLATA","MARMO","MARTELLO","MASCHERA","MASSO","MATITA","MATTONE","MEDAGLIA","MEDUSA","MELA","MELONE","MENTA","MERLO","MIELE","MINIERA","MIRTILLO","MOLLA","MONETA","MONTE","MORA","MOSCA","MOTORE","MOTO","MUCCA","MULINO","MURO","MUSCHIO","MUSICA","NASTRO","NAVE","NEBBIA","NEVE","NICCHIA","NIDO","NOCE","NODO","NOME","NONNO","NOTA","NOTTE","NUBE","NUVOLA","OASI","OCCHIO","OCEANO","OMBRA","OMBRELLO","ONDA","ONICE","ORBITA","ORECCHIO","ORO","ORSO","ORTICA","ORTO","OSSO","OSTRICA","OTARIA","OVALE","PACE","PADRE","PALA","PALAZZO","PALCO","PALMA","PALLA","PANDA","PANE","PANTERA","PAPAVERO","PAPPAGALLO","PARCO","PARETE","PASTA","PATATA","PAVONE","PECORA","PELLE","PENNA","PERA","PERLA","PESCA","PESCE","PETALO","PETTINE","PIANETA","PIANO","PIAZZA","PICCHIO","PIEDE","PIETRA","PIGNA","PILA","PILOTA","PINNA","PINO","PINZA","PIOGGIA","PIRAMIDE","PIRATA","PISTA","PITONE","PIUMA","PIZZA","POLIPO","POLLICE","POLVERE","POMODORO","PONTE","PORTA","PORTO","POZZO","PRATO","PRINCIPE","PRISMA","PUNTO","QUADRO","QUARZO","QUERCIA","RACCHETTA","RADICE","RADIO","RAGGIO","RAGNO","RAMO","RANA","RAZZO","REGINA","REMO","RETE","RICCIO","RIFLESSO","RINGHIERA","RISAIA","RISO","RITMO","RIVA","ROBOT","ROCCIA","ROMBO","ROSA","ROSPO","ROTAIA","RUBINO","RUOTA","SABBIA","SACCO","SALE","SALICE","SALMONE","SALTO","SANDALO","SASSO","SATURNO","SCALA","SCARPA","SCATOLA","SCETTRO","SCHIUMA","SCI","SCIARPA","SCIMMIA","SCINTILLA","SCOGLIO","SCOPA","SCUDO","SEDIA","SEGNALE","SEME","SENTIERO","SERPENTE","SERRA","SFERA","SIEPE","SILENZIO","SIRENA","SLITTA","SOFFIO","SOGLIA","SOLE","SONDA","SONNO","SORGENTE","SORRISO","SPADA","SPAGO","SPALLA","SPARVIERO","SPECCHIO","SPEZIA","SPIAGGIA","SPIGA","SPILLA","SPIRAGLIO","SPIRALE","SPUGNA","STAGNO","STELLA","STELO","STIVALE","STOFFA","STRADA","STRUZZO","SUONO","TAMBURELLO","TAPPETO","TARTARUGA","TASTIERA","TAZZA","TELA","TEMPIO","TEMPO","TENDA","TERRA","TESSERA","TESORO","TETTO","TIGLIO","TIGRE","TIMONE","TINTA","TOPO","TORCIA","TORO","TORRE","TORTA","TRACCIA","TRAM","TRAMONTO","TRENO","TRIFOGLIO","TRONO","TROMBA","TROTTOLA","TUBO","TULIPANO","TUONO","TURBINA","UCCELLO","ULIVO","UNICORNO","UOVO","URAGANO","UVA","VAGONE","VALIGIA","VALLE","VAMPIRO","VAPORE","VASO","VELA","VELLUTO","VENERE","VENTO","VERME","VETRO","VIA","VIGNA","VIOLA","VIOLINO","VIPERA","VITE","VOCE","VULCANO","VUOTO","ZAFFIRO","ZAINO","ZAMPA","ZANZARA","ZATTERA","ZEBRA","ZENZERO","ZUCCA","ZUCCHERO","ABETE","ABISSO","ACCIAIO","ACERO","ACETO","AGO","ALBERGO","ALCOVA","ALFABETO","ALLORO","ALVEARE","AMACA","AMETISTA","ANCORAGGIO","ANFORA","ANGURIA","ANICE","ANATRA","AQUILONE","ARENA","ARMADIO","ARMATURA","ARMONIA","AROMA","ASCIA","ASSE","ASTUCCIO","ASTRONAVE","ATOLLO","AVORIO","BAGAGLIO","BAGNO","BAIA","BALCONE","BALDORIA","BAMBÙ","BARATTOLO","BARRIERA","BASALTO","BATTERIA","BECCO","BELVA","BENGALA","BERSAGLIO","BETULLA","BIBLIOTECA","BOLLA","BONSAI","BORSA","BOTTONE","BRACCIALE","BRANCO","BRICIOLA","BRODO","BRUCO","BUCCIA","BUE","BURRO","CABINA","CACCIAVITE","CADUTA","CALAMARO","CALICE","CALMA","CALORE","CAMINO","CAMMELLO","CANESTRO","CANGURO","CANNUCCIA","CAPANNA","CAPPUCCIO","CAPPERO","CAPSULA","CAROTA","CARRIOLA","CARTELLO","CATAPULTA","CATINO","CAVALLETTO","CAVOLFIORE","CEMBRO","CENTAURO","CERAMICA","CERVELLO","CETRA","CHIODO","CIOCCOLATO","CICALA","CIGNO","CILINDRO","CINGHIALE","CIOCCA","CLARINETTO","COCOMERO","COCCO","COCCINELLA","COCLEA","COLLA","COLLANA","COLTELLO","COLONNA","COMIGNOLO","CONFETTO","CONO","CONTRABBASSO","COPPA","CORNICE","CORRIDOIO","CORTILE","COSTUME","CRATERE","CRICETO","CUBO","CUFFIA","CUNEO","CUPOLA","DAGA","DAINO","DATTERO","DECORO","DELTA","DENTELLO","DIGA","DINAMO","DINOSAURO","DISCO","DIZIONARIO","DOGANA","DORMITORIO","DOSSO","DRAPPO","DROMEDARIO","DUOMO","EDERA","ELMO","EMATITE","ERICE","ERMELLINO","SMERALDO","FAGIOLO","FAGGIO","FALEGNAME","FANTASMA","FAZZOLETTO","FENICOTTERO","FERITOIA","FETTA","FIBBIA","FILTRO","FISARMONICA","FISCHIO","FIAMMA","FODERA","FONTANA","FOSSILE","FRASSINO","FREDDO","FRIGORIFERO","FRONDA","FULMINE","GALEONE","GAMBERO","GARGOUGLIA","GAROFANO","GAZZA","GHIACCIAIO","GHIRLANDA","GINEPRO","GINOCCHIO","GIOIELLO","GIOSTRA","GLICINE","GOMITO","GONDOLA","GRANCHIO","GRAPPOLO","GRIGLIA","GRONDA","GUADO","GUINZAGLIO","HANGAR","IBISCO","ICARO","ICEBERG","IENA","IPPOPOTAMO","IRIDE","IRIS","JOLLY","KOALA","LACRIMA","LAMPONE","LATTUGA","LECCIO","LEGNA","LEMBO","LENTE","LEPRE","LILLA","LIMACCIA","LIME","LINO","LIUTO","LOCOMOTIVA","LONTRA","LUCERTOLA","LUMACA","MACACO","MACIGNO","MADIA","MADREPORA","MAGNETE","MAIALE","MALVA","MANDARINO","MANTELLO","MANTIDE","MARCIAPIEDE","MAREA","MASCELLA","MATERASSO","MEDAGLIONE","MELOGRANO","MENSOLA","MERIDIANA","METEORA","MICROFONO","MIGLIO","MIMOSA","MINARETO","MOLLUSCO","MONGOLFIERA","MONTONE","MORSA","MOSAICO","MOSCERINO","MULO","MUMMIA","NARCISO","NATURA","NAUTILO","NETTARE","NEON","NETTUNO","NINFEA","NOCCIOLA","NUTRIA","OBOE","OCCHIALI","OFFICINA","OLEANDRO","OLIVA","OLMO","ORECCHINO","ORCHIDEA","ORCO","ORIGAMI","ORIZZONTE","OROLOGIO","ORZO","OSSIDIANA","PAGAIA","PAGLIA","PALAFITTA","PALUDE","PANCHINA","PANINO","PANTOFOLA","PAPERA","PARABOLA","PARACADUTE","PARAURTI","PAREO","PASSERO","PAVIMENTO","PAVONCELLA","PEDANA","PENDOLO","PENNELLO","PENTOLA","PEONIA","PERISCOPIO","PERNICE","PERVINCA","PESCATORE","PETTIROSSO","PIANTANA","PIASTRA","PICCIONE","PICCO","PINOCCHIO","PINGUINO","PISTACCHIO","PLATANO","PLUTO","POLARIS","POLENA","POLENTA","POLLO","POLTRONA","POMELLO","POPPA","PORCINO","PORCOSPINO","PORTICO","PRIMULA","PROIETTORE","PRORA","PULEGGIA","PUMA","PUPILLA","PUZZLE","QUADERNO","QUADRANTE","QUAGLIA","QUASAR","RABARBARO","RADAR","RAFFICA","RAGANELLA","RAMPA","RAPANELLO","RASO","RAVIOLO","RECINTO","RELITTO","RENNA","RESINA","RICAMO","RICETTA","RICINO","RIFUGIO","RIGHELLO","RINOCERONTE","RITRATTO","RODODENDRO","RONDINE","ROSMARINO","RUGGINE","RULLO","SAETTA","SAGOMA","SALAMANDRA","SALDATORE","SALIERA","SALSICCIA","SALVAGENTE","SAMBUCO","SANGUE","SAPONE","SARAGO","SATELLITE","SCACCO","SCAFFALE","SCAGLIA","SCARABEO","SCARICO","SCARPONE","SCIALLE","SCIAME","SCIABOLA","SCIVOLO","SCOIATTOLO","SCORZA","SCRIGNO","SEGATURA","SELLA","SENAPE","SEQUOIA","SERBATOIO","SERRATURA","SESAMO","SFINGE","SIESTA","SIGILLO","SILURO","SINFONIA","SIRINGA","SISMOGRAFO","SOFFITTO","SOLCO","SOMBRERO","SONAGLIO","SORBO","SOTTOPASSO","SPAVENTAPASSERI","SPERONE","SPICCHIO","SPILLO","SPINACIO","SPINA","SPIONCINO","SPREMITORE","SQUALO","STACCIONATA","STALATTITE","STALAGMITE","STAMPELLA","STAMPO","STANZA","STAZIONE","STECCO","STIVA","STOMACO","STRACCIO","STRUMENTO","STUFA","SUGHERO","SUSINA","TABACCO","TACCHINO","TACCO","TAGLIERE","TALPA","TAMBURO","TANA","TARGA","TASSO","TEGOLA","TELEFONO","TELESCOPIO","TENDAGGIO","TENTACOLO","TERMOFORO","TERRAZZA","TERRICCIO","TESSUTO","TESTA","TETRAEDRO","TETTUCCIO","TIMBRO","TINELLO","TIRANTE","TIRO","BOB","TOCCO","TOMBA","TOMBINO","TONNO","TORPEDINE","TORSO","TRABOCCO","TRAPEZIO","TRATTORE","TRAVERSA","TRIDENTE","TRILLO","TRINCIA","TRITONE","TROTA","TUNNEL","TURCHESE","TORRETTA","UCCELLINO","UNCINO","UNGUENTO","URNA","UTENSILE","VAPORIERA","VASCA","VENTAGLIO","VERANDA","VERBENA","VESPA","VESTITO","VIADOTTO","VIBRAZIONE","VICOLO","VILLETTA","VITELLO","VIVAIO","VORTICE","ZAMPOGNA","ZANNA","ZEPPA","ZIBELLINO","ZODIACO","ZOLFO","ZOLLA","ZUCCOTTO","ZUPPA"];
+    const ccSay=s=>{M('cc-message').textContent=s||''};
+    const ccHost=r=>r.hostUid===cc.uid;
+    const ccMine=r=>r.players[cc.uid];
+    const ccTeam=r=>ccMine(r)?.team;
+    const ccCaptain=r=>r.captains[ccTeam(r)]===cc.uid;
+    const ccAlive=r=>Array.from({length:r.settings.teams},(_,i)=>i).filter(i=>!r.eliminated.includes(i));
+    const ccDuration=r=>r.phase==='clue'?(r.seenTeams.includes(r.turn)?r.settings.clueDuration:r.settings.firstClueDuration):r.settings.duration;
+    const ccRemaining=r=>{const duration=ccDuration(r);return duration===0?Infinity:Math.max(0,Math.ceil((r.turnAt.toMillis()+duration*1000-Date.now())/1000));};
+    const ccPhaseKey=r=>`${cc.ref?.id}:${r.round}:${r.turnAt.toMillis()}`;
+    const ccFormatTime=s=>s===0?'∞':`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
+    function ccParseWords(raw){
+      const words=[...new Set(raw.split(/[\n,;]+/).map(w=>w.normalize('NFC').trim().replace(/\s+/g,' ').toLocaleUpperCase('it-IT')).filter(Boolean))];
+      if(words.length>100)throw Error('Inserisci al massimo 100 parole personalizzate.');
+      if(words.some(w=>w.length>30||! /^[\p{L}\p{N}][\p{L}\p{N} ’'\-]*$/u.test(w)))throw Error('Ogni parola deve contenere 1–30 caratteri: lettere, numeri, spazi, apostrofi o trattini.');
+      return words;
+    }
+    const CC_CUSTOM_LEVELS={20:'Traccia',40:'Risonanza',60:'Dominio'};
+    function ccCustomQuota(s){return Math.round(s.size**2*s.customPercent/100);}
+    function ccWordStatus(){
+      const el=M('cc-word-count'),only=M('cc-word-mode').value==='custom',slider=M('cc-custom-percent'),percent=Number(slider.value),label=CC_CUSTOM_LEVELS[percent];
+      hide('cc-custom-mix',only);slider.disabled=only;
+      M('cc-custom-level').textContent=`${label} · ${percent}%`;
+      slider.setAttribute('aria-valuetext',`${label}, ${percent}%`);
+      document.querySelectorAll('.cc-mix-labels [data-percent]').forEach(e=>e.classList.toggle('active',Number(e.dataset.percent)===percent));
+      try{const n=ccParseWords(M('cc-custom-words').value).length,size=Number(M('cc-size').value),needed=size**2,quota=ccCustomQuota({size,customPercent:percent}),actual=Math.min(n,quota);
+        el.textContent=`${n} parole uniche · ${needed} caselle. `+(only?(n<needed?`Ne mancano ${needed-n} per usare solo le tue parole.`:'La griglia sarà estratta solo dalle tue parole.'):`${actual} personalizzate + ${needed-actual} dal dizionario per round.`+(n<quota?` Aggiungine ${quota-n} per raggiungere il livello scelto.`:''));
+      }catch(e){el.textContent=e.message;}
+    }
+    for(const id of ['cc-custom-words','cc-size','cc-word-mode','cc-custom-percent'])M(id).addEventListener('input',ccWordStatus);
+    ccWordStatus();
+    M('cc-timer-enabled').onchange=()=>{const enabled=M('cc-timer-enabled').checked;hide('cc-timer-settings',!enabled);for(const id of ['cc-first-duration','cc-clue-duration','cc-duration'])M(id).disabled=!enabled;};
+    function ccReadTimer(id){if(!M('cc-timer-enabled').checked)return 0;const value=M(id).valueAsNumber;if(!Number.isInteger(value)||value<0||value>1800)throw Error('Imposta una durata da 0 a 1800 secondi.');return value;}
+    function ccWordsFor(s){
+      const n=s.size**2,custom=ccShuffle(s.customWords);
+      if(s.wordMode==='custom')return custom.slice(0,n);
+      const quota=CC_CUSTOM_LEVELS[s.customPercent]?ccCustomQuota(s):n;
+      const selected=custom.slice(0,Math.min(quota,custom.length)),used=new Set(custom);
+      return ccShuffle([...selected,...ccShuffle([...new Set(CC_WORDS)].filter(w=>!used.has(w))).slice(0,n-selected.length)]);
+    }
+    let ccAudioKey='',ccAudioSecond=-1,ccAlarmKey='';
+    function ccAlarm(key){if(ccAlarmKey===key)return;ccAlarmKey=key;window.cosmicGame?.timerAlarm();}
+    function ccAudioTick(r,sec){if(r.captains[r.turn]!==cc.uid||sec===Infinity)return;const key=ccPhaseKey(r);if(ccAudioKey!==key){ccAudioKey=key;ccAudioSecond=-1;}if(sec===0)ccAlarm(key);else if(sec<=10&&ccAudioSecond!==sec){ccAudioSecond=sec;window.cosmicGame?.timerTick();}}
+    M('cc-sound').onclick=()=>{M('btn-sound').click();ccUpdateSound();};
+    function ccUpdateSound(){const on=window.cosmicGame?.soundEnabled()!==false;M('cc-sound').textContent=on?'🔊 Audio':'🔇 Audio';M('cc-sound').setAttribute('aria-pressed',String(on));}
+    const ccExpired=r=>ccRemaining(r)<=0;
+    const ccNewPlayer=(team=0)=>({name:cleanName(),team,role:'agent',ready:0});
+    const ccNode=(tag,text,cls)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=text;if(cls)el.className=cls;return el};
+    function ccShuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){let j=crypto.getRandomValues(new Uint32Array(1))[0]%(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;}
+    async function ccAction(fn){if(cc.busy)return;cc.busy=true;ccSay('');ccRender();try{await fn()}catch(e){ccSay(cloudError(e));console.error('Connessioni:',e)}finally{cc.busy=false;ccRender()}}
+    async function ccTx(change,checkVersion=false){const ref=cc.ref,uid=cc.uid,old=cc.room;if(!ref||uid!==requireOnline())throw Error('Stanza non disponibile.');return runTransaction(db,async t=>{const snap=await t.get(ref);if(!snap.exists())throw Error('Stanza non trovata.');const r=snap.data();if(!r.players[uid])throw Error('Non fai parte della stanza.');if(checkVersion&&(r.round!==old.round||r.state!==old.state||r.turn!==old.turn||r.phase!==old.phase||r.revealed.length!==old.revealed.length||r.turnAt?.toMillis()!==old.turnAt?.toMillis()))throw Error('La partita è cambiata: riprova.');const patch=change(r);if(patch)t.update(ref,patch);});}
+    function ccDetach(message=''){cc.unsub?.();cc.unsub=null;cc.ref=null;cc.room=null;cc.uid=null;dropSession(CC_SESSION);hide('cc-room',true);hide('cc-entry',false);hide('cc-create',true);hide('cc-join',true);ccSay(message);}
+    function ccAttach(ref,uid){cc.unsub?.();cc.ref=ref;cc.uid=uid;cc.room=null;saveSession(CC_SESSION,{id:ref.id,uid});hide('cc-modal',false);hide('cc-entry',true);cc.unsub=onSnapshot(ref,{includeMetadataChanges:true},snap=>{if(cc.ref!==ref||snap.metadata.hasPendingWrites||snap.metadata.fromCache)return;const r=snap.exists()?snap.data():null;if(!r||!r.players[uid]||r.state==='closed'){ccDetach('Stanza chiusa o accesso revocato.');return;}if(cc.room&&r.lastTimeout&&r.lastTimeout[0]===uid){const eventKey=`${cc.ref?.id}:${r.round}:${r.lastTimeout[1].toMillis()}`;const previous=cc.room.lastTimeout;if(!previous||previous[1].toMillis()!==r.lastTimeout[1].toMillis())ccAlarm(eventKey);}cc.room=r;ccRender();},e=>ccSay('Sincronizzazione: '+cloudError(e)));}
+    function ccRestore(uid){const s=readSession(CC_SESSION);if(!mp.ref&&!cc.ref&&s?.uid===uid&&/^[a-f0-9]{64}$/.test(s.id)){ccSay('Riconnessione…');ccAttach(doc(db,...CC_PATH,s.id),uid);}}
+    function ccOpen(){if(mp.ref||window.cosmicGame.isSingleActive()||window.cosmicGame.isMultiplayer()){alert('Concludi o abbandona prima la partita in corso.');return;}hide('cc-modal',false);ccRender();}
+    M('cc-open').onclick=ccOpen;
+    M('cc-close').onclick=()=>{if(cc.ref&&!cc.room){ccDetach();}else if(cc.ref){ccSay('Usa Esci dalla stanza per tornare al menu.');return;}hide('cc-modal',true);};
+    M('cc-show-create').onclick=()=>{hide('cc-create',false);hide('cc-join',true);ccSay()};
+    M('cc-show-join').onclick=()=>{hide('cc-create',true);hide('cc-join',false);ccSay()};
+    M('cc-create').onsubmit=e=>{e.preventDefault();ccAction(async()=>{if(cc.ref||mp.ref)throw Error('Sei già in una stanza.');const uid=requireOnline(),name=M('cc-name').value.trim(),settings={size:+M('cc-size').value,teams:+M('cc-teams').value,capacity:+M('cc-capacity').value,duration:ccReadTimer('cc-duration'),clueDuration:ccReadTimer('cc-clue-duration'),firstClueDuration:ccReadTimer('cc-first-duration'),wordMode:M('cc-word-mode').value,customPercent:+M('cc-custom-percent').value,customWords:ccParseWords(M('cc-custom-words').value),rotate:M('cc-rotate').checked};if(!name)throw Error('Inserisci il nome.');if(settings.capacity<settings.teams*2)throw Error('Servono almeno due posti per squadra.');if(settings.wordMode==='custom'&&settings.customWords.length<settings.size**2)throw Error(`Servono almeno ${settings.size**2} parole uniche per questa griglia.`);const code=bytesHex(crypto.getRandomValues(new Uint8Array(5))).toUpperCase(),id=await deriveRoom(code,M('cc-password').value),ref=doc(db,...CC_PATH,id);await runTransaction(db,async t=>{if((await t.get(ref)).exists())throw Error('Codice già in uso.');t.set(ref,{code,name,hostUid:uid,settings,createdAt:serverTimestamp(),state:'lobby',round:0,players:{[uid]:ccNewPlayer()},words:[],roles:[],captains:['','','',''],target:0,revealed:[],scores:[0,0,0,0],eliminated:[],winner:-1,turn:0,phase:'clue',clue:'',clueCount:0,left:0,turnAt:null,lastIndex:-1,seenTeams:[],lastTimeout:null});});M('cc-password').value='';ccAttach(ref,uid);});};
+    M('cc-join').onsubmit=e=>{e.preventDefault();ccAction(async()=>{if(cc.ref||mp.ref)throw Error('Sei già in una stanza.');const uid=requireOnline(),code=M('cc-code-input').value.trim().toUpperCase(),id=await deriveRoom(code,M('cc-join-password').value),ref=doc(db,...CC_PATH,id);await runTransaction(db,async t=>{const snap=await t.get(ref);if(!snap.exists())throw Error('Codice o password errati.');const r=snap.data();if(r.state==='closed')throw Error('Stanza chiusa.');if(!Array.isArray(r.settings.customWords)||!Array.isArray(r.seenTeams))throw Error('Stanza creata con una versione precedente: chiedi all’host di crearne una nuova.');if(r.players[uid])return;if(r.state!=='lobby')throw Error('Partita in corso. Attendi la rivincita.');if(Object.keys(r.players).length>=r.settings.capacity)throw Error('Stanza piena.');const counts=Array.from({length:r.settings.teams},(_,i)=>Object.values(r.players).filter(p=>p.team===i).length);t.update(ref,{players:{...r.players,[uid]:ccNewPlayer(counts.indexOf(Math.min(...counts)))}});});M('cc-join-password').value='';ccAttach(ref,uid);});};
+    function ccChangePlayer(patch){return ccAction(()=>ccTx(r=>{if(r.state!=='lobby')throw Error('La sfida è già iniziata.');return {players:{...r.players,[cc.uid]:{...ccMine(r),...patch}}}}));}
+    M('cc-my-team').onchange=()=>ccChangePlayer({team:+M('cc-my-team').value,ready:0});
+    M('cc-my-role').onchange=()=>ccChangePlayer({role:M('cc-my-role').value,ready:0});
+    M('cc-ready').onclick=()=>ccChangePlayer({ready:ccMine(cc.room).ready===cc.room.round+1?0:cc.room.round+1});
+    function ccCaptains(r){const result=['','','',''];for(let i=0;i<r.settings.teams;i++){const group=Object.entries(r.players).filter(([,p])=>p.team===i).sort(([a],[b])=>a.localeCompare(b));if(group.length<2)throw Error(`Servono almeno due giocatori in ${CC_NAMES[i]}.`);if(r.settings.rotate&&r.round>0){const idx=group.findIndex(([id])=>id===r.captains[i]);result[i]=group[(idx+1)%group.length][0];}else{const caps=group.filter(([,p])=>p.role==='captain');if(caps.length!==1)throw Error(`Scegli esattamente un capitano per ${CC_NAMES[i]}.`);result[i]=caps[0][0];}}return result;}
+    M('cc-start').onclick=()=>ccAction(()=>ccTx(r=>{if(!ccHost(r)||r.state!=='lobby')throw Error('Solo l’host può avviare.');if(!Object.entries(r.players).every(([id,p])=>id===cc.uid||p.ready===r.round+1))throw Error('Non tutti i giocatori sono pronti.');const captains=ccCaptains(r),n=r.settings.size**2,target=Math.floor((n-Math.ceil(n/4)-1)/r.settings.teams),roles=[];for(let i=0;i<r.settings.teams;i++)for(let j=0;j<target;j++)roles.push(i);while(roles.length<n-1)roles.push(4);roles.push(5);return {state:'running',round:r.round+1,words:ccWordsFor(r.settings),roles:ccShuffle(roles),captains,target,revealed:[],scores:[0,0,0,0],eliminated:[],winner:-1,turn:r.round%r.settings.teams,phase:'clue',clue:'',clueCount:0,left:0,turnAt:serverTimestamp(),lastIndex:-1,seenTeams:[],lastTimeout:null};}));
+    function ccNext(r,eliminated=r.eliminated){const alive=Array.from({length:r.settings.teams},(_,i)=>i).filter(i=>!eliminated.includes(i));if(alive.length===1)return {state:'finished',phase:'done',winner:alive[0]};let next=r.turn;do{next=(next+1)%r.settings.teams;}while(eliminated.includes(next));return {turn:next,phase:'clue',clue:'',clueCount:0,left:0,turnAt:serverTimestamp(),seenTeams:r.seenTeams.includes(r.turn)?r.seenTeams:[...r.seenTeams,r.turn]};}
+    const ccFinish=winner=>({state:'finished',phase:'done',winner});
+    function ccCanGuess(r){return r.state==='running'&&r.phase==='guess'&&ccTeam(r)===r.turn&&!ccCaptain(r)&&!ccExpired(r);}
+    M('cc-clue-form').onsubmit=e=>{e.preventDefault();const clue=M('cc-clue').value.trim().toUpperCase(),count=+M('cc-clue-count').value;ccAction(async()=>{await ccTx(r=>{if(r.state!=='running'||r.phase!=='clue'||!ccCaptain(r)||ccTeam(r)!==r.turn||ccExpired(r))throw Error('Non è il tuo turno.');if(!/^[A-ZÀÈÉÌÒÙ]{1,24}$/.test(clue)||r.words.includes(clue))throw Error('Usa una sola parola diversa da quelle sulla griglia.');if(count<1||count>r.target-r.scores[r.turn])throw Error('Numero non valido.');return {phase:'guess',clue,clueCount:count,left:count+1,turnAt:serverTimestamp()};},true);M('cc-clue').value='';});};
+    function ccGuess(index){ccAction(()=>ccTx(r=>{if(!ccCanGuess(r)||r.revealed.includes(index)||!Number.isInteger(index)||index<0||index>=r.words.length)throw Error('Scelta non valida.');const type=r.roles[index],scores=[...r.scores],revealed=[...r.revealed,index],patch={scores,revealed,lastIndex:index};if(type<4)scores[type]++;if(type<4&&!r.eliminated.includes(type)&&scores[type]===r.target)return {...patch,...ccFinish(type)};if(type===5){const eliminated=[...r.eliminated,r.turn];return {...patch,eliminated,...ccNext(r,eliminated)};}if(type===r.turn&&r.left>1)return {...patch,left:r.left-1};return {...patch,...ccNext(r)};},true));}
+    M('cc-pass').onclick=()=>ccAction(()=>ccTx(r=>{if(!ccCanGuess(r))throw Error('Non è il tuo turno.');return ccNext(r);},true));
+    function ccTimeoutPatch(r){return {...ccNext(r),lastTimeout:[r.captains[r.turn],r.turnAt]};}
+    M('cc-timeout').onclick=()=>ccAction(()=>ccTx(r=>{if(r.state!=='running'||!ccExpired(r))throw Error('Il tempo non è ancora scaduto.');return ccTimeoutPatch(r);},true));
+    M('cc-rematch').onclick=()=>ccAction(()=>ccTx(r=>{if(!ccHost(r)||r.state!=='finished')throw Error('Rivincita non disponibile.');return {state:'lobby'};}));
+    M('cc-leave').onclick=()=>ccAction(async()=>{if(!cc.room){ccDetach();hide('cc-modal',true);return;}if(!confirm(ccHost(cc.room)?'Chiudere la stanza per tutti?':'Uscire dalla stanza?'))return;await ccTx(r=>{if(ccHost(r))return {state:'closed'};if(r.state!=='lobby')return null;const players={...r.players};delete players[cc.uid];return {players};});ccDetach();hide('cc-modal',true);});
+    M('cc-invite').onclick=async()=>{if(!cc.room)return;const url=new URL(location.href);url.searchParams.delete('room');url.searchParams.set('connections',cc.room.code);url.hash='';const text=`Connessioni Cosmiche — stanza ${cc.room.code}\n${url.href}\nChiedi la password all’host.`;try{if(navigator.share)await navigator.share({title:'Connessioni Cosmiche',text});else{await navigator.clipboard.writeText(text);ccSay('Invito copiato. Invia la password separatamente.');}}catch(e){if(e.name!=='AbortError')ccSay(text);}};
+    function ccTick(){const r=cc.room;if(!r||r.state!=='running')return;const sec=ccRemaining(r);const phase=r.phase==='clue'?(r.seenTeams.includes(r.turn)?'Indizio master':'Primo indizio master'):'Scelte esploratori';M('cc-timer').textContent=sec===Infinity?`${phase} · Nessun limite di tempo`:`${phase}: ${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`;M('cc-timer').classList.toggle('cc-urgent',sec<=10);ccAudioTick(r,sec);ccUpdateSound();hide('cc-timeout',sec!==0);M('cc-timeout').disabled=cc.busy;const enabled=!cc.busy&&ccCanGuess(r);for(const b of M('cc-board').children)b.disabled=!enabled||r.revealed.includes(+b.dataset.index);M('cc-pass').disabled=!enabled;M('cc-clue-form').querySelector('button').disabled=cc.busy||sec===0;}
+    function ccRender(){const r=cc.room;if(!r){hide('cc-room',true);hide('cc-entry',!!cc.ref);return;}const me=ccMine(r);if(!me)return;const lobby=r.state==='lobby',done=r.state==='finished';hide('cc-entry',true);hide('cc-room',false);hide('cc-lobby',!lobby);hide('cc-play',lobby);M('cc-room-name').textContent=r.name;M('cc-room-code').textContent=r.code;M('cc-room-settings').textContent=`${r.settings.size}×${r.settings.size} · ${r.settings.teams} squadre · ${Object.keys(r.players).length}/${r.settings.capacity} giocatori · ${r.settings.duration||r.settings.clueDuration||r.settings.firstClueDuration?`Primo master ${ccFormatTime(r.settings.firstClueDuration)} · Master ${ccFormatTime(r.settings.clueDuration)} · Esploratori ${ccFormatTime(r.settings.duration)}`:'Senza timer'} · ${r.settings.wordMode==='custom'?'Solo parole custom':(CC_CUSTOM_LEVELS[r.settings.customPercent]?`${CC_CUSTOM_LEVELS[r.settings.customPercent]} · ${r.settings.customPercent}% custom (${Math.min(r.settings.customWords.length,ccCustomQuota(r.settings))}/${r.settings.size**2})`:r.settings.customWords.length+' parole custom + dizionario')}`;
+        if(lobby){const teams=[];for(let i=0;i<r.settings.teams;i++){const el=ccNode('div',undefined,'cc-team');el.style.setProperty('--team',CC_COLORS[i]);el.append(ccNode('strong',CC_NAMES[i]));for(const [id,p] of Object.entries(r.players).filter(([,p])=>p.team===i)){const line=ccNode('p',`${p.ready===r.round+1?'✓':'○'} ${p.name}${id===r.hostUid?' · Host':''}${id===cc.uid?' · Tu':''} · ${p.role==='captain'?'Capitano':'Esploratore'}`);if(ccHost(r)&&id!==cc.uid){const kick=ccNode('button','✕','icon-btn');kick.style.marginLeft='5px';kick.title='Espelli';kick.onclick=()=>ccAction(()=>ccTx(old=>{if(!ccHost(old)||old.state!=='lobby')throw Error('Lobby non disponibile.');const players={...old.players};delete players[id];return {players};}));line.append(kick);}el.append(line);}teams.push(el);}M('cc-players').replaceChildren(...teams);const select=M('cc-my-team');if(select.options.length!==r.settings.teams)select.replaceChildren(...CC_NAMES.slice(0,r.settings.teams).map((n,i)=>new Option(n,String(i))));select.value=String(me.team);select.disabled=cc.busy;M('cc-my-role').value=me.role;M('cc-my-role').disabled=cc.busy;M('cc-ready').disabled=cc.busy;M('cc-ready').textContent=me.ready===r.round+1?'✓ Pronto (annulla)':'Sono pronto';hide('cc-start',!ccHost(r));let valid=false;try{ccCaptains(r);valid=Object.entries(r.players).every(([id,p])=>id===cc.uid||p.ready===r.round+1)}catch(e){}M('cc-start').disabled=cc.busy||!valid;return;}
+        const scores=[];for(let i=0;i<r.settings.teams;i++){const el=ccNode('div',undefined,'cc-team');el.style.setProperty('--team',CC_COLORS[i]);el.append(ccNode('strong',CC_NAMES[i]+(i===me.team?' · Tu':'')),ccNode('p',r.eliminated.includes(i)?'Eliminata':`${r.scores[i]}/${r.target} segnali`),ccNode('p',`Capitano: ${r.players[r.captains[i]]?.name||'—'}`));scores.push(el);}M('cc-scores').replaceChildren(...scores);M('cc-turn').textContent=done?'Sfida conclusa':`${CC_NAMES[r.turn]} · ${r.phase==='clue'?'Attesa indizio':'Decifrazione'} · Tu: ${ccCaptain(r)?'Capitano':'Esploratore'}`;M('cc-clue-display').textContent=r.clue?`${r.clue} · ${r.clueCount} (scelte rimaste: ${r.left})`:'Nessun indizio ancora';M('cc-board').style.setProperty('--cc-size',r.settings.size);const canSee=done||ccCaptain(r);M('cc-board').replaceChildren(...r.words.map((word,i)=>{const revealed=r.revealed.includes(i),b=ccNode('button',undefined,'cc-cell'+(revealed?' cc-revealed':''));b.type='button';b.dataset.index=i;b.append(ccNode('span',word,'cc-word'));if(canSee||revealed){b.dataset.color=r.roles[i];b.append(ccNode('small',CC_SYMBOLS[r.roles[i]]+' '+(r.roles[i]<4?CC_NAMES[r.roles[i]]:r.roles[i]===4?'Neutro':'Vuoto')));}b.disabled=cc.busy||!ccCanGuess(r)||revealed;b.onclick=()=>ccGuess(i);return b;}));M('cc-legend').textContent=canSee?'Mappa capitano: trova i segnali della tua squadra. Il Vuoto elimina la squadra che lo seleziona.':'Seleziona i segnali della tua squadra. Un segnale neutro o rivale termina il turno; il Vuoto elimina la squadra.';const canClue=!done&&r.phase==='clue'&&ccTeam(r)===r.turn&&ccCaptain(r);hide('cc-clue-form',!canClue);const counts=M('cc-clue-count'),max=r.target-r.scores[r.turn];if(counts.options.length!==max)counts.replaceChildren(...Array.from({length:max},(_,i)=>new Option(String(i+1),String(i+1))));hide('cc-pass',!ccCanGuess(r));hide('cc-result',!done);hide('cc-rematch',!done||!ccHost(r));M('cc-rematch').disabled=cc.busy;if(done){M('cc-result').textContent=`🏆 Vince la squadra ${CC_NAMES[r.winner]}!`;M('cc-timer').textContent='';hide('cc-timeout',true);}else ccTick();
+    }
+    let ccAutoKey='',ccAutoSince=0,ccAutoAttempt=0,ccAutoPending=false;
+    setInterval(async()=>{ccTick();const r=cc.room;if(r?.state!=='running'||!ccExpired(r)||cc.busy||ccAutoPending)return;const key=ccPhaseKey(r),now=Date.now();if(ccAutoKey!==key){ccAutoKey=key;ccAutoSince=now;ccAutoAttempt=0;}const delay=r.captains[r.turn]===cc.uid?200:ccHost(r)?800:1800;if(now-ccAutoSince<delay||now-ccAutoAttempt<3000)return;ccAutoAttempt=now;ccAutoPending=true;try{await ccTx(old=>old.state==='running'&&ccPhaseKey(old)===key&&ccExpired(old)?ccTimeoutPatch(old):null);}catch(e){console.warn('Timeout, nuovo tentativo:',cloudError(e));}finally{ccAutoPending=false;}},250);
+    const ccInvite=new URL(location.href).searchParams.get('connections');if(!inviteCode&&ccInvite&&/^[A-Fa-f0-9]{10}$/.test(ccInvite)){M('cc-code-input').value=ccInvite.toUpperCase();hide('cc-modal',false);hide('cc-join',false);}
+    function switchMenu(m){hide('single-modes',m!=='single');hide('multi-modes',m!=='multi');M('menu-single').setAttribute('aria-selected',String(m==='single'));M('menu-multi').setAttribute('aria-selected',String(m==='multi'));}
+    M('menu-single').onclick=()=>switchMenu('single');M('menu-multi').onclick=()=>switchMenu('multi');if(ccInvite||inviteCode)switchMenu('multi');
 
     initCloud();
 </script>
@@ -1806,6 +2003,9 @@
         } catch (e) {}
     }
 
+    function unlockAudio(){if(!store.sound)return;try{const AC=window.AudioContext||window.webkitAudioContext;if(!audioCtx&&AC)audioCtx=new AC();if(audioCtx?.state==='suspended')audioCtx.resume().catch(()=>{});}catch(e){}}
+    document.addEventListener('pointerdown',unlockAudio,{passive:true});
+    document.addEventListener('keydown',unlockAudio);
     const soundFX = {
         click: () => beep(540, "triangle", 0.07, 0.06),
         erase: () => beep(270, "sine", 0.08, 0.06),
@@ -2668,6 +2868,9 @@
 
     // Collegamento del motore single player con il controller multiplayer.
     window.cosmicGame = {
+        soundEnabled: () => store.sound,
+        timerTick: () => beep(1350, 'triangle', 0.035, 0.10),
+        timerAlarm: () => [660,440,660,330].forEach((f,i)=>setTimeout(()=>beep(f,'square',0.19,0.055),i*210)),
         username: getUsername,
         colorName: id => COLOR_PALETTE[id]?.name || "?",
         isSingleActive: () => game.active && !game.multiplayer,
