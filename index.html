@@ -970,6 +970,26 @@
         .toast-banner.visible {
             transform: translateX(-50%) translateY(0);
         }
+            /* Multiplayer */
+        .mp-card {border-color:rgba(0,243,255,.65);background:linear-gradient(135deg,rgba(8,62,82,.85),rgba(15,23,42,.95))}
+        .mp-modal-box {max-width:500px;max-height:90dvh}
+        .mp-stack {display:flex;flex-direction:column;gap:9px;min-width:0}
+        .mp-stack label {display:flex;flex-direction:column;gap:5px;color:var(--text-muted);font-size:.76rem}
+        .mp-stack input.profile-input,.mp-stack select {width:100%;min-height:40px;flex:auto;color:var(--text-main);background:#10192d;border:1px solid var(--panel-border);border-radius:10px;padding:6px 9px;font:inherit;user-select:text}
+        .mp-stack .mp-check {flex-direction:row;align-items:center;gap:8px}
+        .mp-fields {display:grid;grid-template-columns:1fr 1fr;gap:9px}
+        .mp-actions {display:flex;gap:8px}.mp-actions>* {flex:1}
+        .mp-message {font-size:.75rem;color:var(--amber-glow);white-space:pre-wrap;overflow-wrap:anywhere}.mp-message:empty{display:none}
+        .mp-room-header {text-align:center;display:flex;flex-direction:column;gap:6px;align-items:center;padding:8px}
+        .mp-code {font-family:var(--font-mono);font-size:1.65rem;color:var(--cyan-glow);font-weight:800;letter-spacing:.12em;user-select:text}
+        .mp-player {display:flex;gap:8px;align-items:center;justify-content:space-between;background:#0b1428;border:1px solid var(--panel-border);border-radius:10px;padding:8px 10px;font-size:.75rem;overflow-wrap:anywhere}
+        .mp-player>div:first-child {min-width:0;flex:1}.mp-player .icon-btn {min-height:28px;height:28px;font-size:.7rem}
+        .mp-score {color:var(--emerald-glow);font-weight:800;white-space:nowrap}
+        .mp-progress-track {height:4px;background:#24324b;border-radius:4px;overflow:hidden;margin-top:4px}.mp-progress-fill {height:100%;background:var(--cyan-glow)}
+        #board-panel.mp-wide .slot-box {width:clamp(21px,6.1vw,35px);height:clamp(23px,6.1vw,35px);font-size:.8rem;border-radius:7px}
+        #board-panel.mp-wide .slots-container {gap:3px}#board-panel.mp-wide .attempt-row{padding:4px;gap:3px}#board-panel.mp-wide .row-leds{min-width:0;gap:2px}#board-panel.mp-wide .led-pill{padding:2px 3px;font-size:.6rem}#board-panel.mp-wide .row-index{width:14px}
+        @media(max-width:360px){#board-panel.mp-wide .slot-box{width:21px;height:23px}#board-panel.mp-wide .row-leds{flex-direction:column}}
+
     </style>
 </head>
 <body>
@@ -1093,6 +1113,11 @@
             </div>
         </div>
 
+    <div>
+        <div class="section-label">◈ Sfide online</div>
+        <button id="mp-open" class="mode-card mp-card"><div><div class="mode-title">🌐 Multiplayer</div><div class="mode-desc">Stanze private · Stessa combinazione · Vince il migliore</div></div><span class="mult-badge">VS</span></button>
+    </div>
+
         <div>
             <div class="section-label">
                 <span>◈ Record Personali (Salvati in Automatico)</span>
@@ -1123,6 +1148,13 @@
                 <span class="hud-val amber" id="hud-timer">00:00</span>
             </div>
         </div>
+
+        <section id="mp-game-panel" class="glass-panel hidden" style="padding:10px">
+            <div class="section-label"><span>◈ Avversari</span><button id="mp-game-lobby" class="icon-btn">Stanza</button></div>
+            <div id="mp-progress" class="mp-stack"></div>
+            <div id="mp-game-message" class="mp-message" role="status"></div>
+            <button id="mp-retry" class="icon-btn hidden">Riprova sincronizzazione</button>
+        </section>
 
         <!-- BOARD 7 TENTATIVI -->
         <div class="glass-panel board-panel" id="board-panel"></div>
@@ -1209,12 +1241,53 @@
     </div>
 </div>
 
+<div id="mp-modal" class="modal-backdrop hidden">
+  <div class="glass-panel modal-box mp-modal-box">
+    <div class="modal-head"><span class="modal-title">🌐 Multiplayer</span><button id="mp-close" class="icon-btn">✕</button></div>
+    <div id="mp-message" class="mp-message" role="status" aria-live="polite"></div>
+    <div id="mp-entry" class="mp-stack">
+      <div class="rules-box">Sfida privata tra amici. Tutti ricevono la stessa sequenza di colori. I risultati non confluiscono nella classifica single player.</div>
+      <div class="mp-actions"><button id="mp-show-create" class="action-btn btn-submit">Crea stanza</button><button id="mp-show-join" class="action-btn btn-clear">Unisciti</button></div>
+      <form id="mp-create" class="mp-stack hidden" autocomplete="off">
+        <label>Nome stanza<input id="mp-name" class="profile-input" maxlength="30" value="Sfida cosmica" required></label>
+        <label>Password (min. 8 caratteri)<input id="mp-password" class="profile-input" type="password" minlength="8" maxlength="64" required autocomplete="new-password"></label>
+        <div class="mp-fields">
+          <label>Tentativi<select id="mp-attempts"></select></label><label>Colori<select id="mp-colors"></select></label>
+          <label>Caselle<select id="mp-slots"></select></label><label>Giocatori max<select id="mp-capacity"></select></label>
+        </div>
+        <label>Tempo massimo<select id="mp-duration"><option value="120">2 minuti</option><option value="300" selected>5 minuti</option><option value="600">10 minuti</option><option value="0">Illimitato</option></select></label>
+        <label class="mp-check"><input id="mp-duplicates" type="checkbox"> Consenti colori ripetuti</label>
+        <button class="action-btn btn-submit" type="submit">Crea stanza privata</button>
+      </form>
+      <form id="mp-join" class="mp-stack hidden" autocomplete="off">
+        <label>Codice stanza<input id="mp-code-input" class="profile-input" maxlength="10" placeholder="Es. A1B2C3D4E5" required autocapitalize="characters"></label>
+        <label>Password<input id="mp-join-password" class="profile-input" type="password" minlength="8" maxlength="64" required autocomplete="off"></label>
+        <button class="action-btn btn-submit" type="submit">Entra nella stanza</button>
+      </form>
+    </div>
+    <div id="mp-room" class="mp-stack hidden">
+      <div class="mp-room-header"><div id="mp-room-name" class="mode-title"></div><div id="mp-room-code" class="mp-code"></div><div id="mp-room-settings" class="mode-desc"></div></div>
+      <button id="mp-invite" class="icon-btn">Condividi codice / invito</button>
+      <div id="mp-phase" class="section-label"></div>
+      <div id="mp-players" class="mp-stack"></div>
+      <div id="mp-solution" class="rules-box hidden"></div>
+      <div id="mp-lobby-settings" class="mp-stack hidden"><button id="mp-edit" class="icon-btn">Modifica impostazioni</button></div>
+      <div id="mp-ready-actions" class="mp-actions hidden"><button id="mp-ready" class="action-btn btn-clear">Pronto</button><button id="mp-start" class="action-btn btn-submit hidden">Avvia partita</button></div>
+      <button id="mp-resume" class="action-btn btn-submit hidden">Torna alla partita</button>
+      <button id="mp-rematch" class="action-btn btn-submit hidden">Rivincita · Torna in lobby</button>
+      <button id="mp-end-round" class="icon-btn hidden">Termina round (host)</button>
+      <button id="mp-leave" class="action-btn btn-clear">Esci dalla stanza</button>
+    </div>
+  </div>
+</div>
+<div id="mp-countdown" class="modal-backdrop hidden"><div class="glass-panel modal-box mp-room-header"><div class="section-label">La sfida sta iniziando</div><div id="mp-count" class="mp-code" style="font-size:3rem">5</div><div class="mode-desc">Stessa sequenza per tutti gli esploratori</div></div></div>
+
 <!-- Firebase SDK (Classifica Globale Online) -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
     import { initializeAppCheck, ReCaptchaEnterpriseProvider } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app-check.js";
     import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
-    import { getFirestore, collection, addDoc, getDocsFromServer, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocsFromServer, serverTimestamp, doc, onSnapshot, runTransaction } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
     const CUSTOM_FIREBASE_CONFIG = {
         apiKey: "AIzaSyDctdxiEzKSMrxaBLIWmwtgam4OLsung6I",
@@ -1256,7 +1329,7 @@
             db = getFirestore(app);
             onAuthStateChanged(auth, (user) => {
                 currentUser = user;
-                if (user) window.refreshLeaderboardData();
+                if (user) { window.refreshLeaderboardData(); restoreRoom(user.uid); }
             });
             await auth.authStateReady();
             if (!auth.currentUser) await signInAnonymously(auth);
@@ -1318,6 +1391,186 @@
         })();
         return pendingRead;
     };
+
+    // Multiplayer: stanza individuata da una capability derivata da codice + password.
+    // Nessuna password o hash separato memorizzato nei campi Firestore.
+    const MP_PATH = ["artifacts", "occhio-del-cosmo-prod", "public", "data", "rooms"];
+    const mp = { ref:null, room:null, uid:null, unsub:null, busy:false, roundKey:null, pending:null, syncing:false, editing:false, closing:false };
+    const M = id => document.getElementById(id);
+    const hide = (id,yes) => M(id).classList.toggle('hidden',yes);
+    const say = (s='') => { M('mp-message').textContent=s; };
+    const gameSay = (s='') => { M('mp-game-message').textContent=s; };
+    const resumeKey='cosmic-eye-mp-room-v1';
+    const saveSession = (k,v) => {try { sessionStorage.setItem(k,JSON.stringify(v)); } catch(e){} };
+    const readSession = k => {try{return JSON.parse(sessionStorage.getItem(k)||'null')}catch(e){return null}};
+    const dropSession = k => {try{sessionStorage.removeItem(k)}catch(e){}};
+    function fillSelect(id,min,max,def){for(let i=min;i<=max;i++){const o=new Option(String(i),String(i),false,i===def);M(id).add(o)}}
+    fillSelect('mp-attempts',3,15,7);fillSelect('mp-colors',6,25,15);fillSelect('mp-slots',3,8,4);fillSelect('mp-capacity',2,16,8);
+    function settingsFromForm(){
+        const s={attempts:+M('mp-attempts').value,colors:+M('mp-colors').value,slots:+M('mp-slots').value,capacity:+M('mp-capacity').value,duration:+M('mp-duration').value,duplicates:M('mp-duplicates').checked};
+        if(!s.duplicates&&s.slots>s.colors)throw Error('Con colori unici, le caselle non possono superare il numero di colori.');
+        return s;
+    }
+    function fillSettings(s){for(const k of ['attempts','colors','slots','capacity','duration']) M('mp-'+k).value=String(s[k]);M('mp-duplicates').checked=s.duplicates;}
+    function requireOnline(){if(!db||!currentUser)throw Error('Autenticazione Firebase non disponibile. Riprova tra poco.');return currentUser.uid;}
+    function bytesHex(b){return Array.from(b,x=>x.toString(16).padStart(2,'0')).join('');}
+    async function deriveRoom(code,password){
+        if(!/^[A-F0-9]{10}$/.test(code))throw Error('Il codice stanza deve contenere 10 caratteri esadecimali.');
+        if(password.length<8||password.length>64)throw Error('La password deve avere da 8 a 64 caratteri.');
+        const enc=new TextEncoder();
+        const key=await crypto.subtle.importKey('raw',enc.encode(password),'PBKDF2',false,['deriveBits']);
+        const bits=await crypto.subtle.deriveBits({name:'PBKDF2',hash:'SHA-256',salt:enc.encode('cosmic-eye-room-v1:'+code),iterations:150000},key,256);
+        return bytesHex(new Uint8Array(bits));
+    }
+    const cleanName=()=>window.cosmicGame.username().trim().slice(0,18)||'Viaggiatore';
+    const newPlayer=()=>({name:cleanName(),readyRound:0,round:0,status:'idle',attempts:0,seconds:0,score:0});
+    const isHost=()=>mp.room?.hostUid===mp.uid;
+    const own=(r=mp.room)=>r?.players?.[mp.uid];
+    const roundStart=r=>r.startedAt?.toMillis()+5000;
+    const expired=r=>r.settings.duration>0&&Date.now()>=roundStart(r)+r.settings.duration*1000+5000;
+    const actual=(p,r)=>p.round===r.round?p:{...p,status:'idle',attempts:0,seconds:0,score:0};
+    const terminal=p=>['won','lost','forfeit'].includes(p.status);
+    const allDone=r=>Object.values(r.players).every(p=>terminal(actual(p,r)));
+    const finished=r=>r.state==='finished'||(r.state==='running'&&(expired(r)||allDone(r)));
+    function setForm(edit=false){
+        mp.editing=edit;const form=M('mp-create');
+        (edit?M('mp-lobby-settings'):M('mp-entry')).appendChild(form);
+        M('mp-password').parentElement.classList.toggle('hidden',edit);M('mp-password').required=!edit;
+        form.querySelector('button[type=submit]').textContent=edit?'Salva impostazioni':'Crea stanza privata';
+        if(edit){M('mp-name').value=mp.room.name;fillSettings(mp.room.settings);hide('mp-create',false);}
+        else{hide('mp-create',true);M('mp-password').value='';}
+    }
+    async function action(fn){
+        if(mp.busy)return;mp.busy=true;say('');
+        try{await fn()}catch(e){say(cloudError(e));console.error('Multiplayer:',e)}finally{mp.busy=false;renderRoom()}
+    }
+    async function tx(change){
+        const ref=mp.ref, uid=mp.uid;if(!ref||!uid||uid!==requireOnline())throw Error('Stanza non disponibile.');
+        return runTransaction(db,async t=>{const snap=await t.get(ref);if(!snap.exists())throw Error('Stanza non trovata o chiusa.');const r=snap.data();const patch=change(r);if(patch)t.update(ref,patch);});
+    }
+    function openMP(){if(window.cosmicGame.isSingleActive()){say('Termina prima la partita singola.');return;}hide('mp-modal',false);renderRoom()}
+    function detach(message=''){
+        mp.unsub?.();mp.unsub=null;mp.ref=null;mp.room=null;mp.uid=null;mp.roundKey=null;mp.pending=null;mp.syncing=false;mp.closing=false;
+        dropSession(resumeKey);window.cosmicGame.stopMultiplayer();hide('mp-countdown',true);hide('mp-room',true);hide('mp-entry',false);setForm(false);hide('mp-join',true);say(message);
+    }
+    function attach(ref,uid){
+        mp.unsub?.();mp.ref=ref;mp.uid=uid;mp.room=null;mp.roundKey=null;mp.pending=null;mp.closing=false;saveSession(resumeKey,{id:ref.id,uid});
+        mp.unsub=onSnapshot(ref,{includeMetadataChanges:true},snap=>{
+            if(mp.ref!==ref||snap.metadata.hasPendingWrites||snap.metadata.fromCache)return;
+            if(!snap.exists()||!snap.data().players?.[uid]){detach('Stanza chiusa o accesso revocato.');hide('mp-modal',false);return;}
+            mp.room=snap.data();if(mp.room.state==='closed'){detach('La stanza è stata chiusa.');hide('mp-modal',false);return;}
+            renderRoom();processRound();
+        },e=>{say('Sincronizzazione stanza: '+cloudError(e));gameSay('Sincronizzazione stanza: '+cloudError(e));});
+    }
+    async function restoreRoom(uid){
+        const saved=readSession(resumeKey);if(!saved||saved.uid!==uid||!/^[a-f0-9]{64}$/.test(saved.id)||mp.ref)return;
+        hide('mp-modal',false);say('Riconnessione alla stanza…');attach(doc(db,...MP_PATH,saved.id),uid);
+    }
+    M('mp-open').onclick=openMP;M('mp-close').onclick=()=>{if(mp.room&&!finished(mp.room)&&mp.room.state==='running'&&window.cosmicGame.isMultiplayer())hide('mp-modal',true);else if(mp.ref&&!mp.room){detach();hide('mp-modal',true);}else if(mp.ref)say('Usa Esci dalla stanza per tornare al menu.');else hide('mp-modal',true)};
+    M('mp-show-create').onclick=()=>{setForm(false);hide('mp-create',false);hide('mp-join',true);say()};
+    M('mp-show-join').onclick=()=>{hide('mp-create',true);hide('mp-join',false);say()};
+    M('mp-create').onsubmit=e=>{e.preventDefault();action(async()=>{
+        const uid=requireOnline(),s=settingsFromForm(),name=M('mp-name').value.trim();if(!name)throw Error('Inserisci un nome stanza.');
+        if(mp.editing){await tx(r=>{if(r.hostUid!==uid||r.state!=='lobby')throw Error('Impostazioni non modificabili.');if(Object.keys(r.players).length>s.capacity)throw Error('La capacità è inferiore ai giocatori presenti.');return {name,settings:s}});setForm(false);return;}
+        if(mp.ref)throw Error('Sei già in una stanza.');
+        const code=bytesHex(crypto.getRandomValues(new Uint8Array(5))).toUpperCase();
+        const id=await deriveRoom(code,M('mp-password').value);const ref=doc(db,...MP_PATH,id);
+        await runTransaction(db,async t=>{if((await t.get(ref)).exists())throw Error('Codice già usato. Riprova.');t.set(ref,{code,name,hostUid:uid,settings:s,state:'lobby',round:0,pattern:[],startedAt:null,createdAt:serverTimestamp(),players:{[uid]:newPlayer()}})});
+        M('mp-password').value='';hide('mp-create',true);attach(ref,uid);
+    })};
+    M('mp-join').onsubmit=e=>{e.preventDefault();action(async()=>{
+        const uid=requireOnline(),code=M('mp-code-input').value.trim().toUpperCase();if(mp.ref)throw Error('Sei già in una stanza.');
+        const id=await deriveRoom(code,M('mp-join-password').value);const ref=doc(db,...MP_PATH,id);
+        await runTransaction(db,async t=>{const snap=await t.get(ref);if(!snap.exists())throw Error('Codice o password non corretti.');const r=snap.data();if(r.state==='closed')throw Error('Stanza chiusa.');if(r.players[uid])return;if(r.state!=='lobby')throw Error('Partita già avviata. Attendi la rivincita.');if(Object.keys(r.players).length>=r.settings.capacity)throw Error('Stanza piena.');t.update(ref,{players:{...r.players,[uid]:newPlayer()}})});
+        M('mp-join-password').value='';hide('mp-join',true);attach(ref,uid);
+    })};
+    M('mp-edit').onclick=()=>{if(mp.editing)setForm(false);else setForm(true)};
+    M('mp-ready').onclick=()=>action(()=>tx(r=>{if(r.state!=='lobby'||!own(r))throw Error('Lobby non disponibile.');return {players:{...r.players,[mp.uid]:{...own(r),readyRound:own(r).readyRound===r.round+1?0:r.round+1}}}}));
+    function generatePattern(s){const pool=Array.from({length:s.colors},(_,i)=>i);return Array.from({length:s.slots},()=>{const idx=crypto.getRandomValues(new Uint32Array(1))[0]%(s.duplicates?s.colors:pool.length);return s.duplicates?idx:pool.splice(idx,1)[0]})}
+    M('mp-start').onclick=()=>action(()=>tx(r=>{
+        if(r.hostUid!==mp.uid||r.state!=='lobby')throw Error('Solo l’host può avviare.');
+        if(Object.keys(r.players).length<2||!Object.entries(r.players).every(([id,p])=>id===mp.uid||p.readyRound===r.round+1))throw Error('Servono almeno due giocatori e tutti devono essere pronti.');
+        return {state:'running',round:r.round+1,pattern:generatePattern(r.settings),startedAt:serverTimestamp()};
+    }));
+    M('mp-rematch').onclick=()=>action(async()=>{await tx(r=>{if(r.hostUid!==mp.uid||!finished(r))throw Error('Round non concluso.');if(r.state==='running')return {state:'finished'};return {state:'lobby',pattern:[],startedAt:null}});if(mp.room?.state==='running')return;});
+    M('mp-end-round').onclick=()=>{if(confirm('Terminare il round? I giocatori non arrivati al risultato saranno classificati come non conclusi.'))action(()=>tx(r=>{if(r.hostUid!==mp.uid||r.state!=='running')throw Error('Round non disponibile.');return {state:'finished'}}))};
+    M('mp-invite').onclick=async()=>{if(!mp.room)return;const url=new URL(location.href);url.searchParams.set('room',mp.room.code);url.hash='';const text=`L’Occhio del Cosmo — stanza ${mp.room.code}\n${url.href}\nChiedi la password all’host.`;try{if(navigator.share)await navigator.share({title:'Sfida cosmica',text});else {await navigator.clipboard.writeText(text);say('Invito copiato. Invia la password separatamente.')}}catch(e){if(e.name!=='AbortError')say(text)}};
+    M('mp-leave').onclick=()=>leaveRoom();M('mp-game-lobby').onclick=()=>{hide('mp-modal',false);renderRoom()};M('mp-resume').onclick=()=>{hide('mp-modal',true);processRound()};
+    async function leaveRoom(){
+        if(!mp.room){detach();hide('mp-modal',true);return;}
+        if(!isHost()&&Date.now()>=mp.room.createdAt.toMillis()+86400000){detach();hide('mp-modal',true);return;}
+        if(!confirm(isHost()?'Chiudere la stanza per tutti i giocatori?':'Uscire dalla stanza? Durante la sfida equivale al ritiro.'))return;
+        await action(async()=>{
+            if(isHost()){await tx(r=>({state:'closed'}));}
+            else if(mp.room.state==='lobby'){await tx(r=>{const players={...r.players};delete players[mp.uid];return {players}});}
+            else if(mp.room.state==='running'&&!finished(mp.room)&&!terminal(actual(own(),mp.room))){await sendReport({status:'forfeit',attempts:actual(own(),mp.room).attempts,seconds:Math.min(mp.room.settings.duration||86400,Math.max(0,Math.floor((Date.now()-roundStart(mp.room))/1000))),score:0},true);}
+            detach();hide('mp-modal',true);
+        });
+    }
+    window.mpLeaveFromGame=leaveRoom;
+    function kick(id){if(confirm('Espellere questo giocatore dalla lobby?'))action(()=>tx(r=>{if(r.hostUid!==mp.uid||r.state!=='lobby'||id===mp.uid)throw Error('Espulsione non consentita.');const players={...r.players};delete players[id];return {players}}))}
+    function playerRow(id,p,r,rank=null,compact=false){
+        const el=document.createElement('div');el.className='mp-player';const left=document.createElement('div');const name=document.createElement('strong');name.textContent=(rank!==null?`${rank}. `:'')+p.name+(id===r.hostUid?' · Host':'')+(id===mp.uid?' · Tu':'');left.append(name);
+        const current=actual(p,r);const detail=document.createElement('div');detail.className='mode-desc';
+        if(r.state==='lobby')detail.textContent=id===r.hostUid||p.readyRound===r.round+1?'✓ Pronto':'In attesa';
+        else detail.textContent=(current.status==='won'?'✓ Risolto':current.status==='lost'?'Non risolto':current.status==='forfeit'?'Ritirato':finished(r)?'Non concluso':'In gioco')+` · ${current.attempts}/${r.settings.attempts} tentativi`+(terminal(current)?` · ${Math.floor(current.seconds/60)}m ${current.seconds%60}s`:'');
+        left.append(detail);if(compact&&!finished(r)){const bar=document.createElement('div');bar.className='mp-progress-track';const fill=document.createElement('div');fill.className='mp-progress-fill';fill.style.width=`${current.attempts/r.settings.attempts*100}%`;bar.append(fill);left.append(bar)}el.append(left);
+        if(r.state!=='lobby'&&(finished(r)||terminal(current))){const score=document.createElement('span');score.className='mp-score';score.textContent=`${current.score} pt`;el.append(score)}
+        if(!compact&&r.state==='lobby'&&isHost()&&id!==mp.uid){const b=document.createElement('button');b.className='icon-btn';b.textContent='Espelli';b.onclick=()=>kick(id);el.append(b)}return el;
+    }
+    function renderRoom(){
+        const r=mp.room;if(!r){hide('mp-entry',!!mp.ref);hide('mp-room',true);return;}
+        hide('mp-entry',true);hide('mp-room',false);const done=finished(r),host=isHost(),mine=own(r);if(!mine)return;
+        M('mp-room-name').textContent=r.name;M('mp-room-code').textContent=r.code;
+        const s=r.settings;M('mp-room-settings').textContent=`${s.attempts} tentativi · ${s.colors} colori · ${s.slots} caselle · ${s.duration?s.duration/60+' min':'Senza limite'} · ${s.duplicates?'Ripetizioni sì':'Colori unici'}`;
+        const entries=Object.entries(r.players);const rank=(a,b)=>{const x=actual(a[1],r),y=actual(b[1],r);return y.score-x.score||x.attempts-y.attempts||x.seconds-y.seconds};
+        if(done)entries.sort(rank);M('mp-players').replaceChildren(...entries.map(([id,p],i)=>playerRow(id,p,r,done?i+1:null)));
+        M('mp-progress').replaceChildren(...entries.filter(([id])=>id!==mp.uid).map(([id,p])=>playerRow(id,p,r,null,true)));
+        M('mp-phase').textContent=r.state==='lobby'?`Lobby · ${entries.length}/${s.capacity}`:done?(entries[0]&&actual(entries[0][1],r).score>0?`🏆 ${entries.filter(x=>rank(x,entries[0])===0).map(x=>x[1].name).join(' / ')} · Vincitore/i`:'Round concluso · Nessuna soluzione'):`Round ${r.round} · ${entries.filter(([,p])=>terminal(actual(p,r))).length}/${entries.length} conclusi`;
+        hide('mp-lobby-settings',!host||r.state!=='lobby');if(mp.editing&&r.state!=='lobby')setForm(false);
+        hide('mp-ready-actions',r.state!=='lobby');hide('mp-start',!host);M('mp-start').disabled=mp.busy||entries.length<2||!entries.every(([id,p])=>id===mp.uid||p.readyRound===r.round+1);M('mp-ready').textContent=mine.readyRound===r.round+1?'✓ Pronto (annulla)':'Sono pronto';hide('mp-ready',host);
+        hide('mp-resume',r.state!=='running'||done||terminal(actual(mine,r))||!window.cosmicGame.isMultiplayerActive());hide('mp-rematch',!host||!done||r.state!=='finished');hide('mp-end-round',!host||r.state!=='running'||done);
+        hide('mp-solution',!done);if(done)M('mp-solution').textContent='Soluzione: '+r.pattern.map(x=>window.cosmicGame.colorName(x)).join(' • ');
+    }
+    function sessionRoundKey(r){return `cosmic-eye-mp:${mp.ref.id}:${mp.uid}:${r.round}`;}
+    async function sendReport(report,force=false){
+        const key=mp.roundKey,ref=mp.ref;
+        await tx(r=>{
+            if(mp.ref!==ref||r.round!==Number(key?.split(':').pop()||r.round)||r.state!=='running')throw Error('Round già concluso.');
+            const old=actual(own(r),r);if(terminal(old)){if(old.status===report.status&&old.attempts===report.attempts&&old.score===report.score)return null;throw Error('Risultato già registrato.');}
+            if(!force&&old.attempts===report.attempts&&old.status===report.status&&old.score===report.score)return null;
+            return {players:{...r.players,[mp.uid]:{...own(r),round:r.round,...report}}};
+        });
+    }
+    async function flushReport(){
+        if(!mp.pending||mp.syncing)return;const pending=mp.pending,key=mp.roundKey;mp.syncing=true;hide('mp-retry',true);gameSay('Sincronizzazione…');
+        try{await sendReport(pending);if(mp.roundKey!==key)return;mp.pending=null;saveSession(key,{game:window.cosmicGame.snapshot(),pending:null});gameSay('Risultato sincronizzato');window.cosmicGame.setMultiplayerBusy(false);if(terminal(pending)){hide('mp-modal',false);say(finished(mp.room)?'Risultato registrato. Round concluso.':'Risultato registrato. Attendi gli altri giocatori.');renderRoom();}}
+        catch(e){if(mp.roundKey===key){gameSay('Invio non riuscito: '+cloudError(e));say('Invio non riuscito: '+cloudError(e));hide('mp-retry',false);}}
+        finally{if(mp.roundKey===key)mp.syncing=false;}
+    }
+    window.mpReport=(report)=>{if(!mp.roundKey||!mp.ref)return;mp.pending=report;saveSession(mp.roundKey,{game:window.cosmicGame.snapshot(),pending:report});window.cosmicGame.setMultiplayerBusy(true);flushReport()};
+    M('mp-retry').onclick=flushReport;
+    function processRound(){
+        const r=mp.room;if(!r)return;const mine=own(r);if(!mine)return;
+        if(r.state==='lobby'){if(mp.roundKey){dropSession(mp.roundKey);mp.roundKey=null;mp.pending=null;mp.syncing=false;window.cosmicGame.stopMultiplayer();}hide('mp-countdown',true);hide('mp-modal',false);return;}
+        if(finished(r)){
+            hide('mp-countdown',true);window.cosmicGame.freezeMultiplayer();hide('mp-modal',false);renderRoom();
+            if(isHost()&&r.state==='running'&&!mp.closing){mp.closing=true;tx(x=>x.state==='running'&&finished(x)?{state:'finished'}:null).catch(e=>say(cloudError(e))).finally(()=>{mp.closing=false});}return;
+        }
+        if(r.state!=='running')return;const key=sessionRoundKey(r),start=roundStart(r);if(!Number.isFinite(start))return;
+        if(Date.now()<start){hide('mp-countdown',false);M('mp-count').textContent=String(Math.max(1,Math.ceil((start-Date.now())/1000)));return;}
+        hide('mp-countdown',true);
+        if(mp.roundKey===key)return;
+        mp.roundKey=key;const old=actual(mine,r),saved=readSession(key);
+        if(terminal(old)){hide('mp-modal',false);say('Hai già concluso questo round.');return;}
+        if(!saved&&old.attempts>0){hide('mp-modal',false);say('Partita già iniziata su un’altra scheda. Usa la scheda originale oppure ritirati.');return;}
+        if(saved?.game&&saved.game.attempts.length<old.attempts){hide('mp-modal',false);say('Lo stato locale non coincide con quello online. Usa la scheda originale.');return;}
+        mp.pending=saved?.pending||null;
+        window.cosmicGame.startMultiplayer(r.settings,r.pattern,start,saved?.game||null);hide('mp-modal',!!window.cosmicGame.isMultiplayerActive());
+        if(mp.pending){window.cosmicGame.setMultiplayerBusy(true);flushReport();}
+    }
+    setInterval(()=>{if(mp.room?.state==='running'){processRound();}},500);
+    const inviteCode=new URL(location.href).searchParams.get('room');if(inviteCode&&/^[A-Fa-f0-9]{10}$/.test(inviteCode)){M('mp-code-input').value=inviteCode.toUpperCase();hide('mp-modal',false);hide('mp-join',false);}
 
     initCloud();
 </script>
@@ -1463,6 +1716,7 @@
        ========================================================================== */
     const STORAGE_KEY = "occhio_cosmo_data_v3";
     const MAX_ATTEMPTS = 7;
+    const attemptLimit = () => game.multiplayer ? game.multiplayer.attempts : MAX_ATTEMPTS;
 
     const MODE_CONFIG = {
         "color-easy":   { label: "Colori - Facile",    short: "Colori 4",  type: "color", len: 4, colors: 15, mult: 1.0 },
@@ -1711,7 +1965,7 @@
         showToast(`Profilo salvato: ${clean}`);
     });
 
-    document.querySelectorAll(".mode-card").forEach(card => {
+    document.querySelectorAll(".mode-card[data-mode]").forEach(card => {
         card.addEventListener("click", () => {
             startNewGame(card.dataset.mode);
         });
@@ -1720,9 +1974,12 @@
     /* ==========================================================================
        8. MOTORE DI GIOCO (7 TENTATIVI CON BLOCCO VERDE)
        ========================================================================== */
-    function startNewGame(modeKey) {
+    function startNewGame(modeKey, multiplayer = null, saved = null) {
         soundFX.click();
         const cfg = MODE_CONFIG[modeKey];
+        game.multiplayer = multiplayer; game.mpBusy = false;
+        $("mp-game-panel").classList.toggle("hidden", !multiplayer);
+        $("board-panel").classList.toggle("mp-wide", !!multiplayer && cfg.len > 6);
         game.modeKey = modeKey;
         game.attempts = [];
         game.locked = Array(cfg.len).fill(null);
@@ -1731,7 +1988,7 @@
         game.keyStates = {};
         game.active = true;
         game.elapsed = 0;
-        game.startTime = Date.now();
+        game.startTime = multiplayer ? multiplayer.start : Date.now();
 
         if (cfg.type === "color") {
             const pool = Array.from({ length: cfg.colors }, (_, idx) => idx);
@@ -1739,12 +1996,12 @@
                 const j = Math.floor(Math.random() * (i + 1));
                 [pool[i], pool[j]] = [pool[j], pool[i]];
             }
-            game.secret = pool.slice(0, cfg.len);
+            game.secret = multiplayer ? [...multiplayer.pattern] : pool.slice(0, cfg.len);
 
             $("color-input-grid").classList.remove("hidden");
             $("qwerty-input-grid").classList.add("hidden");
             renderColorButtons(cfg.colors);
-            setEyeState("cyan", `Decifra i ${cfg.len} colori unici`);
+            setEyeState("cyan", multiplayer && multiplayer.duplicates ? `Decifra i ${cfg.len} colori` : `Decifra i ${cfg.len} colori unici`);
         } else {
             const chosenWord = WORDS_6[Math.floor(Math.random() * WORDS_6.length)];
             game.secret = chosenWord.split("");
@@ -1754,7 +2011,11 @@
             setEyeState("cyan", "Componi una parola italiana da 6 lettere");
         }
 
-        $("hud-mode").textContent = `${cfg.short} (${cfg.mult.toFixed(1)}x)`;
+        if (saved && multiplayer) {
+            game.attempts = saved.attempts; game.locked = saved.locked;
+            game.current = saved.current; game.cursor = saved.cursor; game.active = saved.active;
+        }
+        $("hud-mode").textContent = multiplayer ? "Multiplayer" : `${cfg.short} (${cfg.mult.toFixed(1)}x)`;
         $("menu-screen").classList.add("hidden");
         $("game-screen").classList.remove("hidden");
         $("btn-home").classList.remove("hidden");
@@ -1763,8 +2024,9 @@
         $("hud-timer").textContent = "00:00";
         game.timerId = setInterval(() => {
             if (!game.active) return;
-            game.elapsed = Math.floor((Date.now() - game.startTime) / 1000);
+            game.elapsed = Math.max(0, Math.floor((Date.now() - game.startTime) / 1000));
             $("hud-timer").textContent = formatDuration(game.elapsed);
+            if (game.multiplayer && game.multiplayer.duration && game.elapsed >= game.multiplayer.duration && !game.mpBusy) concludeGame(false, true);
         }, 500);
 
         updateHudAttempts();
@@ -1773,8 +2035,8 @@
     }
 
     function updateHudAttempts() {
-        const left = MAX_ATTEMPTS - game.attempts.length;
-        $("hud-attempts").textContent = `${left} / ${MAX_ATTEMPTS}`;
+        const left = attemptLimit() - game.attempts.length;
+        $("hud-attempts").textContent = `${left} / ${attemptLimit()}`;
     }
 
     function getNextUnlockedIndex(startIdx) {
@@ -1789,11 +2051,11 @@
     }
 
     function onSelectInput(val) {
-        if (!game.active) return;
+        if (!game.active || game.mpBusy) return;
         const len = game.secret.length;
         const cfg = MODE_CONFIG[game.modeKey];
 
-        if (cfg.type === "color") {
+        if (cfg.type === "color" && !game.multiplayer?.duplicates) {
             const existingIdx = game.current.findIndex((item, idx) => item === val && idx !== game.cursor);
             if (existingIdx !== -1) {
                 if (game.locked[existingIdx] !== null) {
@@ -1835,7 +2097,7 @@
     }
 
     function onClearSlot() {
-        if (!game.active) return;
+        if (!game.active || game.mpBusy) return;
         const len = game.secret.length;
         soundFX.erase();
 
@@ -1856,7 +2118,7 @@
     }
 
     function updateSubmitButton() {
-        $("btn-submit").disabled = game.current.some(v => v === null);
+        $("btn-submit").disabled = !game.active || !!game.mpBusy || game.current.some(v => v === null);
     }
 
     function evaluateAttempt(guess, secret) {
@@ -1893,7 +2155,8 @@
     }
 
     function onSubmitAttempt() {
-        if (!game.active) return;
+        if (!game.active || game.mpBusy) return;
+        if (game.multiplayer?.duration && Date.now() >= game.startTime + game.multiplayer.duration * 1000) { concludeGame(false,true); return; }
         if (game.current.some(v => v === null)) return;
 
         const cfg = MODE_CONFIG[game.modeKey];
@@ -1928,7 +2191,7 @@
             return;
         }
 
-        if (game.attempts.length >= MAX_ATTEMPTS) {
+        if (game.attempts.length >= attemptLimit()) {
             concludeGame(false);
             return;
         }
@@ -1936,7 +2199,7 @@
         game.current = game.locked.map(v => v !== null ? v : null);
         game.cursor = getNextUnlockedIndex(0);
 
-        const remaining = MAX_ATTEMPTS - game.attempts.length;
+        const remaining = attemptLimit() - game.attempts.length;
         if (newlyLocked > 0) {
             soundFX.lock();
             setEyeState("green", `Blocco verde su ${greens}/${cfg.len}! (${yellows} fuori posto)`);
@@ -1950,18 +2213,19 @@
 
         renderBoard();
         updateSubmitButton();
+        if (game.multiplayer) window.mpReport?.({status:"playing",attempts:game.attempts.length,seconds:Math.max(0,Math.floor((Date.now()-game.startTime)/1000)),score:0});
     }
 
     function computeScore(won) {
         if (!won) return 0;
         const cfg = MODE_CONFIG[game.modeKey];
         const baseScore = 400;
-        const attemptsLeftBonus = (MAX_ATTEMPTS - game.attempts.length + 1) * 250;
+        const attemptsLeftBonus = (attemptLimit() - game.attempts.length + 1) * 250;
         const speedBonus = Math.max(150, 900 - game.elapsed * 4);
         return Math.round((baseScore + attemptsLeftBonus + speedBonus) * cfg.mult);
     }
 
-    function concludeGame(won) {
+    function concludeGame(won, timeout = false) {
         game.active = false;
         clearInterval(game.timerId);
         game.elapsed = Math.floor((Date.now() - game.startTime) / 1000);
@@ -1970,6 +2234,16 @@
         renderBoard();
 
         const cfg = MODE_CONFIG[game.modeKey];
+        if (game.multiplayer) {
+            game.elapsed = Math.max(0, game.elapsed);
+            if (game.multiplayer.duration) game.elapsed = Math.min(game.elapsed, game.multiplayer.duration);
+            const score = computeScore(won);
+            if (won) soundFX.win(); else soundFX.lose();
+            setEyeState(won?"green":"danger", won?`Risolto! ${score} punti`:timeout?"Tempo scaduto":"Tentativi esauriti");
+            updateSubmitButton();
+            window.mpReport?.({status:won?"won":timeout?"forfeit":"lost",attempts:game.attempts.length,seconds:game.elapsed,score});
+            return;
+        }
         const score = computeScore(won);
         const username = getUsername();
         const solText = cfg.type === "color"
@@ -2053,7 +2327,7 @@
         const cfg = MODE_CONFIG[game.modeKey];
         board.innerHTML = "";
 
-        for (let r = 0; r < MAX_ATTEMPTS; r++) {
+        for (let r = 0; r < attemptLimit(); r++) {
             const row = document.createElement("div");
             const isPast = r < game.attempts.length;
             const isCurrent = r === game.attempts.length && game.active;
@@ -2289,7 +2563,7 @@
                 card.innerHTML = `
                     <div style="display:flex; flex-direction:column; gap:2px;">
                         <strong style="color:var(--text-main);">${item.won ? "✅" : "❌"} ${escapeHtml(item.mode)}</strong>
-                        <span style="color:var(--text-muted); font-size:0.68rem;">${escapeHtml(item.date)} • ${item.attempts}/${MAX_ATTEMPTS} tent. • ${formatDuration(item.elapsed)}</span>
+                        <span style="color:var(--text-muted); font-size:0.68rem;">${escapeHtml(item.date)} • ${Number(item.attempts) || 0}/${MAX_ATTEMPTS} tent. • ${formatDuration(item.elapsed)}</span>
                         <span style="color:var(--cyan-glow); font-size:0.68rem;">Soluzione: ${escapeHtml(item.solution)}</span>
                     </div>
                     <div style="font-family:var(--font-mono); font-weight:800; font-size:0.9rem; color:var(--emerald-glow);">${item.score.toLocaleString("it-IT")} pt</div>
@@ -2301,9 +2575,13 @@
         $("history-modal").classList.remove("hidden");
     }
 
-    function returnHome() {
+    function returnHome(force = false) {
+        if (game.multiplayer && force !== true) { window.mpLeaveFromGame?.(); return; }
         soundFX.click();
         game.active = false;
+        game.multiplayer = null; game.mpBusy = false;
+        $("mp-game-panel").classList.add("hidden");
+        $("board-panel").classList.remove("mp-wide");
         clearInterval(game.timerId);
         $("game-screen").classList.add("hidden");
         $("menu-screen").classList.remove("hidden");
@@ -2374,7 +2652,7 @@
 
     // Supporto tastiera fisica su computer
     window.addEventListener("keydown", e => {
-        if (!game.active) return;
+        if (!game.active || game.mpBusy || !$("mp-modal").classList.contains("hidden") || !$("mp-countdown").classList.contains("hidden")) return;
         const cfg = MODE_CONFIG[game.modeKey];
         if (e.key === "Backspace" || e.key === "Delete") {
             e.preventDefault();
@@ -2388,6 +2666,23 @@
         }
     });
 
+    // Collegamento del motore single player con il controller multiplayer.
+    window.cosmicGame = {
+        username: getUsername,
+        colorName: id => COLOR_PALETTE[id]?.name || "?",
+        isSingleActive: () => game.active && !game.multiplayer,
+        isMultiplayer: () => !!game.multiplayer,
+        isMultiplayerActive: () => !!game.multiplayer && game.active,
+        startMultiplayer(settings, pattern, start, saved) {
+            Object.defineProperty(MODE_CONFIG,"multiplayer",{value:{label:"Multiplayer",short:"Multiplayer",type:"color",len:settings.slots,colors:settings.colors,mult:1},configurable:true,enumerable:false});
+            $("end-modal").classList.add("hidden");
+            startNewGame("multiplayer",{...settings,pattern,start},saved);
+        },
+        snapshot: () => ({attempts:game.attempts,locked:game.locked,current:game.current,cursor:game.cursor,active:game.active}),
+        setMultiplayerBusy(v) { if(game.multiplayer){game.mpBusy=v;updateSubmitButton();} },
+        freezeMultiplayer() { if(game.multiplayer){game.active=false;clearInterval(game.timerId);updateSubmitButton();renderBoard();} },
+        stopMultiplayer() { if(game.multiplayer)returnHome(true); }
+    };
     // Inizializzazione
     refreshMenuUI();
 })();
