@@ -998,10 +998,31 @@
         .cc-muted{color:var(--text-muted);font-size:.72rem;line-height:1.45}
         .cc-team-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
         .cc-team{border:1px solid var(--team);border-radius:10px;padding:7px;background:#111a2d;min-width:0;font-size:.75rem;overflow-wrap:anywhere}
-        .cc-team strong{color:var(--team);display:block;margin-bottom:3px}.cc-team p{margin:4px 0}
-        .cc-turn,.cc-clue{text-align:center;font-weight:800;padding:8px;border:1px solid var(--panel-border);border-radius:10px;background:#111b30;font-size:.85rem}
-        .cc-timer{text-align:center;color:var(--amber-glow);font-family:var(--font-mono);font-size:.9rem;font-weight:700}
+        .cc-team strong{color:var(--team);display:block}.cc-team p{margin:4px 0}
+        .cc-team-head,.cc-turn-head,.cc-board-head{display:flex;justify-content:space-between;align-items:center;gap:6px 10px;flex-wrap:wrap}
+        .cc-team-players{display:flex;flex-wrap:wrap;gap:3px 9px;color:var(--team)}
+        .cc-team .cc-player-name{color:var(--team);min-width:0}
+        .cc-team-header-score{color:var(--team);font-variant-numeric:tabular-nums}
+        .cc-box.cc-in-play{max-width:1260px;width:100%}
+        .cc-layout{display:grid;grid-template-columns:minmax(0,2.5fr) minmax(240px,1fr);gap:12px;align-items:start}
+        .cc-sidebar{display:grid;gap:8px;min-width:0}
+        .cc-board-head{padding:0 0 6px}.cc-board-head h2{font-size:.93rem;margin:0}
+        .cc-turn-panel{display:grid;gap:6px;padding:10px;border:1px solid var(--panel-border);border-radius:10px;background:#111b30;min-width:0}
+        .cc-turn-label,.cc-clue{color:var(--team,var(--cyan-glow));font-weight:800}
+        .cc-turn{font-size:clamp(.98rem,1.8vw,1.2rem);margin:0;line-height:1.2}
+        .cc-clue{font-size:clamp(1.08rem,2.8vw,1.5rem);letter-spacing:.03em;overflow-wrap:anywhere}
+        .cc-turn-actions{display:flex;justify-content:center;gap:6px;flex-wrap:wrap}
+        .cc-scene{position:relative;isolation:isolate}
+        .cc-timer{color:var(--amber-glow);font-family:var(--font-mono);font-size:.86rem;font-weight:700;white-space:nowrap}
         .cc-timer.cc-urgent{color:#fb7185;text-shadow:0 0 8px #ff2a5f88}
+        #party-modal .cc-turn,#party-modal .cc-clue,#boardgames-modal .cc-turn{text-align:center;font-weight:800;padding:8px;border:1px solid var(--panel-border);border-radius:10px;background:#111b30;color:inherit;font-size:.85rem}
+        #party-modal .cc-timer{text-align:center;font-size:.9rem;white-space:normal}
+        #cc-clue-form .mp-fields{grid-template-columns:minmax(0,1.4fr) minmax(88px,1fr)}
+        #cc-clue-form :is(input,select){width:100%;min-width:0}
+        #cc-scores{grid-template-columns:1fr}
+        #cc-scores .cc-team{border-color:var(--panel-border);border-inline-start:2px solid var(--team)}
+        #cc-room-header.cc-playing{display:flex;flex-direction:row;gap:5px 10px;align-items:center;flex-wrap:wrap;text-align:left}
+        #cc-room-header.cc-playing #cc-invite{margin-inline-start:auto}
         #cc-custom-words{width:100%;resize:vertical;min-height:90px;background:#0b1428;border:1px solid var(--panel-border);border-radius:10px;padding:9px;color:var(--text-main);font:inherit;user-select:text}
         #cc-custom-mix{padding:10px;border:1px solid var(--panel-border);border-radius:10px;background:#0b1428;display:flex;flex-direction:column;gap:6px}
         #cc-custom-percent{width:100%;accent-color:var(--cyan-glow);cursor:pointer}
@@ -1009,14 +1030,67 @@
         .cc-mix-labels span.active{color:var(--cyan-glow);font-weight:800}
         #cc-custom-level{color:var(--cyan-glow);font-weight:800;font-size:.84rem}
         #cc-timer-settings .mp-fields label{min-width:0;overflow-wrap:anywhere} #cc-timer-settings input{width:100%;min-width:0}
-        #cc-sound{align-self:flex-end}
-        .cc-board{display:grid;grid-template-columns:repeat(var(--cc-size,5),minmax(0,1fr));gap:4px}
-        .cc-cell{min-width:0;min-height:52px;aspect-ratio:1.2;border:1px solid #354765;border-radius:8px;background:#121d33;color:#f1f5f9;font-weight:800;font-size:clamp(.55rem,1.9vw,.81rem);overflow-wrap:anywhere;padding:3px;cursor:pointer;line-height:1.15;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px}
-        .cc-cell:disabled{cursor:default;opacity:1}.cc-cell:not(:disabled):hover{border-color:#fff;transform:translateY(-1px)}
-        .cc-cell[data-color="0"]{background:#113e53;border-color:#22d3ee}.cc-cell[data-color="1"]{background:#4b2259;border-color:#e879f9}.cc-cell[data-color="2"]{background:#4d3511;border-color:#fbbf24}.cc-cell[data-color="3"]{background:#104b3b;border-color:#34d399}.cc-cell[data-color="4"]{background:#384153;border-color:#778399}.cc-cell[data-color="5"]{background:#07090f;border-color:#fb7185;color:#fda4af}
-        .cc-cell small{font-size:.56rem;font-weight:600;color:#e2e8f0}.cc-cell.cc-revealed{box-shadow:inset 0 0 0 1px #ffffff44}.cc-cell.cc-revealed .cc-word{text-decoration:line-through;opacity:.82}
+        #cc-modal [data-cc-color="0"]{--team:#7debf7;--cc-wash:#142c45;--cc-a:#08738a;--cc-b:#073b51}
+        #cc-modal [data-cc-color="1"]{--team:#ff9f78;--cc-wash:#362338;--cc-a:#a84316;--cc-b:#652310}
+        #cc-modal [data-cc-color="2"]{--team:#ffda70;--cc-wash:#362c1a;--cc-a:#825900;--cc-b:#503300}
+        #cc-modal [data-cc-color="3"]{--team:#72e8b5;--cc-wash:#16362f;--cc-a:#087052;--cc-b:#12433a}
+        #cc-modal [data-cc-color="4"]{--team:#c3ccda;--cc-wash:#202a3e;--cc-a:#5a6476;--cc-b:#30394c}
+        #cc-modal [data-cc-color="5"]{--team:#d3b5ff;--cc-wash:#261b3d;--cc-a:#39265d;--cc-b:#130e28}
+        .cc-board{display:grid;grid-template-columns:repeat(var(--cc-size,5),minmax(0,1fr));gap:6px}
+        .cc-board .cc-cell{min-width:0;min-height:clamp(44px,calc((100dvh - var(--identity-bottom,0px) - 168px) / var(--cc-size,5)),92px);padding:0;border:0;border-radius:8px;background:transparent;color:#f1f5f9;display:grid;grid-template-columns:minmax(0,1fr);perspective:620px;cursor:pointer;line-height:1.15}
+        .cc-cell:disabled{cursor:default;opacity:1}
+        .cc-flipper{display:grid;grid-template-columns:minmax(0,1fr);border-radius:inherit;transform-style:preserve-3d;transform:rotateY(0deg);pointer-events:none}
+        .cc-face{grid-area:1/1;min-width:0;border:1px solid #354765;border-radius:inherit;backface-visibility:hidden}
+        .cc-front{display:grid;grid-template-rows:auto minmax(0,1fr);justify-items:center;align-items:center;gap:2px;padding:4px 3px;background:#121d33}
+        .cc-back{display:grid;place-items:center;transform:rotateY(180deg)}
+        .cc-word{grid-row:2;text-align:center;font-weight:800;font-size:clamp(.7rem,1.35vw,.94rem);overflow-wrap:anywhere}
+        .cc-card-team{grid-row:1;justify-self:start;color:var(--team);font-size:.66rem;font-weight:700;line-height:1.12;overflow-wrap:anywhere}
+        .cc-mark{font:700 clamp(1.45rem,3.8vw,2.45rem)/1 "Segoe UI Symbol",var(--font-sans)}
+        .cc-cell[data-classified="true"] .cc-front{background:var(--cc-wash);border-color:color-mix(in srgb,var(--team) 65%,#354765);box-shadow:inset 0 2px var(--team)}
+        .cc-revealed .cc-face{background:linear-gradient(142deg,var(--cc-a),var(--cc-b));border-color:var(--team);color:#fff}
+        .cc-revealed .cc-card-team{color:inherit}
+        .cc-cell[data-turnable="true"] .cc-flipper{transition:transform 460ms cubic-bezier(.42,0,.2,1)}
+        .cc-cell[data-flipped="true"] .cc-flipper{transform:rotateY(180deg)}
+        .cc-cell:not(:disabled):hover .cc-face{border-color:var(--team,#7debf7);box-shadow:inset 0 0 0 1px var(--team,#7debf7)}
+        .cc-cell[data-effect="ally"]{z-index:1;animation:cc-signal 640ms cubic-bezier(.15,.72,.22,1) both}
+        .cc-cell[data-effect="ally"]::after{content:"";position:absolute;inset:0;border-radius:inherit;border:2px solid var(--team);pointer-events:none;animation:cc-wave 640ms ease-out both}
+        .cc-cell[data-effect="neutral"]{animation:cc-rest 430ms ease-out both}
+        .cc-cell[data-effect="rival"]{z-index:1;animation:cc-rival 560ms ease-out both}
         .cc-result{font-size:1.05rem;color:var(--amber-glow);font-weight:800;text-align:center;padding:12px}
-        @media(max-width:420px){.cc-box{padding:9px}.cc-board{gap:3px}.cc-cell{min-height:42px;padding:2px;border-radius:5px}.cc-cell small{font-size:.48rem}}
+        .cc-scene.cc-void .cc-cell{animation:cc-pull 1230ms cubic-bezier(.55,.06,.32,1) var(--cc-delay,0ms) both}
+        .cc-portal{position:absolute;z-index:4;width:clamp(72px,22vw,156px);aspect-ratio:1;left:var(--cc-x,50%);top:var(--cc-y,50%);transform:translate(-50%,-50%);pointer-events:none}
+        .cc-portal::before,.cc-portal::after{content:"";position:absolute;inset:0;border-radius:50%}
+        .cc-void .cc-portal::before{background:radial-gradient(circle,#000 0 26%,#100a22 32%,#4d2f84 40%,#aa7dfa 45%,#6d5ad74d 54%,transparent 72%);animation:cc-hole 1320ms ease-out both}
+        .cc-void .cc-portal::after{inset:7%;border:2px solid #ce9cff;box-shadow:0 0 14px #aa7af5;animation:cc-orbit 1270ms ease-in both}
+        .cc-victory{margin:auto;width:min(calc(100% - 24px),390px);max-height:calc(100dvh - 24px);padding:clamp(20px,5vw,34px);border:1px solid var(--team);border-radius:20px;background:radial-gradient(ellipse at top,color-mix(in srgb,var(--team) 18%,#10192e),#10192e 72%);color:var(--text-main);text-align:center;box-shadow:0 16px 46px #050b1c99}
+        .cc-victory form{display:grid;justify-items:center;gap:9px;margin:0}
+        .cc-victory h2{margin:0;color:var(--team);font-size:clamp(1.5rem,5vw,2rem);line-height:1.12}
+        .cc-victory p{margin:0;color:var(--text-muted)}
+        .cc-victory-symbol{display:grid;place-items:center;position:relative;width:72px;aspect-ratio:1;margin-bottom:5px;border:1px solid var(--team);border-radius:22px;background:linear-gradient(145deg,var(--cc-a),var(--cc-b));color:#fff}
+        .cc-victory-symbol::after{content:"";position:absolute;inset:0;border:2px solid var(--team);border-radius:inherit;opacity:0;pointer-events:none}
+        .cc-victory[open]{animation:cc-victory-enter 480ms cubic-bezier(.16,1,.28,1) both}
+        .cc-victory[open]::backdrop{background:#051020ad;animation:cc-victory-shade 320ms ease-out both}
+        .cc-victory[open] .cc-victory-symbol::after{animation:cc-wave 780ms 140ms ease-out both}
+        @keyframes cc-signal{0%{transform:scale(.92);filter:brightness(1.36)}45%{transform:scale(1.05)}100%{transform:none;filter:none}}
+        @keyframes cc-wave{0%{transform:scale(.9);opacity:.9}100%{transform:scale(1.25);opacity:0}}
+        @keyframes cc-rest{0%{transform:translateY(-4px) rotateX(45deg);opacity:.62}100%{transform:none;opacity:1}}
+        @keyframes cc-rival{0%{transform:translateX(-5px) skewX(-8deg);filter:brightness(1.42)}28%{transform:translateX(4px) skewX(4deg)}65%{transform:translateX(-2px)}100%{transform:none;filter:none}}
+        @keyframes cc-pull{0%{transform:none;opacity:1}20%{transform:translate(calc(var(--cc-dx)*-.08),calc(var(--cc-dy)*-.08)) rotate(7deg) scale(1.04)}82%,100%{transform:translate(var(--cc-dx),var(--cc-dy)) rotate(var(--cc-spin)) scale(.035);opacity:0}}
+        @keyframes cc-hole{0%{transform:scale(.13);opacity:0}24%{transform:scale(1.05);opacity:1}78%{transform:scale(.92);opacity:1}100%{transform:scale(.28);opacity:0}}
+        @keyframes cc-orbit{0%{transform:rotate(10deg) scale(.2,.14);opacity:0}34%{opacity:.9}80%{transform:rotate(335deg) scale(1.04,.62);opacity:.75}100%{transform:rotate(560deg) scale(.12,.08);opacity:0}}
+        @keyframes cc-victory-enter{from{opacity:0;transform:translateY(18px) scale(.94)}to{opacity:1;transform:none}}
+        @keyframes cc-victory-shade{from{opacity:0}to{opacity:1}}
+        @media(max-width:700px){
+          .cc-layout{grid-template-columns:minmax(0,1fr);gap:8px}
+          .cc-sidebar{display:contents}.cc-turn-panel{grid-row:1}
+          #cc-scores{grid-template-columns:repeat(2,minmax(0,1fr))}
+          .cc-board .cc-cell{min-height:50px}
+        }
+        @media(max-width:420px){.cc-box{padding:9px}.cc-board{gap:3px}.cc-board .cc-cell{min-height:44px;border-radius:5px}.cc-front{padding:3px 2px}.cc-card-team{font-size:.6rem}}
+        @media(prefers-reduced-motion:reduce){
+          .cc-cell[data-effect],.cc-cell[data-effect]::after,.cc-scene.cc-void .cc-cell,.cc-void .cc-portal::before,.cc-void .cc-portal::after,.cc-victory[open],.cc-victory[open]::backdrop,.cc-victory[open] .cc-victory-symbol::after{animation:none}
+          .cc-cell[data-turnable="true"] .cc-flipper{transition:none}
+        }
 
 .party-box{max-width:760px}.party-box .mp-actions{flex-wrap:wrap}.party-box .mp-actions input{min-width:110px;flex:4}.party-box .mp-actions button{flex:1;min-width:max-content}.party-box #party-canvas{display:block;width:100%;height:auto;aspect-ratio:3/2;background:#fff;border-radius:10px;border:1px solid #38516b;touch-action:none}.party-tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.party-tools label{flex:1;min-width:70px}.party-tools input[type=color]{width:100%;height:32px}.party-tools input[type=range]{width:100%;accent-color:var(--cyan-glow)}.party-chat{height:145px;overflow:auto;background:#080f20;border:1px solid var(--panel-border);border-radius:9px;padding:8px;display:flex;flex-direction:column;gap:5px;font-size:.8rem;overflow-wrap:anywhere;user-select:text}.party-chat .correct{color:var(--emerald-glow)}.party-banned{padding:12px;border:1px solid #ff2a5f;border-radius:10px;background:#321429;color:#fda4af;text-align:center;font-weight:700;line-height:1.6}.party-card{border-color:#fbbf2477;background:linear-gradient(135deg,#3b2b16,#10192d)}.party-taboo{border-color:#34d39977;background:linear-gradient(135deg,#123b34,#10192d)}
 
@@ -1103,7 +1177,9 @@ body:has(>.modal-backdrop:not(.hidden)) .app-chrome {pointer-events:none;}
  .eye-stage {justify-content:center;min-height:132px;padding:16px 18px;}
  .eye-wrapper {width:170px;height:96px;}
  .eye-status-pill {font-size:.9rem;}
- .menu-controls {grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);align-items:end;padding:10px 14px;gap:16px;}
+ .menu-controls {grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);grid-template-areas:"mode profile";reading-flow:grid-rows;align-items:end;padding:10px 14px;gap:16px;}
+ .menu-controls > .mode-switch {grid-area:mode;}
+ .menu-controls > .profile-controls {grid-area:profile;}
  .profile-controls .section-label {font-size:.72rem;}
  .sync-status {font-size:.68rem;}
  .mode-switch button {min-height:42px;font-size:.9rem;}
@@ -1290,6 +1366,10 @@ body.mind-playing #btn-info {display:none!important;}
 .about-sign {color:var(--cyan-glow);text-align:right;font-weight:700;}
 .auxiliary-modal {z-index:100;}
 #help-modal .game-intro,#help-modal .game-rules {margin:0;}
+#help-modal .help-guide { display:grid; gap:14px; padding:4px 2px 12px; color:var(--text-main); font-size:.9rem; line-height:1.55; }
+#help-modal .help-guide section { display:grid; gap:5px; }
+#help-modal .help-guide h3 { color:var(--cyan-glow); font-size:1rem; }
+#help-modal .help-guide ul { display:grid; gap:4px; padding-inline-start:1.25em; }
 .score-modal {max-width:650px;}.score-tabs {flex-shrink:0;}.score-tabs button {font-size:.78rem;}
 .cosmic-mind-title {
     justify-content: center;
@@ -1339,6 +1419,124 @@ body.mind-playing #mp-game-panel {min-height:0;overflow:auto;}
 }
 @media(max-width:360px){.top-bar{grid-template-columns:minmax(0,1fr) 56px minmax(0,1fr);}.eye-wrapper{width:56px;height:31px;}body.mind-playing .top-bar{grid-template-columns:minmax(0,1fr) 48px minmax(0,1.4fr);}body.mind-playing .eye-wrapper{width:48px;height:27px;}}
 @media(max-height:520px) and (orientation:landscape){body.mind-playing #game-screen{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:'hud hud' 'board side';grid-template-rows:auto minmax(0,1fr);}body.mind-playing .game-side{overflow:auto;}body.mind-playing .color-btn,body.mind-playing .color-btn.compact-25{height:26px;}body.mind-playing .key-btn{height:28px;}body.mind-playing .action-bar .action-btn{height:32px;}}
+#party-modal[data-party-kind="taboo"] .party-box { max-width:1230px; }
+.taboo-board { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,2.35fr) minmax(0,1fr); grid-template-areas:"nebula turn nova"; gap:12px; align-items:start; }
+.taboo-team,.taboo-turn { min-width:0; border:1px solid #29405f; border-radius:13px; background:#101a2b; }
+.taboo-team { grid-area:nebula; --taboo-team:#5ae7f4; padding:10px; border-top:2px solid var(--taboo-team); }
+.taboo-team[data-team="1"] { grid-area:nova; --taboo-team:#ffb577; }
+.taboo-name[data-team="0"] { color:#5ae7f4; }
+.taboo-name[data-team="1"] { color:#ffb577; }
+.taboo-team-head,.taboo-clock-row,.taboo-toolbar { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+.taboo-team-head { color:var(--taboo-team); }
+.taboo-team h3 { font-size:1rem; }
+.taboo-score,.taboo-clock { font-variant-numeric:tabular-nums; font-size:1.3rem; }
+.taboo-roster { list-style:none; display:grid; gap:4px; margin-top:6px; padding:0; }
+.taboo-roster li { min-width:0; display:flex; align-items:center; gap:6px; border-radius:7px; padding:4px; overflow-wrap:anywhere; }
+.taboo-roster li[aria-current] { box-shadow:inset 2px 0 var(--taboo-team); background:color-mix(in srgb,var(--taboo-team) 10%,transparent); }
+.taboo-roster li > span { min-width:0; flex:1 1 auto; }
+.taboo-roster .mini-avatar { vertical-align:middle; }
+.taboo-roster .icon-btn { flex:0 0 auto; min-height:28px; padding:2px 5px; font-size:.76rem; }
+.taboo-turn { grid-area:turn; }
+.taboo-clock-row { padding:10px 14px; border-bottom:1px solid #29405f; }
+.taboo-clock-row[data-paused="true"] { color:#ffd48a; }
+.taboo-phase { color:#81edf6; }
+.taboo-clock-row[data-team="1"]:not([data-paused="true"]) .taboo-phase { color:#ffb577; }
+.taboo-clock-row[data-paused="true"] .taboo-phase { color:inherit; }
+.taboo-body { display:grid; gap:10px; padding:12px 14px; }
+.taboo-body h2 { font-size:clamp(1.15rem,2.5vw,1.46rem); }
+.taboo-context { color:#b5c5db; font-size:.87rem; overflow-wrap:anywhere; }
+.taboo-note { color:#ffd48a; font-size:.86rem; overflow-wrap:anywhere; }
+.taboo-card { display:grid; gap:5px; padding:13px 10px; text-align:center; border-radius:10px; background:#263b62; }
+.taboo-card strong { color:#ffd58c; font-size:clamp(1.22rem,3vw,1.55rem); letter-spacing:.035em; overflow-wrap:anywhere; }
+.taboo-card ul { list-style:none; display:flex; flex-wrap:wrap; justify-content:center; gap:4px 10px; margin:0; padding:0; }
+.taboo-actions { display:flex; flex-wrap:wrap; justify-content:center; gap:7px; }
+.taboo-buzzer {
+  justify-self:center; width:108px; min-height:108px; aspect-ratio:1; border:2px solid #fc6475; border-radius:50%;
+  background:radial-gradient(ellipse at 30% 16%,#ff7d73 0%,transparent 58%),linear-gradient(155deg,#ed334f 15%,#b41431 54%,#820e27 100%);
+  box-shadow:inset 0 2px 0 #ffc3b675,inset 0 -6px 12px #5d071b66,0 5px 0 #650c22,0 9px 20px #ed29424d;
+  color:#fff; font-weight:850; letter-spacing:.075em; text-shadow:0 1px 3px #6b1028; cursor:pointer;
+}
+.taboo-buzzer:active:not(:disabled) { transform:translateY(3px); box-shadow:inset 0 3px 10px #6b102866,0 2px 0 #650c22; }
+.taboo-buzzer:disabled { opacity:.55; }
+.taboo-review { display:grid; gap:7px; border-radius:8px; background:#19253c; border-inline-start:2px solid #ffd48a; padding:9px 11px; overflow-wrap:anywhere; }
+.taboo-review form,.taboo-review label { display:grid; gap:5px; }
+.taboo-review time { color:#ffd48a; font-weight:750; font-variant-numeric:tabular-nums; }
+.taboo-chat { display:grid; gap:4px; list-style:none; padding:0; color:#c8d5e8; overflow-wrap:anywhere; }
+.taboo-chat-form { display:flex; flex-wrap:wrap; gap:6px; }
+.taboo-chat-form input { flex:1 1 14ch; min-width:0; }
+.taboo-invite-group { display:flex; align-items:center; flex-wrap:wrap; gap:8px; }
+.taboo-invite-group code { color:#81edf6; letter-spacing:.06em; }
+#taboo-stage button:focus-visible,.taboo-team button:focus-visible { outline:2px solid #9cecff; outline-offset:3px; }
+@media (min-width:980px) {
+  #party-modal[data-party-kind="taboo"]:has(#taboo-table:not(.hidden)) { align-items:start; }
+  #party-modal[data-party-kind="taboo"] .party-box:has(#taboo-table:not(.hidden)) { max-height:none; overflow:visible; }
+  #party-modal[data-party-kind="taboo"]:has(#taboo-table:not(.hidden)) { overflow-y:auto; }
+}
+@media (max-width:719px) {
+  .taboo-board { grid-template-columns:repeat(2,minmax(0,1fr)); grid-template-areas:"turn turn" "nebula nova"; gap:8px; }
+  .taboo-team,.taboo-body { padding:8px; }
+}
+#party-modal[data-party-kind="draw"]:has(#draw2-table:not(.hidden)) .party-box {max-width:1320px;}
+.draw2-layout {display:grid;grid-template-columns:minmax(0,2.25fr) minmax(0,1fr);gap:12px;align-items:start;}
+.draw2-board,.draw2-side,.draw2-lobby {min-width:0;background:#121d30;border:1px solid #29405f;border-radius:13px;}
+.draw2-lobby {grid-column:1/-1;display:grid;gap:10px;padding:14px;}
+.draw2-toolbar,.draw2-board-head,.draw2-clock,.draw2-code {display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;}
+.draw2-code {justify-content:flex-start;}
+.draw2-code code {color:#80ecf5;letter-spacing:.07em;}
+.draw2-board-head {padding:9px 12px;}
+.draw2-board-head h2,.draw2-section h3 {font-size:.95rem;}
+.draw2-clock {position:relative;background:#101a2c;border:1px solid #29405f;border-radius:10px;padding:8px 12px;}
+.draw2-clock time {color:#83edf6;font-size:1.35rem;font-weight:750;font-variant-numeric:tabular-nums;line-height:1;}
+.draw2-clock time.cc-urgent {color:#ffd48a;}
+.draw2-muted {color:#b4c5de;font-size:.85rem;overflow-wrap:anywhere;}
+.draw2-pad {position:relative;margin:0 8px 8px;border-radius:8px;background:#fffcf5;overflow:hidden;}
+.draw2-pad canvas {display:block;width:100%;height:auto;aspect-ratio:780/450;}
+.draw2-pad canvas[data-editable="true"] {cursor:crosshair;touch-action:none;}
+.draw2-choice {position:absolute;inset:0;display:grid;place-content:center;justify-items:center;text-align:center;gap:10px;padding:8px;background:#111e33;}
+.draw2-choice h3 {font-size:clamp(.97rem,2.3vw,1.25rem);}
+.draw2-tools,.draw2-tool-group,.draw2-action-row {display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:6px;}
+.draw2-tools {padding:0 8px 8px;}
+.draw2-tools label {display:flex;align-items:center;gap:5px;color:#b4c5de;font-size:.82rem;}
+.draw2-tools input[type="range"] {width:60px;accent-color:#75e8f4;}
+.draw2-tools input[type="color"] {width:32px;height:28px;padding:2px;border:1px solid #38516b;border-radius:6px;background:#182944;}
+.draw2-tool-group .icon-btn {min-width:37px;height:35px;padding:6px;display:grid;place-items:center;}
+.draw2-tool-group svg {width:17px;height:17px;}
+.draw2-tool-group [aria-pressed="true"] {background:#123747;border-color:#67e4f0;color:#85eef7;}
+.draw2-side {overflow:hidden;}
+.draw2-role {display:grid;gap:8px;padding:10px 12px;background:#142c47;border-bottom:1px solid #29405f;}
+.draw2-role h2 {font-size:clamp(1.04rem,2.25vw,1.24rem);}
+.draw2-word {border-radius:8px;text-align:center;padding:8px;background:#263b62;color:#ffd58c;font-weight:800;letter-spacing:.05em;overflow-wrap:anywhere;}
+.draw2-guess {display:flex;align-items:center;flex-wrap:wrap;gap:6px;}
+.draw2-guess input {flex:1 1 100px;min-width:0;}
+.draw2-feedback {color:#93edba;font-size:.86rem;overflow-wrap:anywhere;}
+.draw2-section {display:grid;gap:5px;padding:8px 10px;}
+.draw2-section+.draw2-section {border-top:1px solid #29405f;}
+.draw2-roster,.draw2-log {display:grid;gap:4px;list-style:none;padding:0;min-width:0;}
+.draw2-side .draw2-roster[data-many="true"] {grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 9px;}
+.draw2-roster li {display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px;align-items:center;min-width:0;overflow-wrap:anywhere;}
+.draw2-roster .mini-avatar {width:21px;height:21px;margin-inline-end:4px;}
+.draw2-roster[data-many="true"] .mini-avatar {width:16px;height:16px;}
+.draw2-roster .draw2-artist {color:#87e7f2;}
+.draw2-roster .draw2-solved {color:#93edba;}
+.draw2-roster strong {font-size:.83rem;font-variant-numeric:tabular-nums;color:#c8d9ed;}
+.draw2-roster .icon-btn {min-height:29px;padding:3px 5px;font-size:.75rem;}
+.draw2-lobby .draw2-roster {grid-template-columns:repeat(2,minmax(0,1fr));gap:7px 12px;}
+.draw2-lobby .draw2-roster li {background:#16263d;border-radius:7px;padding:5px 8px;}
+.draw2-log {font-size:.84rem;color:#b4c5de;overflow-wrap:anywhere;}
+.draw2-log li strong {color:#e2efff;}
+.draw2-log li[data-correct] {color:#93edba;}
+@media(min-width:980px) {
+  #party-modal[data-party-kind="draw"]:has(#draw2-table:not(.hidden)) {align-items:start;overflow-y:auto;}
+  #party-modal[data-party-kind="draw"]:has(#draw2-table:not(.hidden)) .party-box {max-height:none;overflow:visible;}
+  .draw2-pad {width:min(calc(100% - 16px),max(350px,calc((100dvh - var(--identity-bottom) - 220px)*1.733)));margin-inline:auto;}
+}
+@media(max-width:719px) {
+  .draw2-layout {grid-template-columns:minmax(0,1fr);gap:8px;}
+  .draw2-lobby .draw2-roster {grid-template-columns:minmax(0,1fr);}
+}
+@media(pointer:coarse) {
+  .draw2-tool-group .icon-btn {min-width:44px;min-height:44px;}
+}
 </style>
 </head>
 <body>
@@ -1568,11 +1766,23 @@ body.mind-playing #mp-game-panel {min-height:0;overflow:auto;}
             <div style="text-align:center; padding:18px; font-size:0.78rem; color:var(--text-muted);">Caricamento classifica...</div>
         </div>
 </section></div></div>
-<div id="help-modal" class="modal-backdrop hidden auxiliary-modal"><div class="glass-panel modal-box"><div class="modal-head"><span class="modal-title">Come si gioca</span><button id="close-help" class="icon-btn" aria-label="Chiudi">✕</button></div><div id="help-mind" class="mp-stack">        <section class="glass-panel game-intro" aria-label="Come si gioca"><strong>Come si gioca: </strong><span id="game-intro-text"></span></section>        <section class="glass-panel rules-box game-rules" aria-label="Legenda dei tentativi">
+<div id="help-modal" class="modal-backdrop hidden auxiliary-modal" role="dialog" aria-modal="true" aria-labelledby="help-title"><div class="glass-panel modal-box"><div class="modal-head"><span id="help-title" class="modal-title">Come si gioca</span><button id="close-help" class="icon-btn" aria-label="Chiudi">✕</button></div><div id="help-mind" class="mp-stack">        <section class="glass-panel game-intro" aria-label="Come si gioca"><strong>Come si gioca: </strong><span id="game-intro-text"></span></section>        <section class="glass-panel rules-box game-rules" aria-label="Legenda dei tentativi">
             <div class="game-rules-title">◈ Legenda dei tentativi</div>
             <div><span class="legend-dot legend-green" aria-hidden="true"></span><span><strong>Luce verde:</strong> elemento e posizione esatti; resta bloccato.</span></div>
             <div><span class="legend-dot legend-yellow" aria-hidden="true"></span><span><strong>Luce gialla:</strong> elemento presente, ma in posizione diversa.</span></div>
-        </section></div><p id="help-other" class="room-entry-intro hidden"></p></div></div>
+        </section></div><p id="help-other" class="room-entry-intro hidden"></p><div id="help-guide" class="help-guide hidden"></div></div></div>
+<template id="guide-tratti-stellari" data-heading="Tratti Stellari · Come si gioca">
+ <section><h3>Scegli e disegna</h3><p>A ogni turno cambia il disegnatore. Ha 15 secondi per scegliere una delle tre parole. Alla scadenza viene scelta la prima. Durante il turno solo il disegnatore vede la parola. Può usare pennello, riempimento e gomma, annullare o ripristinare un’azione e pulire la lavagna.</p></section>
+ <section><h3>Indovina prima degli altri</h3><p>Gli altri giocatori inviano i tentativi nella chat. Il turno dura 80 secondi per impostazione predefinita. La prima risposta giusta riduce il tempo rimanente a 30 secondi se era superiore. Chi ha già indovinato aspetta il prossimo turno. Il turno termina quando tutti indovinano o quando scade il tempo. Chi disegna e chi ha creato la stanza possono anche terminarlo in anticipo.</p></section>
+ <section><h3>Punteggio</h3><p>Chi indovina ottiene fino a 500 punti nei primi secondi e almeno 75 all’ultimo istante utile. A 30 secondi, in un turno standard, la risposta vale 325 punti. Il disegnatore riceve i punti a fine turno in base a quanti giocatori hanno indovinato e al tempo rimasto all’ultima risposta corretta. Dopo i giri previsti vince chi ha più punti.</p></section>
+</template>
+<template id="guide-parole-proibite">
+<section><h3>Squadre e ruoli</h3><p>Nebula e Nova devono avere lo stesso numero di giocatori, almeno due per squadra. Le squadre si alternano e i ruoli ruotano. Il <strong>suggeritore</strong> dà gli indizi, i suoi compagni <strong>indovinano</strong> e un <strong>controllore</strong> dell’altra squadra legge la carta e verifica gli indizi. Solo suggeritore e controllore vedono la carta.</p></section>
+<section><h3>Come si gioca un turno</h3><p>Il suggeritore preme <strong>Avvia il turno</strong>. Il timer parte con la durata scelta alla creazione della stanza. <strong>In chat</strong>, si scrivono gli indizi e le risposte nel gioco. <strong>In chiamata</strong>, si parla nella chiamata del gruppo e il suggeritore preme <strong>Indovinata</strong> quando sente la risposta corretta. Per cambiare carta, il suggeritore può premere <strong>Passa parola</strong>.</p></section>
+<section><h3>Indizi vietati</h3><p>Evita la soluzione, le cinque parole sulla carta, parti di quelle parole, plurali e varianti. Vanno evitati anche gesti, abbreviazioni e suggerimenti basati su rime, suoni o somiglianze della parola.</p></section>
+<section><h3>Segnalazioni</h3><p>Il controllore preme <strong>SEGNALA</strong> per fermare il timer del turno. <strong>In chat</strong>, ha 15 secondi per inviare il motivo e un eventuale dettaglio riservato al suggeritore. Se il motivo non arriva, la segnalazione si annulla. Dopo l’invio, il suggeritore ha 10 secondi per rispondere. Alla scadenza la segnalazione viene accettata. <strong>In chiamata</strong>, il controllore spiega a voce quale regola ritiene violata e il timer resta fermo fino alla scelta del suggeritore.</p><ul><li><strong>Continua</strong> assegna il punto all’altra squadra e apre una nuova carta.</li><li><strong>Contesta</strong> fa ripartire il turno con la carta successiva. Il punto resta in sospeso finché il controllore lo conferma o annulla la segnalazione.</li><li><strong>Annulla segnalazione</strong> permette al controllore di ritirarla prima della risposta. Il turno riprende sulla stessa carta, senza assegnare punti.</li></ul></section>
+<section><h3>Punteggio e fine partita</h3><p>Una risposta corretta vale <strong>+1</strong> per la squadra che indovina. Un passaggio o una violazione confermata vale <strong>+1</strong> per l’altra squadra. Allo scadere del timer si risolvono le eventuali contestazioni rimaste aperte, poi tocca all’altra squadra. Dopo i giri previsti, vince chi ha più punti.</p></section>
+</template>
 <div id="info-modal" class="modal-backdrop hidden auxiliary-modal"><div class="glass-panel modal-box"><div class="modal-head"><span class="modal-title">Cosmic Eye</span><button id="close-info" class="icon-btn" aria-label="Chiudi">✕</button></div><h2 class="about-motto">Mens sana in corpore sano</h2><p class="about-copy">Ho creato Cosmic Eye perché volevo un posto in cui allenare la mente e, allo stesso tempo, ritrovare il piacere di giocare insieme. Un piccolo spazio senza complicazioni, dove la curiosità, la logica e la creatività diventano occasioni per mettersi alla prova e condividere un momento con gli amici.</p><p class="about-copy">L'idea è quella di poter aprire il gioco ovunque, anche solo per pochi minuti, e trovare sempre una nuova sfida. Perché divertirsi e tenere la mente attiva possono andare di pari passo.</p><p class="about-sign">~ Roxanto</p></div></div>
 <div id="avatar-modal" class="modal-backdrop hidden auxiliary-modal"><div class="glass-panel modal-box"><div class="modal-head"><span class="modal-title">Crea il tuo avatar</span><button id="close-avatar" class="icon-btn" aria-label="Chiudi">✕</button></div><div id="avatar-preview" class="avatar-preview"></div><div id="avatar-options" class="mp-fields"></div><div class="mp-actions"><button id="avatar-random" class="icon-btn">Casuale</button><button id="avatar-save" class="action-btn btn-submit">Salva avatar</button></div><p class="cc-muted" id="avatar-message" role="status"></p></div></div>
 
@@ -1666,6 +1876,8 @@ body.mind-playing #mp-game-panel {min-height:0;overflow:auto;}
      <label>Squadre<select id="cc-teams"><option value="2">2 squadre</option><option value="3">3 squadre</option><option value="4">4 squadre</option></select></label>
      <label>Posti<select id="cc-capacity"><option value="4">4</option><option value="8" selected>8</option><option value="12">12</option><option value="16">16</option></select></label>
     </div>
+    <label>Scelte per turno<select id="cc-guess-limit" aria-describedby="cc-guess-limit-help"><option value="limited">Con limite</option><option value="unlimited">Illimitate</option></select></label>
+    <p id="cc-guess-limit-help" class="cc-muted">Con limite: numero dell’indizio + 1. Con scelte illimitate, la squadra continua finché trova carte proprie. Il timer, se attivo, vale in entrambi i casi.</p>
     <div class="section-label">◈ Timer della partita</div>
     <label class="mp-check"><input id="cc-timer-enabled" type="checkbox" checked> Attiva timer</label>
     <div id="cc-timer-settings" class="mp-stack">
@@ -1687,7 +1899,7 @@ body.mind-playing #mp-game-panel {min-height:0;overflow:auto;}
       <p class="cc-muted">Il livello limita sia la percentuale delle parole uniche inserite da estrarre sia la percentuale delle caselle che possono occupare. Si usa il minore dei due valori, arrotondato all’intero più vicino. Estrazione casuale a ogni round.</p>
     </div>
     <p id="cc-word-count" class="cc-muted" aria-live="polite"></p>
-    <label class="mp-check"><input id="cc-rotate" type="checkbox" checked> Ruota i capitani nelle rivincite</label>
+    <label class="mp-check"><input id="cc-rotate" type="checkbox" checked> Ruota i Master nelle rivincite</label>
     <button type="submit" class="action-btn btn-submit">Crea stanza</button>
    </form>
    <form id="cc-join" class="mp-stack hidden room-entry-form">
@@ -1696,45 +1908,164 @@ body.mind-playing #mp-game-panel {min-height:0;overflow:auto;}
     <button type="submit" class="action-btn btn-submit">Unisciti</button>
    </form>
   </div></div>
-  <div id="cc-room" class="mp-stack hidden"><details class="game-guide"><summary>Come si gioca</summary><p id="cc-guide-text">Ogni squadra ha un master che conosce la mappa delle parole. Il master dà un indizio di una sola parola e un numero; gli esploratori cercano i segnali della propria squadra. Una scelta errata termina il turno, mentre il Vuoto elimina la squadra. Vince chi trova tutti i propri segnali o rimane l’ultima squadra in gioco.</p></details>
-   <div class="mp-room-header"><strong id="cc-room-name"></strong><span id="cc-room-code" class="mp-code"></span><span id="cc-room-settings" class="cc-muted"></span><button id="cc-invite" class="icon-btn">Condividi invito</button></div>
+  <div id="cc-room" class="mp-stack hidden">
+   <div id="cc-room-header" class="mp-room-header"><strong id="cc-room-name"></strong><span id="cc-room-code" class="mp-code"></span><span id="cc-room-settings" class="cc-muted"></span><button id="cc-invite" class="icon-btn">Condividi invito</button></div>
    <div id="cc-lobby" class="mp-stack">
     <div class="section-label">Squadre e ruoli</div><div id="cc-players" class="cc-team-grid"></div>
-    <div class="mp-fields"><label>La tua squadra<select id="cc-my-team"></select></label><label>Ruolo preferito<select id="cc-my-role"><option value="agent">Esploratore</option><option value="captain">Capitano</option></select></label></div>
+    <div class="mp-fields"><label>La tua squadra<select id="cc-my-team"></select></label><label>Ruolo preferito<select id="cc-my-role"><option value="agent">Esploratore</option><option value="captain">Master</option></select></label></div>
     <button id="cc-ready" class="icon-btn">Sono pronto</button><button id="cc-start" class="action-btn btn-submit">Avvia sfida</button>
-    <p class="cc-muted">Servono almeno un capitano e un esploratore per squadra. Il capitano vede la mappa completa. Nelle rivincite può essere ruotato automaticamente.</p>
+    <p class="cc-muted">Servono un Master e almeno un Esploratore per squadra.</p>
    </div>
    <div id="cc-play" class="mp-stack hidden">
-    <div id="cc-scores" class="cc-team-grid"></div>
-    <div id="cc-turn" class="cc-turn" role="status"></div><div id="cc-timer" class="cc-timer"></div><button id="cc-sound" class="icon-btn" type="button" title="Audio del gioco">🔊 Audio</button>
-    <div id="cc-clue-display" class="cc-clue"></div><div id="cc-board" class="cc-board"></div>
-    <div id="cc-legend" class="cc-muted"></div>
-    <form id="cc-clue-form" class="mp-stack hidden"><div class="mp-fields"><label>Indizio (una parola)<input id="cc-clue" class="profile-input" maxlength="24" required autocomplete="off"></label><label>Numero di parole<select id="cc-clue-count"></select></label></div><button type="submit" class="action-btn btn-submit">Trasmetti indizio</button></form>
-    <button id="cc-pass" class="icon-btn hidden">Termina turno</button>
-    <button id="cc-timeout" class="icon-btn hidden">Tempo scaduto · Prossimo turno</button>
-    <p id="cc-result" class="cc-result hidden"></p>
-    <button id="cc-rematch" class="action-btn btn-submit hidden">Rivincita</button>
+    <div class="cc-layout">
+     <section aria-labelledby="cc-board-title">
+      <div class="cc-board-head"><h2 id="cc-board-title">Tabellone</h2><span id="cc-legend" class="cc-muted"></span><button id="cc-sound" class="icon-btn" type="button" aria-label="Audio del gioco">Audio</button></div>
+      <div id="cc-scene" class="cc-scene"><div id="cc-board" class="cc-board"></div><div id="cc-portal" class="cc-portal hidden" aria-hidden="true"></div></div>
+     </section>
+     <aside class="cc-sidebar" aria-label="Turno e squadre">
+      <section id="cc-turn-panel" class="cc-turn-panel" aria-label="Turno">
+       <div class="cc-turn-head"><strong id="cc-turn-label" class="cc-turn-label"></strong><time id="cc-timer" class="cc-timer"></time></div>
+       <h2 id="cc-turn" class="cc-turn" role="status"></h2>
+       <form id="cc-clue-form" class="mp-stack hidden">
+        <div class="mp-fields"><label>Parola<input id="cc-clue" class="profile-input" maxlength="24" required autocomplete="off" placeholder="Es. OTTICA"></label><label>Carte collegate<select id="cc-clue-count" required></select></label></div>
+        <button type="submit" class="action-btn btn-submit">Invia indizio</button>
+       </form>
+       <p id="cc-clue-display" class="cc-clue hidden"></p>
+       <p id="cc-choices" class="cc-muted hidden"></p>
+       <p id="cc-feedback" class="cc-muted hidden" role="status"></p>
+       <div class="cc-turn-actions">
+        <button id="cc-pass" type="button" class="icon-btn hidden">Passa</button>
+        <button id="cc-timeout" type="button" class="icon-btn hidden">Tempo scaduto · Prossimo turno</button>
+        <button id="cc-rematch" type="button" class="action-btn btn-submit hidden">Rivincita</button>
+       </div>
+      </section>
+      <div id="cc-scores" class="cc-team-grid"></div>
+     </aside>
+    </div>
    </div>
    <button id="cc-leave" class="icon-btn" style="color:#fda4af">Esci dalla stanza</button>
   </div>
  </section>
+ <dialog id="cc-victory" class="cc-victory" aria-labelledby="cc-victory-title" aria-describedby="cc-victory-reason">
+  <form method="dialog">
+   <span id="cc-victory-symbol" class="cc-victory-symbol cc-mark" aria-hidden="true"></span>
+   <h2 id="cc-victory-title"></h2>
+   <p id="cc-victory-reason"></p>
+   <button type="submit" class="action-btn btn-submit" autofocus>Rivedi il tabellone</button>
+  </form>
+ </dialog>
 </div>
+<template id="guide-connessioni-cosmiche" data-heading="Connessioni Cosmiche · Come si gioca">
+ <section><h3>Squadre e indizi</h3><p>Ogni squadra sceglie un Master. Solo i Master vedono a chi appartengono le carte coperte. Il Master di turno invia una sola parola, diversa da quelle sul tabellone, e indica quante carte sono collegate.</p></section>
+ <section><h3>Scelte degli Esploratori</h3><p>Gli Esploratori della squadra di turno scelgono una carta alla volta. Una carta propria vale un punto e permette di continuare. Con il limite attivo, le scelte sono pari al numero dell’indizio più una. Se la stanza ha scelte illimitate, si continua finché si trovano carte proprie, si passa o scade il timer, se attivo.</p></section>
+ <section><h3>Esiti delle carte</h3><ul><li>Una carta neutra chiude il turno.</li><li>Una carta rivale assegna il punto alla sua squadra e chiude il turno.</li><li>Il Vuoto elimina la squadra che lo sceglie. Le squadre rimaste continuano.</li></ul><p>Puoi rigirare una carta rivelata per rileggere la parola.</p></section>
+ <section><h3>Vittoria</h3><p>Vince la squadra che trova tutte le proprie carte o rimane l’ultima in gioco.</p></section>
+</template>
 
 <div id="party-modal" class="modal-backdrop hidden"><div class="glass-panel modal-box cc-box party-box">
- <div class="modal-head"><span id="party-title" class="modal-title"></span><button id="party-close" class="icon-btn">✕</button></div>
+ <div class="modal-head"><span id="party-title" class="modal-title"></span><button id="party-help" type="button" class="icon-btn room-help-btn" title="Come si gioca" aria-label="Come si gioca" aria-haspopup="dialog" aria-controls="help-modal">?</button><button id="party-close" class="icon-btn">✕</button></div>
  <div id="party-message" class="mp-message" role="status"></div>
  <div id="party-entry" class="mp-stack"><section class="room-directory mp-stack" aria-label="Stanze disponibili"><div class="room-directory-head"><div class="section-label">◈ Stanze aperte</div><button id="party-directory-refresh" type="button" class="icon-btn" title="Aggiorna elenco">↻</button></div><p class="cc-muted">🔓 Libera · 🔒 Con password</p><div id="party-directory-list" class="mp-stack" role="status" aria-live="polite"><p class="cc-muted">Caricamento…</p></div></section><div class="room-entry-controls mp-stack">
   <p id="party-intro" class="room-entry-intro"></p>
   <div class="mp-actions"><button id="party-show-create" type="button" class="action-btn btn-submit">＋ Crea stanza</button><button id="party-show-join" type="button" class="action-btn btn-submit">Unisciti</button></div>
   <form id="party-create" class="mp-stack room-entry-form hidden"><div class="section-label">Crea stanza</div>
-   <label>Nome stanza<input id="party-name" class="profile-input" maxlength="30" required value="Sfida tra amici"></label>
+   <label>Nome stanza<input id="party-name" class="profile-input" maxlength="30" placeholder="Facoltativo"></label>
    <label>Password (vuota = accesso libero; altrimenti 8-64 caratteri)<input id="party-password" class="profile-input" type="password" minlength="8" maxlength="64"></label>
    <div class="mp-fields"><label>Giocatori massimi<select id="party-capacity"><option>2</option><option>4</option><option>6</option><option selected>8</option><option>12</option><option>16</option></select></label>
    <label>Giri completi<select id="party-rounds"><option>1</option><option selected>2</option><option>3</option><option>4</option></select></label></div>
-   <label>Durata turno<select id="party-duration"><option value="30">30 secondi</option><option value="60" selected>60 secondi</option><option value="90">90 secondi</option><option value="120">120 secondi</option><option value="180">180 secondi</option><option value="0">Nessun timer</option></select></label>
+   <label>Durata turno<select id="party-duration"><option value="30">30 secondi</option><option value="60" selected>60 secondi</option><option value="80">80 secondi</option><option value="90">90 secondi</option><option value="120">120 secondi</option><option value="180">180 secondi</option><option value="0">Nessun timer</option></select></label>
+   <label id="party-channel-label" class="hidden">Indizi<select id="party-channel"><option value="chat">In chat</option><option value="voice">In chiamata esterna</option></select></label>
    <button class="action-btn btn-submit">Crea stanza</button></form>
   <form id="party-join" class="mp-stack room-entry-form hidden"><div class="section-label">Unisciti</div><label>Codice stanza<input id="party-code-input" class="profile-input" maxlength="10" required></label><label>Password (vuota = accesso libero; altrimenti 8-64 caratteri)<input id="party-join-password" class="profile-input" type="password" maxlength="64" minlength="8"></label><button class="action-btn btn-submit">Unisciti</button></form>
  </div></div>
+ <div id="draw2-table" class="mp-stack hidden">
+  <div class="draw2-toolbar">
+   <div class="draw2-code"><strong id="draw2-room-name" class="hidden"></strong><code id="draw2-code" class="hidden"></code></div>
+   <div class="draw2-action-row"><button id="draw2-invite" type="button" class="icon-btn">Condividi invito</button><button id="draw2-sound" type="button" class="icon-btn">Audio</button><button id="draw2-leave" type="button" class="icon-btn">Esci dalla stanza</button></div>
+  </div>
+  <div id="draw2-clock" class="draw2-clock hidden"><strong id="draw2-phase" role="status"></strong><time id="draw2-time" aria-label="Tempo rimasto"></time><span id="draw2-turn" class="draw2-muted"></span></div>
+  <div class="draw2-layout">
+   <section id="draw2-lobby" class="draw2-lobby hidden" aria-label="Lobby"><h2 id="draw2-lobby-title"></h2><ul id="draw2-lobby-players" class="draw2-roster"></ul><div><button id="draw2-start" class="action-btn btn-submit" type="button">Avvia partita</button><p id="draw2-waiting" class="draw2-muted"></p></div></section>
+   <section id="draw2-board" class="draw2-board hidden" aria-labelledby="draw2-board-title">
+    <div class="draw2-board-head"><h2 id="draw2-board-title"></h2><span id="draw2-progress" class="draw2-muted"></span></div>
+    <div class="draw2-pad">
+     <canvas id="draw2-canvas" width="780" height="450" aria-label="Lavagna condivisa"></canvas>
+     <div id="draw2-choice" class="draw2-choice hidden"><h3 id="draw2-choice-title"></h3><div id="draw2-words" class="draw2-action-row"></div></div>
+    </div>
+    <div id="draw2-tools" class="draw2-tools hidden" aria-label="Strumenti di disegno">
+     <div class="draw2-tool-group" role="group" aria-label="Strumento attivo">
+      <button id="draw2-brush" class="icon-btn" type="button" title="Pennello" aria-label="Pennello" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 15 18 4a2 2 0 0 1 3 3L10 18M8 15a3 3 0 0 0-4 2c-.2 1.2-.6 2.1-2 2.5 2 1 5.5 1 7-1 .8-1 .2-2.5-1-3.5Z"/></svg></button>
+      <button id="draw2-fill" class="icon-btn" type="button" title="Riempi" aria-label="Riempi" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 3 10 10-6 6a2 2 0 0 1-3 0l-5-5a2 2 0 0 1 0-3l5-5M4 12h13M20 15s-2 2.5-2 4a2 2 0 1 0 4 0c0-1.5-2-4-2-4Z"/></svg></button>
+      <button id="draw2-eraser" class="icon-btn" type="button" title="Gomma" aria-label="Gomma" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m4 14 9-9a2 2 0 0 1 3 0l4 4a2 2 0 0 1 0 3l-8 8H9l-5-5a1 1 0 0 1 0-1Zm4-4 7 7M11 20h10"/></svg></button>
+     </div>
+     <label>Colore <input id="draw2-ink" type="color" value="#26334d"></label>
+     <label>Spessore <input id="draw2-size" type="range" min="2" max="22" value="6"></label>
+     <div class="draw2-tool-group" role="group" aria-label="Cronologia">
+      <button id="draw2-undo" class="icon-btn" type="button" title="Annulla" aria-label="Annulla" disabled><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 5-4 4 4 4M4 9h10a5 5 0 0 1 0 10h-3"/></svg></button>
+      <button id="draw2-redo" class="icon-btn" type="button" title="Ripristina" aria-label="Ripristina" disabled><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m16 5 4 4-4 4m4-4H10a5 5 0 0 0 0 10h3"/></svg></button>
+     </div>
+     <button id="draw2-clear" type="button" class="icon-btn">Pulisci</button>
+    </div>
+   </section>
+   <aside id="draw2-side" class="draw2-side hidden" aria-label="Turno e giocatori">
+    <div class="draw2-role"><h2 id="draw2-role-title"></h2><p id="draw2-role-note" class="draw2-muted"></p><strong id="draw2-word" class="draw2-word hidden"></strong>
+     <form id="draw2-guess" class="draw2-guess hidden"><input id="draw2-answer" class="profile-input" type="text" maxlength="100" required autocomplete="off" aria-label="La tua risposta" placeholder="La tua risposta"><button type="submit" class="icon-btn">Invia</button></form>
+     <p id="draw2-feedback" class="draw2-feedback hidden" role="status"></p>
+     <div id="draw2-end-actions" class="draw2-action-row hidden"><button id="draw2-end" type="button" class="icon-btn">Termina turno</button><button id="draw2-rematch" type="button" class="action-btn btn-submit hidden">Rivincita</button></div>
+    </div>
+    <section id="draw2-log-section" class="draw2-section hidden"><h3>Ultimi tentativi</h3><ol id="draw2-log" class="draw2-log" role="log"></ol></section>
+    <section class="draw2-section"><h3>Giocatori</h3><ul id="draw2-players" class="draw2-roster"></ul></section>
+   </aside>
+  </div>
+ </div>
+ <div id="taboo-table" class="mp-stack hidden">
+  <div class="taboo-toolbar">
+   <div class="taboo-invite-group"><strong id="taboo-room-name"></strong><code id="taboo-code"></code><span id="taboo-channel-status" class="taboo-context"></span></div>
+   <div class="taboo-actions"><button id="taboo-invite" type="button" class="icon-btn">Condividi invito</button><button id="taboo-sound" type="button" class="icon-btn">Audio</button><button id="taboo-leave" type="button" class="icon-btn">Esci dalla stanza</button></div>
+  </div>
+  <div class="taboo-board">
+   <section class="taboo-team" aria-labelledby="taboo-nebula" data-team="0">
+    <div class="taboo-team-head"><h3 id="taboo-nebula">Nebula</h3><strong id="taboo-score-0" class="taboo-score"></strong></div>
+    <ul id="taboo-team-0" class="taboo-roster"></ul>
+   </section>
+   <section id="taboo-stage" class="taboo-turn" aria-label="Situazione di gioco">
+    <div id="taboo-clock-row" class="taboo-clock-row"><strong class="taboo-phase" id="taboo-phase" role="status"></strong><time class="taboo-clock" id="taboo-clock"></time></div>
+    <div class="taboo-body">
+     <h2 id="taboo-title"></h2>
+     <p id="taboo-context" class="taboo-context"></p>
+     <div id="taboo-lobby" class="mp-stack hidden">
+      <label>La tua squadra<select id="taboo-team-select"><option value="0">Nebula</option><option value="1">Nova</option></select></label>
+      <button id="taboo-start" type="button" class="action-btn btn-submit">Avvia partita</button>
+     </div>
+     <button id="taboo-ready" type="button" class="action-btn btn-submit hidden">Avvia il turno</button>
+     <div id="taboo-card" class="taboo-card hidden"><strong id="taboo-word"></strong><span class="taboo-context">Parole vietate</span><ul id="taboo-terms"></ul></div>
+     <ol id="taboo-chat" class="taboo-chat hidden" aria-label="Ultimi messaggi" role="log"></ol>
+     <form id="taboo-chat-form" class="taboo-chat-form hidden"><input id="taboo-input" class="profile-input" maxlength="100" autocomplete="off" required><button class="icon-btn">Invia</button></form>
+     <div id="taboo-clue-actions" class="taboo-actions hidden"><button id="taboo-correct" type="button" class="action-btn btn-submit">Indovinata</button><button id="taboo-pass" type="button" class="icon-btn">Passa parola</button></div>
+     <button id="taboo-buzz" class="taboo-buzzer hidden" type="button">SEGNALA</button>
+     <section id="taboo-review" class="taboo-review hidden" aria-label="Segnalazione">
+      <div class="taboo-toolbar"><strong id="taboo-review-title" aria-live="polite"></strong><time id="taboo-review-clock"></time></div>
+      <p id="taboo-review-reason" class="taboo-context"></p>
+      <p id="taboo-review-detail" class="taboo-context hidden"></p>
+      <form id="taboo-reason-form" class="hidden">
+       <label>Regola violata<select id="taboo-reason" required><option value="">Scegli il motivo</option><option>Parola vietata o soluzione</option><option>Parte di una parola</option><option>Plurale o variante</option><option>Rima o somiglianza</option><option>Abbreviazione</option><option>Gesto</option><option>Altro</option></select></label>
+       <label>Dettaglio per il suggeritore<input id="taboo-detail" class="profile-input" maxlength="140" placeholder="Facoltativo" autocomplete="off"></label>
+       <div><button class="action-btn btn-submit">Invia motivo</button></div>
+      </form>
+      <div id="taboo-decision" class="taboo-actions hidden"><button id="taboo-continue" type="button" class="action-btn btn-submit">Continua</button><button id="taboo-contest" type="button" class="icon-btn">Contesta</button></div>
+      <div id="taboo-withdraw-row" class="hidden"><button id="taboo-withdraw" type="button" class="icon-btn">Annulla segnalazione</button></div>
+     </section>
+     <section id="taboo-dispute" class="taboo-review hidden" aria-label="Contestazione aperta"><strong>Segnalazione contestata</strong><p id="taboo-dispute-reason" class="taboo-context"></p><div class="taboo-actions"><button id="taboo-dismiss-point" type="button" class="icon-btn">Annulla</button><button id="taboo-confirm-point" type="button" class="action-btn btn-submit">Conferma punto</button></div></section>
+     <p id="taboo-event" class="taboo-note hidden" aria-live="polite"></p>
+     <button id="taboo-rematch" type="button" class="action-btn btn-submit hidden">Rivincita</button>
+    </div>
+   </section>
+   <section class="taboo-team" aria-labelledby="taboo-nova" data-team="1">
+    <div class="taboo-team-head"><h3 id="taboo-nova">Nova</h3><strong id="taboo-score-1" class="taboo-score"></strong></div>
+    <ul id="taboo-team-1" class="taboo-roster"></ul>
+   </section>
+  </div>
+ </div>
  <div id="party-room" class="mp-stack hidden"><details class="game-guide"><summary>Come si gioca</summary><p id="party-guide-text"></p></details>
   <div class="mp-room-header"><strong id="party-room-name"></strong><span class="mp-code" id="party-code"></span><button id="party-invite" class="icon-btn">Condividi invito</button></div>
   <div id="party-status" class="cc-turn"></div><div id="party-players" class="mp-stack"></div>
@@ -1766,7 +2097,7 @@ body.mind-playing #mp-game-panel {min-height:0;overflow:auto;}
 <script>
 (() => {
  const $=id=>document.getElementById(id), hide=(id,v)=>$(id).classList.toggle('hidden',v);
- const defaults='000000', valid=v=>typeof v==='string'&&/^[0-7]{6}$/.test(v);
+ const defaults='000000', valid=v=>typeof v==='string'&&/^[0-7]{5}[0-8]$/.test(v);
  const palettes={bg:['#1e3a5f','#423267','#23574e','#6a3845','#4a4f25','#263d6f','#673b63','#374151'],skin:['#f6d1a7','#d9a47b','#b97752','#80513f','#f5bc9f','#9f735d','#b6d8ed','#c7b9f7'],hair:['#201d2a','#654832','#ad7446','#dfbd72','#151e3b','#a855f7','#13a6a9','#e5e7eb']};
  const hairStyles = [
    { // Frangia
@@ -1903,6 +2234,13 @@ body.mind-playing #mp-game-panel {min-height:0;overflow:auto;}
      case 5: return '<circle cx="49" cy="39" r="3" fill="#facc15"/><circle cx="49" cy="39" r="1" fill="#fff7ae"/>';
      case 6: return '<g><path d="M18 12L24 4L30 12" fill="#8b5e3c"/><path d="M34 12L40 4L46 12" fill="#8b5e3c"/><path d="M20 11L24 7L28 11" fill="#f9a8d4"/><path d="M36 11L40 7L44 11" fill="#f9a8d4"/></g>';
      case 7: return '<path d="M21 48L27 44L32 49L37 44L43 48L37 53L32 50L27 53Z" fill="#6366f1"/><circle cx="32" cy="49" r="1.6" fill="#e0e7ff"/>';
+     case 8: // Naso da maiale
+       return `<g>
+         <ellipse cx="32" cy="34.15" rx="5.4" ry="2.35" fill="#f7a3b8" stroke="#a34564" stroke-width=".62"/>
+         <path d="M28.6 33.5Q32 32 35.4 33.5" fill="none" stroke="#ffd6df" stroke-width=".48" stroke-linecap="round"/>
+         <ellipse cx="29.95" cy="34.45" rx=".8" ry=".9" fill="#922b52"/>
+         <ellipse cx="34.05" cy="34.45" rx=".8" ry=".9" fill="#922b52"/>
+       </g>`;
      default:return '';
    }
  }
@@ -1919,19 +2257,74 @@ body.mind-playing #mp-game-panel {min-height:0;overflow:auto;}
  window.cosmicAvatar={local:()=>saved,decorate,sync};
  window.addEventListener('online',()=>{if(configured)void sync();});
  const labels=['Sfondo','Carnagione','Colore capelli','Acconciatura','Espressione','Accessorio'];
- const names=[['Blu','Viola','Verde','Rosso','Oliva','Indaco','Prugna','Grigio'],['Chiara','Miele','Ramata','Scura','Pesca','Bronzo','Azzurra','Lilla'],['Nero','Castano','Rame','Biondo','Blu notte','Viola','Turchese','Argento'],['Frangia','Ciuffo','Spettinati','Lunghi lisci','Lunghi mossi','Corti','Ricci lunghi','Rasati'],['Sorriso','Serio','Triste','Rilassato','Felice','Neutro','Sorpreso','Arrabbiato'],['Nessuno','Occhiali','Occhiali scuri','Cravatta','Cappellino','Orecchino','Orecchie da gatto','Papillon']];
+ const names=[['Blu','Viola','Verde','Rosso','Oliva','Indaco','Prugna','Grigio'],['Chiara','Miele','Ramata','Scura','Pesca','Bronzo','Azzurra','Lilla'],['Nero','Castano','Rame','Biondo','Blu notte','Viola','Turchese','Argento'],['Frangia','Ciuffo','Spettinati','Lunghi lisci','Lunghi mossi','Corti','Ricci lunghi','Rasati'],['Sorriso','Serio','Triste','Rilassato','Felice','Neutro','Sorpreso','Arrabbiato'],['Nessuno','Occhiali','Occhiali scuri','Cravatta','Cappellino','Orecchino','Orecchie da gatto','Papillon','Naso da maiale']];
  const options=$('avatar-options'); labels.forEach((label,i)=>{const l=document.createElement('label');l.textContent=label;const select=document.createElement('select');select.id='avatar-part-'+i;names[i].forEach((n,j)=>select.append(new Option(n,String(j))));select.addEventListener('change',()=>{let a=draft.split('');a[i]=select.value;draft=a.join('');preview();});l.append(select);options.append(l);});
  function preview(){ $('avatar-preview').innerHTML=svg(draft);for(let i=0;i<6;i++)$('avatar-part-'+i).value=draft[i]; }
  function refreshOwn(){ $('btn-avatar').innerHTML=svg(saved);const uid=window.cosmicOwnUid?.();if(uid)document.querySelectorAll('[data-avatar-uid]').forEach(el=>{if(el.dataset.avatarUid===uid)el.innerHTML=svg(saved);}); }
  refreshOwn();
  $('btn-avatar').onclick=()=>{draft=saved;preview();$('avatar-message').textContent='';hide('avatar-modal',false);};
- $('avatar-random').onclick=()=>{draft=Array.from(crypto.getRandomValues(new Uint8Array(6)),v=>String(v%8)).join('');preview();};
+ $('avatar-random').onclick=()=>{
+   const values = crypto.getRandomValues(new Uint32Array(names.length));
+   draft = names.map((choices, index) => values[index] % choices.length).join('');
+   preview();
+ };
  $('avatar-save').onclick=async()=>{saved=draft;configured=true;try{localStorage.setItem('cosmic-avatar-v1',saved);}catch(e){}refreshOwn();$('avatar-save').disabled=true;$('avatar-message').textContent='Salvataggio…';try{const ok=await sync();$('avatar-message').textContent=ok?'Avatar sincronizzato.':'Avatar salvato sul dispositivo. Verrà sincronizzato quando disponibile.';if(ok)hide('avatar-modal',true);}finally{$('avatar-save').disabled=false;}};
  $('btn-save-user').addEventListener('click',()=>{if(configured)void sync();});
  $('close-avatar').onclick=()=>hide('avatar-modal',true);$('btn-info').onclick=()=>hide('info-modal',false);$('close-info').onclick=()=>hide('info-modal',true);
- function help(other){hide('help-mind',!!other);hide('help-other',!other);if(other)$('help-other').textContent=other;hide('help-modal',false);}
- $('btn-help').onclick=()=>help();$('close-help').onclick=()=>hide('help-modal',true);
- for(const [prefix,modal] of [['mp','mp-modal'],['cc','cc-modal'],['party','party-modal'],['bg','boardgames-modal']]){const close=$(prefix+'-close'),b=document.createElement('button');b.className='icon-btn room-help-btn';b.textContent='?';b.title='Come si gioca';b.setAttribute('aria-label','Come si gioca');b.onclick=()=>{const desc=$(prefix+'-guide-text')?.textContent||$(modal).querySelector('.room-entry-intro')?.textContent||'';if(prefix==='mp'){const text=$('game-intro-text');const previous=text.textContent;text.textContent=desc;help();$('close-help').addEventListener('click',()=>{text.textContent=previous;},{once:true});}else help(desc);};close.before(b);}
+ let helpTrigger=null, helpRoom=null;
+ function help(other, guide, trigger=document.activeElement){
+   helpTrigger=trigger;
+   helpRoom=helpTrigger?.closest('.modal-backdrop')||null;
+   if(helpRoom) helpRoom.inert=true;
+   hide('help-mind',Boolean(other||guide));
+   hide('help-other',!other);
+   hide('help-guide',!guide);
+   $('help-title').textContent=guide?(guide.dataset.heading||'Parole Proibite · Come si gioca'):'Come si gioca';
+   $('help-other').textContent=other||'';
+   $('help-guide').replaceChildren(...(guide?[guide.content.cloneNode(true)]:[]));
+   hide('help-modal',false);
+   $('help-modal').querySelector('.modal-box').scrollTop=0;
+   $('close-help').focus({preventScroll:true});
+ }
+ $('btn-help').onclick=()=>help();
+ $('close-help').onclick=()=>{
+   hide('help-modal',true);
+   if(helpRoom) helpRoom.inert=false;
+   helpTrigger?.focus({preventScroll:true});
+   helpRoom=null;
+   helpTrigger=null;
+ };
+ $('help-modal').addEventListener('keydown',e=>{
+   if(e.key==='Escape'||e.key==='Tab') {
+     e.preventDefault();
+     if(e.key==='Escape') $('close-help').click();
+     else $('close-help').focus({preventScroll:true});
+   }
+ });
+ $('party-help').onclick=()=>{
+   const kind=$('party-modal').dataset.partyKind;
+   const trigger=$('party-help');
+   if(kind==='taboo'&&$('party-room').classList.contains('hidden')) help('', $('guide-parole-proibite'), trigger);
+   else if(kind==='taboo') help('Questa stanza usa le regole precedenti. Il suggeritore dà indizi in chat o in chiamata. Un compagno che indovina fa guadagnare un punto alla squadra. Passare vale zero e una violazione costa un punto alla squadra di turno. Allo scadere del timer tocca all’altra squadra.', null, trigger);
+   else if(kind==='draw'&&$('party-modal').dataset.drawRules!=='legacy') help('', $('guide-tratti-stellari'), trigger);
+   else help($('party-guide-text').textContent||$('party-intro').textContent, null, trigger);
+ };
+ for(const [prefix,modal] of [['mp','mp-modal'],['cc','cc-modal'],['bg','boardgames-modal']]){
+   const close=$(prefix+'-close'),b=document.createElement('button');
+   b.className='icon-btn room-help-btn';b.textContent='?';b.title='Come si gioca';b.setAttribute('aria-label','Come si gioca');
+   b.setAttribute('aria-haspopup','dialog');b.setAttribute('aria-controls','help-modal');
+   b.onclick=()=>{
+     if(prefix==='cc'){help('', $('guide-connessioni-cosmiche'), b);return;}
+     const desc=$(prefix+'-guide-text')?.textContent||$(modal).querySelector('.room-entry-intro')?.textContent||'';
+     if(prefix==='mp'){
+       const text=$('game-intro-text'),previous=text.textContent;
+       text.textContent=desc;
+       help();
+       $('close-help').addEventListener('click',()=>{text.textContent=previous;},{once:true});
+     }else help(desc);
+   };
+   close.before(b);
+ }
  // Keep the info button home-only, even when multiplayer is represented by a modal.
  const game=$('game-screen');const update=()=>{document.body.classList.toggle('mind-playing',!game.classList.contains('hidden'));};new MutationObserver(update).observe(game,{attributes:true,attributeFilter:['class']});update();
 })();
@@ -2280,8 +2673,12 @@ body.mind-playing #mp-game-panel {min-height:0;overflow:auto;}
     const cc={ref:null,room:null,uid:null,unsub:null,busy:false};
     const CC_SESSION='cosmic-eye-connections-v2';
     const CC_NAMES=['Nebula','Nova','Solaria','Aurora'];
-    const CC_COLORS=['#22d3ee','#e879f9','#fbbf24','#34d399'];
-    const CC_SYMBOLS=['◆','✦','▲','●','○','⚠'];
+    const CC_LABELS=[...CC_NAMES,'Neutra','Vuoto'];
+    const CC_SYMBOLS=['◆','✦','▲','●','×'];
+    const CC_EFFECT_MS={ally:640,neutral:430,rival:560,void:1450};
+    const CC_FLIP_MS=460;
+    const ccMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
+    const ccVisual={round:null,cards:[],wordsUp:new Set(),effect:null,timer:0,winner:null,feedback:''};
     const CC_WORDS=["ACQUA","ALBERO","ALBA","ALBUM","ALI","AMBRA","AMICO","AMORE","ANELLO","ANGOLO","ANIMA","ANTENNA","APICE","APE","AQUILA","ARANCIA","ARCO","ARGENTO","ARIA","ARPA","ARTE","ASINO","ASTRO","ATLANTE","AURORA","AUTO","AVVENTURA","BALENA","BALLO","BANANA","BANCA","BANCO","BANDIERA","BARBA","BARCA","BASTONE","BAULE","BICCHIERE","BICI","BILANCIA","BINARIO","BISCOTTO","BOSCO","BOTTIGLIA","BRACCIO","BRACE","BRINA","BRONZO","BUSSOLA","CACAO","CAFFÈ","CALAMITA","CALENDARIO","CAMICIA","CAMPANA","CAMPO","CANALE","CANARINO","CANDELA","CANE","CANNONE","CANTO","CAPELLO","CAPRA","CARBONE","CARTA","CASA","CASCO","CASTELLO","CATENA","CAVALLO","CAVERNA","CAVO","CENERE","CERCHIO","CERVO","CHIAVE","CHIESA","CHITARRA","CICOGNA","CIELO","CILIEGIA","CIMA","CINEMA","CIPOLLA","CIRCO","CITTADELLA","CLAVA","CLIMA","CODA","COFANO","COLLINA","COLOMBA","COLORE","COMETA","COMPASSO","CONCHIGLIA","CONIGLIO","COPERTA","CORALLO","CORDA","CORNA","CORONA","CORPO","CORRENTE","CORVO","COSTA","COTONE","CREMA","CRESTA","CRISTALLO","CUCCIA","CUORE","CURVA","CUSCINO","DADO","DAMA","DANZA","DELFINO","DENTE","DESERTO","DIAMANTE","DIARIO","DITO","DIVANO","DOMINO","DRAGO","DUCA","ECO","EDICOLA","ELEFANTE","ELICA","ELISIR","ERBA","EREMITA","ERRORE","ETERE","ETNA","FABBRO","FALCO","FALCE","FARFALLA","FARINA","FARO","FATA","FAVOLA","FELCE","FERRO","FESTA","FIASCO","FICO","FILO","FINESTRA","FIORE","FIUME","FIUTO","FLAUTO","FOGLIA","FONTE","FORBICE","FORESTA","FORNO","FORTEZZA","FOSSA","FOTO","FRAGOLA","FRANA","FRATE","FRECCIA","FRENO","FRONTE","FRUTTO","FUCINA","FUMO","FUNGO","FUOCO","GABBIA","GALASSIA","GALLO","GAMBA","GANCIO","GARA","GATTO","GAZZELLA","GELATO","GEMMA","GESSO","GHIACCIO","GHIANDA","GIADA","GIAGUARO","GIGANTE","GINESTRA","GIOCO","GIORNO","GIRAFFA","GIRASOLE","GIRO","GLOBO","GOLFO","GOMMA","GONG","GRANO","GRATA","GRILLO","GROTTA","GRU","GUANTO","GUFO","GUSCIO","IDEA","IGLOO","IMBUTO","IMPRONTA","INCENSO","INCHIOSTRO","INCONTRO","INDICE","INFERNO","INGRESSO","INSETTO","ISOLA","ISTANTE","LABIRINTO","LAGO","LAMA","LAMPADA","LANA","LANCIA","LANTERNA","LATTE","LAVA","LEONE","LETTO","LIBRO","LICHENE","LIMONE","LINEA","LINGUA","LIQUIRIZIA","LISTA","LOMBRICO","LOTO","LUCE","LUCCIOLA","LUNA","LUPO","MACCHIA","MADRE","MAGIA","MAGLIA","MAGO","MAIS","MANDORLA","MANO","MAPPA","MARE","MARGHERITA","MARMELLATA","MARMO","MARTELLO","MASCHERA","MASSO","MATITA","MATTONE","MEDAGLIA","MEDUSA","MELA","MELONE","MENTA","MERLO","MIELE","MINIERA","MIRTILLO","MOLLA","MONETA","MONTE","MORA","MOSCA","MOTORE","MOTO","MUCCA","MULINO","MURO","MUSCHIO","MUSICA","NASTRO","NAVE","NEBBIA","NEVE","NICCHIA","NIDO","NOCE","NODO","NOME","NONNO","NOTA","NOTTE","NUBE","NUVOLA","OASI","OCCHIO","OCEANO","OMBRA","OMBRELLO","ONDA","ONICE","ORBITA","ORECCHIO","ORO","ORSO","ORTICA","ORTO","OSSO","OSTRICA","OTARIA","OVALE","PACE","PADRE","PALA","PALAZZO","PALCO","PALMA","PALLA","PANDA","PANE","PANTERA","PAPAVERO","PAPPAGALLO","PARCO","PARETE","PASTA","PATATA","PAVONE","PECORA","PELLE","PENNA","PERA","PERLA","PESCA","PESCE","PETALO","PETTINE","PIANETA","PIANO","PIAZZA","PICCHIO","PIEDE","PIETRA","PIGNA","PILA","PILOTA","PINNA","PINO","PINZA","PIOGGIA","PIRAMIDE","PIRATA","PISTA","PITONE","PIUMA","PIZZA","POLIPO","POLLICE","POLVERE","POMODORO","PONTE","PORTA","PORTO","POZZO","PRATO","PRINCIPE","PRISMA","PUNTO","QUADRO","QUARZO","QUERCIA","RACCHETTA","RADICE","RADIO","RAGGIO","RAGNO","RAMO","RANA","RAZZO","REGINA","REMO","RETE","RICCIO","RIFLESSO","RINGHIERA","RISAIA","RISO","RITMO","RIVA","ROBOT","ROCCIA","ROMBO","ROSA","ROSPO","ROTAIA","RUBINO","RUOTA","SABBIA","SACCO","SALE","SALICE","SALMONE","SALTO","SANDALO","SASSO","SATURNO","SCALA","SCARPA","SCATOLA","SCETTRO","SCHIUMA","SCI","SCIARPA","SCIMMIA","SCINTILLA","SCOGLIO","SCOPA","SCUDO","SEDIA","SEGNALE","SEME","SENTIERO","SERPENTE","SERRA","SFERA","SIEPE","SILENZIO","SIRENA","SLITTA","SOFFIO","SOGLIA","SOLE","SONDA","SONNO","SORGENTE","SORRISO","SPADA","SPAGO","SPALLA","SPARVIERO","SPECCHIO","SPEZIA","SPIAGGIA","SPIGA","SPILLA","SPIRAGLIO","SPIRALE","SPUGNA","STAGNO","STELLA","STELO","STIVALE","STOFFA","STRADA","STRUZZO","SUONO","TAMBURELLO","TAPPETO","TARTARUGA","TASTIERA","TAZZA","TELA","TEMPIO","TEMPO","TENDA","TERRA","TESSERA","TESORO","TETTO","TIGLIO","TIGRE","TIMONE","TINTA","TOPO","TORCIA","TORO","TORRE","TORTA","TRACCIA","TRAM","TRAMONTO","TRENO","TRIFOGLIO","TRONO","TROMBA","TROTTOLA","TUBO","TULIPANO","TUONO","TURBINA","UCCELLO","ULIVO","UNICORNO","UOVO","URAGANO","UVA","VAGONE","VALIGIA","VALLE","VAMPIRO","VAPORE","VASO","VELA","VELLUTO","VENERE","VENTO","VERME","VETRO","VIA","VIGNA","VIOLA","VIOLINO","VIPERA","VITE","VOCE","VULCANO","VUOTO","ZAFFIRO","ZAINO","ZAMPA","ZANZARA","ZATTERA","ZEBRA","ZENZERO","ZUCCA","ZUCCHERO","ABETE","ABISSO","ACCIAIO","ACERO","ACETO","AGO","ALBERGO","ALCOVA","ALFABETO","ALLORO","ALVEARE","AMACA","AMETISTA","ANCORAGGIO","ANFORA","ANGURIA","ANICE","ANATRA","AQUILONE","ARENA","ARMADIO","ARMATURA","ARMONIA","AROMA","ASCIA","ASSE","ASTUCCIO","ASTRONAVE","ATOLLO","AVORIO","BAGAGLIO","BAGNO","BAIA","BALCONE","BALDORIA","BAMBÙ","BARATTOLO","BARRIERA","BASALTO","BATTERIA","BECCO","BELVA","BENGALA","BERSAGLIO","BETULLA","BIBLIOTECA","BOLLA","BONSAI","BORSA","BOTTONE","BRACCIALE","BRANCO","BRICIOLA","BRODO","BRUCO","BUCCIA","BUE","BURRO","CABINA","CACCIAVITE","CADUTA","CALAMARO","CALICE","CALMA","CALORE","CAMINO","CAMMELLO","CANESTRO","CANGURO","CANNUCCIA","CAPANNA","CAPPUCCIO","CAPPERO","CAPSULA","CAROTA","CARRIOLA","CARTELLO","CATAPULTA","CATINO","CAVALLETTO","CAVOLFIORE","CEMBRO","CENTAURO","CERAMICA","CERVELLO","CETRA","CHIODO","CIOCCOLATO","CICALA","CIGNO","CILINDRO","CINGHIALE","CIOCCA","CLARINETTO","COCOMERO","COCCO","COCCINELLA","COCLEA","COLLA","COLLANA","COLTELLO","COLONNA","COMIGNOLO","CONFETTO","CONO","CONTRABBASSO","COPPA","CORNICE","CORRIDOIO","CORTILE","COSTUME","CRATERE","CRICETO","CUBO","CUFFIA","CUNEO","CUPOLA","DAGA","DAINO","DATTERO","DECORO","DELTA","DENTELLO","DIGA","DINAMO","DINOSAURO","DISCO","DIZIONARIO","DOGANA","DORMITORIO","DOSSO","DRAPPO","DROMEDARIO","DUOMO","EDERA","ELMO","EMATITE","ERICE","ERMELLINO","SMERALDO","FAGIOLO","FAGGIO","FALEGNAME","FANTASMA","FAZZOLETTO","FENICOTTERO","FERITOIA","FETTA","FIBBIA","FILTRO","FISARMONICA","FISCHIO","FIAMMA","FODERA","FONTANA","FOSSILE","FRASSINO","FREDDO","FRIGORIFERO","FRONDA","FULMINE","GALEONE","GAMBERO","GARGOUGLIA","GAROFANO","GAZZA","GHIACCIAIO","GHIRLANDA","GINEPRO","GINOCCHIO","GIOIELLO","GIOSTRA","GLICINE","GOMITO","GONDOLA","GRANCHIO","GRAPPOLO","GRIGLIA","GRONDA","GUADO","GUINZAGLIO","HANGAR","IBISCO","ICARO","ICEBERG","IENA","IPPOPOTAMO","IRIDE","IRIS","JOLLY","KOALA","LACRIMA","LAMPONE","LATTUGA","LECCIO","LEGNA","LEMBO","LENTE","LEPRE","LILLA","LIMACCIA","LIME","LINO","LIUTO","LOCOMOTIVA","LONTRA","LUCERTOLA","LUMACA","MACACO","MACIGNO","MADIA","MADREPORA","MAGNETE","MAIALE","MALVA","MANDARINO","MANTELLO","MANTIDE","MARCIAPIEDE","MAREA","MASCELLA","MATERASSO","MEDAGLIONE","MELOGRANO","MENSOLA","MERIDIANA","METEORA","MICROFONO","MIGLIO","MIMOSA","MINARETO","MOLLUSCO","MONGOLFIERA","MONTONE","MORSA","MOSAICO","MOSCERINO","MULO","MUMMIA","NARCISO","NATURA","NAUTILO","NETTARE","NEON","NETTUNO","NINFEA","NOCCIOLA","NUTRIA","OBOE","OCCHIALI","OFFICINA","OLEANDRO","OLIVA","OLMO","ORECCHINO","ORCHIDEA","ORCO","ORIGAMI","ORIZZONTE","OROLOGIO","ORZO","OSSIDIANA","PAGAIA","PAGLIA","PALAFITTA","PALUDE","PANCHINA","PANINO","PANTOFOLA","PAPERA","PARABOLA","PARACADUTE","PARAURTI","PAREO","PASSERO","PAVIMENTO","PAVONCELLA","PEDANA","PENDOLO","PENNELLO","PENTOLA","PEONIA","PERISCOPIO","PERNICE","PERVINCA","PESCATORE","PETTIROSSO","PIANTANA","PIASTRA","PICCIONE","PICCO","PINOCCHIO","PINGUINO","PISTACCHIO","PLATANO","PLUTO","POLARIS","POLENA","POLENTA","POLLO","POLTRONA","POMELLO","POPPA","PORCINO","PORCOSPINO","PORTICO","PRIMULA","PROIETTORE","PRORA","PULEGGIA","PUMA","PUPILLA","PUZZLE","QUADERNO","QUADRANTE","QUAGLIA","QUASAR","RABARBARO","RADAR","RAFFICA","RAGANELLA","RAMPA","RAPANELLO","RASO","RAVIOLO","RECINTO","RELITTO","RENNA","RESINA","RICAMO","RICETTA","RICINO","RIFUGIO","RIGHELLO","RINOCERONTE","RITRATTO","RODODENDRO","RONDINE","ROSMARINO","RUGGINE","RULLO","SAETTA","SAGOMA","SALAMANDRA","SALDATORE","SALIERA","SALSICCIA","SALVAGENTE","SAMBUCO","SANGUE","SAPONE","SARAGO","SATELLITE","SCACCO","SCAFFALE","SCAGLIA","SCARABEO","SCARICO","SCARPONE","SCIALLE","SCIAME","SCIABOLA","SCIVOLO","SCOIATTOLO","SCORZA","SCRIGNO","SEGATURA","SELLA","SENAPE","SEQUOIA","SERBATOIO","SERRATURA","SESAMO","SFINGE","SIESTA","SIGILLO","SILURO","SINFONIA","SIRINGA","SISMOGRAFO","SOFFITTO","SOLCO","SOMBRERO","SONAGLIO","SORBO","SOTTOPASSO","SPAVENTAPASSERI","SPERONE","SPICCHIO","SPILLO","SPINACIO","SPINA","SPIONCINO","SPREMITORE","SQUALO","STACCIONATA","STALATTITE","STALAGMITE","STAMPELLA","STAMPO","STANZA","STAZIONE","STECCO","STIVA","STOMACO","STRACCIO","STRUMENTO","STUFA","SUGHERO","SUSINA","TABACCO","TACCHINO","TACCO","TAGLIERE","TALPA","TAMBURO","TANA","TARGA","TASSO","TEGOLA","TELEFONO","TELESCOPIO","TENDAGGIO","TENTACOLO","TERMOFORO","TERRAZZA","TERRICCIO","TESSUTO","TESTA","TETRAEDRO","TETTUCCIO","TIMBRO","TINELLO","TIRANTE","TIRO","BOB","TOCCO","TOMBA","TOMBINO","TONNO","TORPEDINE","TORSO","TRABOCCO","TRAPEZIO","TRATTORE","TRAVERSA","TRIDENTE","TRILLO","TRINCIA","TRITONE","TROTA","TUNNEL","TURCHESE","TORRETTA","UCCELLINO","UNCINO","UNGUENTO","URNA","UTENSILE","VAPORIERA","VASCA","VENTAGLIO","VERANDA","VERBENA","VESPA","VESTITO","VIADOTTO","VIBRAZIONE","VICOLO","VILLETTA","VITELLO","VIVAIO","VORTICE","ZAMPOGNA","ZANNA","ZEPPA","ZIBELLINO","ZODIACO","ZOLFO","ZOLLA","ZUCCOTTO","ZUPPA"];
     const ccSay=s=>{M('cc-message').textContent=s||''};
     const ccHost=r=>r.hostUid===cc.uid;
@@ -2289,6 +2686,7 @@ body.mind-playing #mp-game-panel {min-height:0;overflow:auto;}
     const ccTeam=r=>ccMine(r)?.team;
     const ccCaptain=r=>r.captains[ccTeam(r)]===cc.uid;
     const ccAlive=r=>Array.from({length:r.settings.teams},(_,i)=>i).filter(i=>!r.eliminated.includes(i));
+    const ccUnlimited=r=>r.settings.unlimitedGuesses===true;
     const ccDuration=r=>r.phase==='clue'?(r.seenTeams.includes(r.turn)?r.settings.clueDuration:r.settings.firstClueDuration):r.settings.duration;
     const ccRemaining=r=>{const duration=ccDuration(r);return duration===0?Infinity:Math.max(0,Math.ceil((r.turnAt.toMillis()+duration*1000-serverNow())/1000));};
     const ccPhaseKey=r=>`${cc.ref?.id}:${r.round}:${r.turnAt.toMillis()}`;
@@ -2333,8 +2731,32 @@ body.mind-playing #mp-game-panel {min-height:0;overflow:auto;}
     function ccShuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){let j=crypto.getRandomValues(new Uint32Array(1))[0]%(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;}
     async function ccAction(fn){if(cc.busy)return;cc.busy=true;ccSay('');ccRender();try{await fn()}catch(e){ccSay(cloudError(e));console.error('Connessioni:',e)}finally{cc.busy=false;ccRender()}}
     async function ccTx(change,checkVersion=false){const ref=cc.ref,uid=cc.uid,old=cc.room;if(!ref||uid!==requireOnline())throw Error('Stanza non disponibile.');return runTransaction(db,async t=>{const snap=await t.get(ref);if(!snap.exists())throw Error('Stanza non trovata.');const r=snap.data();assertRoomFresh(r);if(!r.players[uid])throw Error('Non fai parte della stanza.');if(checkVersion&&(r.round!==old.round||r.state!==old.state||r.turn!==old.turn||r.phase!==old.phase||r.revealed.length!==old.revealed.length||r.turnAt?.toMillis()!==old.turnAt?.toMillis()))throw Error('La partita è cambiata: riprova.');const patch=change(r);if(patch)directoryUpdate(t,ref,r,patch);});}
-    function ccDetach(message=''){cc.unsub?.();cc.unsub=null;cc.ref=null;cc.room=null;cc.uid=null;dropSession(CC_SESSION);hide('cc-room',true);hide('cc-entry',false);hide('cc-create',true);hide('cc-join',true);ccSay(message);}
-    function ccAttach(ref,uid){void syncClock();cc.unsub?.();cc.ref=ref;cc.uid=uid;cc.room=null;saveSession(CC_SESSION,{id:ref.id,uid});hide('cc-modal',false);hide('cc-entry',true);cc.unsub=onSnapshot(ref,{includeMetadataChanges:true},snap=>{if(cc.ref!==ref||!observeRoom(cc,snap,ccSay))return;const r=snap.exists()?snap.data():null;if(roomExpired(r)){ccDetach('Stanza scaduta dopo 24 ore. Crea una nuova stanza.');return;}if(!r||!r.players[uid]||r.state==='closed'){ccDetach('Stanza chiusa o accesso revocato.');return;}if(cc.room&&r.lastTimeout&&r.lastTimeout[0]===uid){const eventKey=`${cc.ref?.id}:${r.round}:${r.lastTimeout[1].toMillis()}`;const previous=cc.room.lastTimeout;if(!previous||previous[1].toMillis()!==r.lastTimeout[1].toMillis())ccAlarm(eventKey);}cc.room=r;ccRender();},e=>ccSay('Sincronizzazione: '+cloudError(e)));}
+    function ccDetach(message=''){
+      cc.unsub?.();cc.unsub=null;cc.ref=null;cc.room=null;cc.uid=null;
+      ccResetPresentation();
+      dropSession(CC_SESSION);hide('cc-room',true);hide('cc-entry',false);hide('cc-create',true);hide('cc-join',true);
+      ccRender();
+      ccSay(message);
+    }
+    function ccAttach(ref,uid){
+      void syncClock();
+      cc.unsub?.();cc.ref=ref;cc.uid=uid;cc.room=null;
+      ccResetPresentation();
+      saveSession(CC_SESSION,{id:ref.id,uid});hide('cc-modal',false);hide('cc-entry',true);
+      cc.unsub=onSnapshot(ref,{includeMetadataChanges:true},snap=>{
+        if(cc.ref!==ref||!observeRoom(cc,snap,ccSay))return;
+        const r=snap.exists()?snap.data():null;
+        if(roomExpired(r)){ccDetach('Stanza scaduta dopo 24 ore. Crea una nuova stanza.');return;}
+        if(!r||!r.players[uid]||r.state==='closed'){ccDetach('Stanza chiusa o accesso revocato.');return;}
+        if(cc.room&&r.lastTimeout?.[0]===uid){
+          const previous=cc.room.lastTimeout;
+          if(!previous||previous[1].toMillis()!==r.lastTimeout[1].toMillis()){
+            ccAlarm(cc.ref.id+':'+r.round+':'+r.lastTimeout[1].toMillis());
+          }
+        }
+        ccSyncPresentation(cc.room,r);
+      },e=>ccSay('Sincronizzazione: '+cloudError(e)));
+    }
     function ccRestore(uid){const s=readSession(CC_SESSION);if(!mp.ref&&!cc.ref&&s?.uid===uid&&/^[a-f0-9]{64}$/.test(s.id)){ccSay('Riconnessione…');ccAttach(doc(db,...CC_PATH,s.id),uid);}}
     function ccOpen(){if(bg.ref||party.ref||mp.ref||window.cosmicGame.isSingleActive()||window.cosmicGame.isMultiplayer()){alert('Concludi o abbandona prima la partita in corso.');return;}hide('cc-modal',false);ccRender();}
     M('cc-open').onclick=ccOpen;
@@ -2345,7 +2767,33 @@ body.mind-playing #mp-game-panel {min-height:0;overflow:auto;}
     M('party-show-join').onclick=()=>{hide('party-create',true);hide('party-join',false);partySay('');};
     M('bg-show-create').onclick=()=>{hide('bg-create',false);hide('bg-join',true);bgSay('');};
     M('bg-show-join').onclick=()=>{hide('bg-create',true);hide('bg-join',false);bgSay('');};
-    M('cc-create').onsubmit=e=>{e.preventDefault();ccAction(async()=>{if(cc.ref||mp.ref)throw Error('Sei già in una stanza.');const uid=requireOnline(),name=M('cc-name').value.trim(),settings={size:+M('cc-size').value,teams:+M('cc-teams').value,capacity:+M('cc-capacity').value,duration:ccReadTimer('cc-duration'),clueDuration:ccReadTimer('cc-clue-duration'),firstClueDuration:ccReadTimer('cc-first-duration'),wordMode:M('cc-word-mode').value,customPercent:+M('cc-custom-percent').value,customWords:ccParseWords(M('cc-custom-words').value),rotate:M('cc-rotate').checked};if(!name)throw Error('Inserisci il nome.');if(settings.capacity<settings.teams*2)throw Error('Servono almeno due posti per squadra.');if(settings.wordMode==='custom'&&settings.customWords.length<settings.size**2)throw Error(`Servono almeno ${settings.size**2} parole uniche per questa griglia.`);const code=bytesHex(crypto.getRandomValues(new Uint8Array(5))).toUpperCase(),password=M('cc-password').value,id=await deriveRoom(code,password),ref=doc(db,...CC_PATH,id);await runTransaction(db,async t=>{if((await t.get(ref)).exists())throw Error('Codice già in uso.');directoryCreate(t,ref,{locked:password!=='',code,name,hostUid:uid,settings,createdAt:serverTimestamp(),state:'lobby',round:0,players:{[uid]:ccNewPlayer()},words:[],roles:[],captains:['','','',''],target:0,revealed:[],scores:[0,0,0,0],eliminated:[],winner:-1,turn:0,phase:'clue',clue:'',clueCount:0,left:0,turnAt:null,lastIndex:-1,seenTeams:[],lastTimeout:null});});M('cc-password').value='';ccAttach(ref,uid);});};
+    M('cc-create').onsubmit=e=>{
+      e.preventDefault();
+      ccAction(async()=>{
+        if(cc.ref||mp.ref)throw Error('Sei già in una stanza.');
+        const uid=requireOnline(),name=M('cc-name').value.trim();
+        const settings={
+          size:+M('cc-size').value,teams:+M('cc-teams').value,capacity:+M('cc-capacity').value,
+          duration:ccReadTimer('cc-duration'),clueDuration:ccReadTimer('cc-clue-duration'),
+          firstClueDuration:ccReadTimer('cc-first-duration'),wordMode:M('cc-word-mode').value,
+          customPercent:+M('cc-custom-percent').value,customWords:ccParseWords(M('cc-custom-words').value),
+          rotate:M('cc-rotate').checked
+        };
+        if(M('cc-guess-limit').value==='unlimited')settings.unlimitedGuesses=true;
+        if(!name)throw Error('Inserisci il nome.');
+        if(settings.capacity<settings.teams*2)throw Error('Servono almeno due posti per squadra.');
+        if(settings.wordMode==='custom'&&settings.customWords.length<settings.size**2){
+          throw Error('Servono almeno '+settings.size**2+' parole uniche per questa griglia.');
+        }
+        const code=bytesHex(crypto.getRandomValues(new Uint8Array(5))).toUpperCase();
+        const password=M('cc-password').value,id=await deriveRoom(code,password),ref=doc(db,...CC_PATH,id);
+        await runTransaction(db,async t=>{
+          if((await t.get(ref)).exists())throw Error('Codice già in uso.');
+          directoryCreate(t,ref,{locked:password!=='',code,name,hostUid:uid,settings,createdAt:serverTimestamp(),state:'lobby',round:0,players:{[uid]:ccNewPlayer()},words:[],roles:[],captains:['','','',''],target:0,revealed:[],scores:[0,0,0,0],eliminated:[],winner:-1,turn:0,phase:'clue',clue:'',clueCount:0,left:0,turnAt:null,lastIndex:-1,seenTeams:[],lastTimeout:null});
+        });
+        M('cc-password').value='';ccAttach(ref,uid);
+      });
+    };
     M('cc-join').onsubmit=e=>{e.preventDefault();ccAction(async()=>{if(cc.ref||mp.ref)throw Error('Sei già in una stanza.');const uid=requireOnline(),code=M('cc-code-input').value.trim().toUpperCase(),id=await deriveRoom(code,M('cc-join-password').value),ref=doc(db,...CC_PATH,id);await runTransaction(db,async t=>{const snap=await t.get(ref);if(!snap.exists())throw Error('Codice o password errati.');const r=snap.data();assertRoomFresh(r);if(r.state==='closed')throw Error('Stanza chiusa.');if(!Array.isArray(r.settings.customWords)||!Array.isArray(r.seenTeams))throw Error('Stanza creata con una versione precedente: chiedi all’host di crearne una nuova.');if(r.players[uid])return;if(r.state!=='lobby')throw Error('Partita in corso. Attendi la rivincita.');if(Object.keys(r.players).length>=r.settings.capacity)throw Error('Stanza piena.');const counts=Array.from({length:r.settings.teams},(_,i)=>Object.values(r.players).filter(p=>p.team===i).length);directoryUpdate(t,ref,r,{players:{...r.players,[uid]:ccNewPlayer(counts.indexOf(Math.min(...counts)))}});});M('cc-join-password').value='';ccAttach(ref,uid);});};
     function ccChangePlayer(patch){return ccAction(()=>ccTx(r=>{if(r.state!=='lobby')throw Error('La sfida è già iniziata.');return {players:{...r.players,[cc.uid]:{...ccMine(r),...patch}}}}));}
     M('cc-my-team').onchange=()=>ccChangePlayer({team:+M('cc-my-team').value,ready:0});
@@ -2355,19 +2803,339 @@ body.mind-playing #mp-game-panel {min-height:0;overflow:auto;}
     M('cc-start').onclick=()=>ccAction(()=>ccTx(r=>{if(!ccHost(r)||r.state!=='lobby')throw Error('Solo l’host può avviare.');if(!Object.entries(r.players).every(([id,p])=>id===cc.uid||p.ready===r.round+1))throw Error('Non tutti i giocatori sono pronti.');const captains=ccCaptains(r),n=r.settings.size**2,target=Math.floor((n-Math.ceil(n/4)-1)/r.settings.teams),roles=[];for(let i=0;i<r.settings.teams;i++)for(let j=0;j<target;j++)roles.push(i);while(roles.length<n-1)roles.push(4);roles.push(5);return {state:'running',round:r.round+1,words:ccWordsFor(r.settings),roles:ccShuffle(roles),captains,target,revealed:[],scores:[0,0,0,0],eliminated:[],winner:-1,turn:r.round%r.settings.teams,phase:'clue',clue:'',clueCount:0,left:0,turnAt:serverTimestamp(),lastIndex:-1,seenTeams:[],lastTimeout:null};}));
     function ccNext(r,eliminated=r.eliminated){const alive=Array.from({length:r.settings.teams},(_,i)=>i).filter(i=>!eliminated.includes(i));if(alive.length===1)return {state:'finished',phase:'done',winner:alive[0]};let next=r.turn;do{next=(next+1)%r.settings.teams;}while(eliminated.includes(next));return {turn:next,phase:'clue',clue:'',clueCount:0,left:0,turnAt:serverTimestamp(),seenTeams:r.seenTeams.includes(r.turn)?r.seenTeams:[...r.seenTeams,r.turn]};}
     const ccFinish=winner=>({state:'finished',phase:'done',winner});
-    function ccCanGuess(r){return r.state==='running'&&r.phase==='guess'&&ccTeam(r)===r.turn&&!ccCaptain(r)&&!ccExpired(r);}
-    M('cc-clue-form').onsubmit=e=>{e.preventDefault();const clue=M('cc-clue').value.trim().toUpperCase(),count=+M('cc-clue-count').value;ccAction(async()=>{await ccTx(r=>{if(r.state!=='running'||r.phase!=='clue'||!ccCaptain(r)||ccTeam(r)!==r.turn||ccExpired(r))throw Error('Non è il tuo turno.');if(!/^[A-ZÀÈÉÌÒÙ]{1,24}$/.test(clue)||r.words.includes(clue))throw Error('Usa una sola parola diversa da quelle sulla griglia.');if(count<1||count>r.target-r.scores[r.turn])throw Error('Numero non valido.');return {phase:'guess',clue,clueCount:count,left:count+1,turnAt:serverTimestamp()};},true);M('cc-clue').value='';});};
-    function ccGuess(index){ccAction(()=>ccTx(r=>{if(!ccCanGuess(r)||r.revealed.includes(index)||!Number.isInteger(index)||index<0||index>=r.words.length)throw Error('Scelta non valida.');const type=r.roles[index],scores=[...r.scores],revealed=[...r.revealed,index],patch={scores,revealed,lastIndex:index};if(type<4)scores[type]++;if(type<4&&!r.eliminated.includes(type)&&scores[type]===r.target)return {...patch,...ccFinish(type)};if(type===5){const eliminated=[...r.eliminated,r.turn];return {...patch,eliminated,...ccNext(r,eliminated)};}if(type===r.turn&&r.left>1)return {...patch,left:r.left-1};return {...patch,...ccNext(r)};},true));}
+    function ccCanGiveClue(r){return r.state==='running'&&r.phase==='clue'&&ccTeam(r)===r.turn&&ccCaptain(r)&&!ccExpired(r);}
+    function ccCanGuess(r){
+      return r.state==='running'&&r.phase==='guess'&&ccTeam(r)===r.turn&&!ccCaptain(r)&&!ccExpired(r)
+        && (ccUnlimited(r)?r.left===0:r.left>0);
+    }
+    M('cc-clue-form').onsubmit=e=>{
+      e.preventDefault();
+      if(ccVisual.effect)return;
+      const clue=M('cc-clue').value.trim().normalize('NFC').toUpperCase(),count=+M('cc-clue-count').value;
+      ccAction(async()=>{
+        await ccTx(r=>{
+          if(!ccCanGiveClue(r))throw Error('Non è il tuo turno.');
+          if(!/^[A-ZÀÈÉÌÒÙ]{1,24}$/.test(clue)||r.words.includes(clue)){
+            throw Error('Usa una sola parola diversa da quelle sulla griglia.');
+          }
+          if(!Number.isInteger(count)||count<1||count>r.target-r.scores[r.turn])throw Error('Numero non valido.');
+          return {phase:'guess',clue,clueCount:count,left:ccUnlimited(r)?0:count+1,turnAt:serverTimestamp()};
+        },true);
+        M('cc-clue').value='';
+      });
+    };
+    function ccGuess(index){
+      ccAction(()=>ccTx(r=>{
+        if(!ccCanGuess(r)||!Number.isInteger(index)||index<0||index>=r.words.length||r.revealed.includes(index)){
+          throw Error('Scelta non valida.');
+        }
+        const type=r.roles[index],scores=[...r.scores],revealed=[...r.revealed,index];
+        const patch={scores,revealed,lastIndex:index};
+        if(type<4)scores[type]++;
+        if(type<4&&!r.eliminated.includes(type)&&scores[type]===r.target)return {...patch,...ccFinish(type)};
+        if(type===5){
+          const eliminated=[...r.eliminated,r.turn];
+          return {...patch,eliminated,...ccNext(r,eliminated)};
+        }
+        if(type===r.turn&&ccUnlimited(r))return patch;
+        if(type===r.turn&&r.left>1)return {...patch,left:r.left-1};
+        return {...patch,...ccNext(r)};
+      },true));
+    }
     M('cc-pass').onclick=()=>ccAction(()=>ccTx(r=>{if(!ccCanGuess(r))throw Error('Non è il tuo turno.');return ccNext(r);},true));
     function ccTimeoutPatch(r){return {...ccNext(r),lastTimeout:[r.captains[r.turn],r.turnAt]};}
     M('cc-timeout').onclick=()=>ccAction(()=>ccTx(r=>{if(r.state!=='running'||!ccExpired(r))throw Error('Il tempo non è ancora scaduto.');return ccTimeoutPatch(r);},true));
     M('cc-rematch').onclick=()=>ccAction(()=>ccTx(r=>{if(!ccHost(r)||r.state!=='finished')throw Error('Rivincita non disponibile.');return {state:'lobby'};}));
     M('cc-leave').onclick=()=>ccAction(async()=>{if(!cc.room){ccDetach();hide('cc-modal',true);return;}if(!confirm(ccHost(cc.room)?'Chiudere la stanza per tutti?':'Uscire dalla stanza?'))return;await ccTx(r=>{if(ccHost(r))return {state:'closed'};if(r.state!=='lobby')return null;const players={...r.players};delete players[cc.uid];return {players};});ccDetach();hide('cc-modal',true);});
     M('cc-invite').onclick=async()=>{if(!cc.room)return;const url=new URL(location.href);url.search='';url.searchParams.set('connections',cc.room.code);url.hash='';const text=`Connessioni Cosmiche: stanza ${cc.room.code}\n${url.href}\n${cc.room.locked===false?'Accesso libero.':'Chiedi la password all’host.'}`;try{if(navigator.share)await navigator.share({title:'Connessioni Cosmiche',text});else{await navigator.clipboard.writeText(text);ccSay(cc.room.locked===false?'Invito copiato.':'Invito copiato. Invia la password separatamente.');}}catch(e){if(e.name!=='AbortError')ccSay(text);}};
-    function ccTick(){const r=cc.room;if(!r||r.state!=='running')return;const sec=ccRemaining(r);const phase=r.phase==='clue'?(r.seenTeams.includes(r.turn)?'Indizio master':'Primo indizio master'):'Scelte esploratori';M('cc-timer').textContent=sec===Infinity?`${phase} · Nessun limite di tempo`:`${phase}: ${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`;M('cc-timer').classList.toggle('cc-urgent',sec<=10);ccAudioTick(r,sec);ccUpdateSound();hide('cc-timeout',sec!==0);M('cc-timeout').disabled=cc.busy;const enabled=!cc.busy&&ccCanGuess(r);for(const b of M('cc-board').children)b.disabled=!enabled||r.revealed.includes(+b.dataset.index);M('cc-pass').disabled=!enabled;M('cc-clue-form').querySelector('button').disabled=cc.busy||sec===0;}
-    function ccRender(){const r=cc.room;if(!r){hide('cc-room',true);hide('cc-entry',!!cc.ref);return;}const me=ccMine(r);if(!me)return;const lobby=r.state==='lobby',done=r.state==='finished';hide('cc-entry',true);hide('cc-room',false);hide('cc-lobby',!lobby);hide('cc-play',lobby);M('cc-room-name').textContent=(r.locked===false?'🔓 ':'🔒 ')+r.name;M('cc-room-code').textContent=r.code;M('cc-room-settings').textContent=`${r.settings.size}×${r.settings.size} · ${r.settings.teams} squadre · ${Object.keys(r.players).length}/${r.settings.capacity} giocatori · ${r.settings.duration||r.settings.clueDuration||r.settings.firstClueDuration?`Primo master ${ccFormatTime(r.settings.firstClueDuration)} · Master ${ccFormatTime(r.settings.clueDuration)} · Esploratori ${ccFormatTime(r.settings.duration)}`:'Senza timer'} · ${r.settings.wordMode==='custom'?'Solo parole custom':(CC_CUSTOM_LEVELS[r.settings.customPercent]?`${CC_CUSTOM_LEVELS[r.settings.customPercent]} · ${r.settings.customPercent}% lista e griglia (${ccCustomQuota(r.settings)}/${r.settings.size**2} caselle custom)`:r.settings.customWords.length+' parole custom + dizionario')}`;
-        if(lobby){const teams=[];for(let i=0;i<r.settings.teams;i++){const el=ccNode('div',undefined,'cc-team');el.style.setProperty('--team',CC_COLORS[i]);el.append(ccNode('strong',CC_NAMES[i]));for(const [id,p] of Object.entries(r.players).filter(([,p])=>p.team===i)){const line=ccNode('p',`${p.ready===r.round+1?'✓':'○'} ${p.name}${id===r.hostUid?' · Host':''}${id===cc.uid?' · Tu':''} · ${p.role==='captain'?'Capitano':'Esploratore'}`);window.cosmicAvatar.decorate(line,id);if(ccHost(r)&&id!==cc.uid){const kick=ccNode('button','✕','icon-btn');kick.style.marginLeft='5px';kick.title='Espelli';kick.onclick=()=>ccAction(()=>ccTx(old=>{if(!ccHost(old)||old.state!=='lobby')throw Error('Lobby non disponibile.');const players={...old.players};delete players[id];return {players};}));line.append(kick);}el.append(line);}teams.push(el);}M('cc-players').replaceChildren(...teams);const select=M('cc-my-team');if(select.options.length!==r.settings.teams)select.replaceChildren(...CC_NAMES.slice(0,r.settings.teams).map((n,i)=>new Option(n,String(i))));select.value=String(me.team);select.disabled=cc.busy;M('cc-my-role').value=me.role;M('cc-my-role').disabled=cc.busy;M('cc-ready').disabled=cc.busy;M('cc-ready').textContent=me.ready===r.round+1?'✓ Pronto (annulla)':'Sono pronto';hide('cc-start',!ccHost(r));let valid=false;try{ccCaptains(r);valid=Object.entries(r.players).every(([id,p])=>id===cc.uid||p.ready===r.round+1)}catch(e){}M('cc-start').disabled=cc.busy||!valid;return;}
-        const scores=[];for(let i=0;i<r.settings.teams;i++){const el=ccNode('div',undefined,'cc-team');el.style.setProperty('--team',CC_COLORS[i]);el.append(ccNode('strong',CC_NAMES[i]+(i===me.team?' · Tu':'')),ccNode('p',r.eliminated.includes(i)?'Eliminata':`${r.scores[i]}/${r.target} segnali`),window.cosmicAvatar.decorate(ccNode('p',`Capitano: ${r.players[r.captains[i]]?.name||'-'}`),r.captains[i]));for(const [uid,p] of Object.entries(r.players).filter(([,p])=>p.team===i&&p.role!=='captain'))el.append(window.cosmicAvatar.decorate(ccNode('p',p.name),uid));scores.push(el);}M('cc-scores').replaceChildren(...scores);M('cc-turn').textContent=done?'Sfida conclusa':`${CC_NAMES[r.turn]} · ${r.phase==='clue'?'Attesa indizio':'Decifrazione'} · Tu: ${ccCaptain(r)?'Capitano':'Esploratore'}`;M('cc-clue-display').textContent=r.clue?`${r.clue} · ${r.clueCount} (scelte rimaste: ${r.left})`:'Nessun indizio ancora';M('cc-board').style.setProperty('--cc-size',r.settings.size);const canSee=done||ccCaptain(r);M('cc-board').replaceChildren(...r.words.map((word,i)=>{const revealed=r.revealed.includes(i),b=ccNode('button',undefined,'cc-cell'+(revealed?' cc-revealed':''));b.type='button';b.dataset.index=i;b.append(ccNode('span',word,'cc-word'));if(canSee||revealed){b.dataset.color=r.roles[i];b.append(ccNode('small',CC_SYMBOLS[r.roles[i]]+' '+(r.roles[i]<4?CC_NAMES[r.roles[i]]:r.roles[i]===4?'Neutro':'Vuoto')));}b.disabled=cc.busy||!ccCanGuess(r)||revealed;b.onclick=()=>ccGuess(i);return b;}));M('cc-legend').textContent=canSee?'Mappa capitano: trova i segnali della tua squadra. Il Vuoto elimina la squadra che lo seleziona.':'Seleziona i segnali della tua squadra. Un segnale neutro o rivale termina il turno; il Vuoto elimina la squadra.';const canClue=!done&&r.phase==='clue'&&ccTeam(r)===r.turn&&ccCaptain(r);hide('cc-clue-form',!canClue);const counts=M('cc-clue-count'),max=r.target-r.scores[r.turn];if(counts.options.length!==max)counts.replaceChildren(...Array.from({length:max},(_,i)=>new Option(String(i+1),String(i+1))));hide('cc-pass',!ccCanGuess(r));hide('cc-result',!done);hide('cc-rematch',!done||!ccHost(r));M('cc-rematch').disabled=cc.busy;if(done){M('cc-result').textContent=`🏆 Vince la squadra ${CC_NAMES[r.winner]}!`;M('cc-timer').textContent='';hide('cc-timeout',true);}else ccTick();
+    function ccClearReveal(){
+      clearTimeout(ccVisual.timer);
+      const active=ccVisual.cards[ccVisual.effect?.index];
+      if(active)delete active.button.dataset.effect;
+      M('cc-scene').classList.remove('cc-void');
+      hide('cc-portal',true);
+      ccVisual.effect=null;
+      ccVisual.timer=0;
+    }
+    function ccResetPresentation(){
+      ccClearReveal();
+      ccVisual.round=null;
+      ccVisual.cards=[];
+      ccVisual.wordsUp.clear();
+      ccVisual.winner=null;
+      ccVisual.feedback='';
+      M('cc-board').replaceChildren();
+      if(M('cc-victory').open)M('cc-victory').close();
+    }
+    function ccRevealEvent(previous,r){
+      if(previous?.state!=='running'||previous.round!==r.round||r.revealed.length<=previous.revealed.length)return null;
+      const index=r.lastIndex,type=r.roles[index];
+      if(type===5)return {index,outcome:'void',message:r.words[index]+' · '+CC_NAMES[r.eliminated.at(-1)]+' eliminata dal Vuoto.'};
+      if(type===4)return {index,outcome:'neutral',message:r.words[index]+' · Carta neutra.'};
+      if(type<0||type>=4||type===undefined)return null;
+      // A finished turn keeps the team that revealed the card. For a batched
+      // update, avoid labelling an older reveal against an unrelated turn.
+      const sameTurn=r.turnAt?.toMillis()===previous.turnAt?.toMillis();
+      let team=-1;
+      if(r.phase==='done'||(r.phase==='guess'&&(sameTurn||previous.phase==='clue'&&previous.turn===r.turn)))team=r.turn;
+      else if(r.phase==='clue'&&previous.phase==='guess'&&r.revealed.length===previous.revealed.length+1)team=previous.turn;
+      if(team<0)return null;
+      return {index,outcome:type===team?'ally':'rival',message:r.words[index]+' · Punto per '+CC_NAMES[type]+'.'};
+    }
+    function ccSyncPresentation(previous,r){
+      if(!previous||previous.round!==r.round||r.state==='lobby'&&previous.state!=='lobby')ccResetPresentation();
+      const event=ccRevealEvent(previous,r);
+      if(event){
+        ccClearReveal();
+        ccVisual.feedback=event.message;
+        if(!ccMotion.matches&&!document.hidden)ccVisual.effect=event;
+      }else if(previous?.turn!==r.turn||previous?.phase!==r.phase){
+        ccVisual.feedback='';
+      }
+      if(previous?.state==='running'&&previous.round===r.round&&r.state==='finished'){
+        ccVisual.winner={team:r.winner,eliminated:r.roles[r.lastIndex]===5?r.eliminated.at(-1):null};
+      }
+      cc.room=r;
+      ccRender();
+      if(event)window.cosmicGame?.connectionsCue(event.outcome);
+      if(event&&ccVisual.effect)ccAnimateReveal(event);
+      if(!ccVisual.effect)ccShowVictory();
+    }
+    function ccShowVictory(){
+      const winner=ccVisual.winner;
+      if(!winner)return;
+      ccVisual.winner=null;
+      const dialog=M('cc-victory');
+      dialog.dataset.ccColor=String(winner.team);
+      M('cc-victory-title').textContent='Vince '+CC_NAMES[winner.team];
+      M('cc-victory-symbol').textContent=CC_SYMBOLS[winner.team];
+      M('cc-victory-reason').textContent=winner.eliminated===null
+        ?'Ha completato la sua mappa.'
+        :CC_NAMES[winner.eliminated]+' è stata eliminata dal Vuoto.';
+      if(M('cc-modal').inert&&!M('help-modal').classList.contains('hidden'))M('close-help').click();
+      if(!dialog.open)dialog.showModal();
+      window.cosmicGame?.connectionsCue('victory');
+    }
+    function ccBlackHole(origin){
+      const scene=M('cc-scene'),box=origin.getBoundingClientRect(),bounds=scene.getBoundingClientRect();
+      const x=box.left+box.width/2,y=box.top+box.height/2;
+      const offsets=ccVisual.cards.map(({button})=>{
+        const card=button.getBoundingClientRect();
+        const dx=x-card.left-card.width/2,dy=y-card.top-card.height/2;
+        return {button,dx,dy,distance:Math.hypot(dx,dy)};
+      });
+      const max=Math.max(1,...offsets.map(offset=>offset.distance));
+      for(const {button,dx,dy,distance} of offsets){
+        button.style.setProperty('--cc-dx',dx+'px');
+        button.style.setProperty('--cc-dy',dy+'px');
+        button.style.setProperty('--cc-spin',(dx<0?-1:1)*(125+196*distance/max)+'deg');
+        button.style.setProperty('--cc-delay',Math.round(100*distance/max)+'ms');
+      }
+      scene.style.setProperty('--cc-x',x-bounds.left+'px');
+      scene.style.setProperty('--cc-y',y-bounds.top+'px');
+      hide('cc-portal',false);
+      scene.classList.add('cc-void');
+    }
+    function ccAnimateReveal(effect){
+      const {index,outcome}=effect,card=ccVisual.cards[index].button;
+      const finish=()=>{
+        if(ccVisual.effect!==effect)return;
+        ccClearReveal();
+        ccRender();
+        ccShowVictory();
+      };
+      if(outcome==='void')ccBlackHole(card);
+      else card.dataset.effect=outcome;
+      ccVisual.timer=setTimeout(()=>{
+        if(ccVisual.effect!==effect)return;
+        if(outcome==='void'||ccMotion.matches){finish();return;}
+        delete card.dataset.effect;
+        effect.flipping=true;
+        ccRenderCard(cc.room,index,ccCaptain(cc.room)||cc.room.state==='finished');
+        ccVisual.timer=setTimeout(finish,CC_FLIP_MS);
+      },CC_EFFECT_MS[outcome]);
+    }
+    function ccBuildBoard(r){
+      const board=M('cc-board');
+      board.style.setProperty('--cc-size',r.settings.size);
+      ccVisual.cards=r.words.map((word,index)=>{
+        const button=ccNode('button',undefined,'cc-cell'),flipper=ccNode('span',undefined,'cc-flipper');
+        const front=ccNode('span',undefined,'cc-face cc-front'),back=ccNode('span',undefined,'cc-face cc-back');
+        const tag=ccNode('small',undefined,'cc-card-team'),symbol=ccNode('span',undefined,'cc-mark');
+        button.type='button';
+        flipper.setAttribute('aria-hidden','true');
+        front.append(tag,ccNode('span',word,'cc-word'));
+        back.append(symbol);
+        flipper.append(front,back);
+        button.append(flipper);
+        button.onclick=()=>{
+          if(button.disabled||!cc.room)return;
+          if(button.dataset.turnable==='true'){
+            if(ccVisual.wordsUp.has(index))ccVisual.wordsUp.delete(index);
+            else ccVisual.wordsUp.add(index);
+            ccRenderCard(cc.room,index,ccCaptain(cc.room)||cc.room.state==='finished');
+            return;
+          }
+          ccGuess(index);
+        };
+        return {button,tag,symbol};
+      });
+      board.replaceChildren(...ccVisual.cards.map(card=>card.button));
+      ccVisual.round=r.round;
+    }
+    function ccRenderCard(r,index,showMap){
+      const {button,tag,symbol}=ccVisual.cards[index],type=r.roles[index],revealed=r.revealed.includes(index);
+      const showRole=showMap||revealed;
+      const turnable=revealed&&type!==5&&(ccVisual.effect?.index!==index||ccVisual.effect.flipping===true);
+      const flipped=turnable&&!ccVisual.wordsUp.has(index);
+      button.classList.toggle('cc-revealed',revealed);
+      button.dataset.classified=String(showMap&&!revealed);
+      button.dataset.turnable=String(turnable);
+      button.dataset.flipped=String(flipped);
+      if(showRole)button.dataset.ccColor=String(type);
+      else delete button.dataset.ccColor;
+      tag.hidden=!showRole;
+      tag.textContent=showRole?CC_LABELS[type]:'';
+      symbol.textContent=revealed?(CC_SYMBOLS[type]||''):'';
+      const identity=showRole?' · '+(revealed?'Rivelata, ':'Coperta, ')+CC_LABELS[type]:'';
+      const action=turnable?(flipped?' · Mostra la parola':' · Mostra il simbolo'):'';
+      button.setAttribute('aria-label',r.words[index]+identity+action);
+      button.disabled=cc.busy||Boolean(ccVisual.effect)||(revealed?!turnable:!ccCanGuess(r));
+    }
+    function ccTeamPanel(team){
+      const panel=ccNode('section',undefined,'cc-team');
+      panel.dataset.ccColor=String(team);
+      panel.setAttribute('aria-label',CC_NAMES[team]);
+      return panel;
+    }
+    function ccRenderLobby(r,me){
+      const teams=CC_NAMES.slice(0,r.settings.teams).map((name,team)=>{
+        const panel=ccTeamPanel(team);
+        panel.append(ccNode('strong',CC_SYMBOLS[team]+' '+name));
+        for(const [id,p] of Object.entries(r.players).filter(([,p])=>p.team===team)){
+          const row=ccNode('p'),person=ccNode('span',p.name,'cc-player-name');
+          const ready=p.ready===r.round+1,mark=ccNode('span',ready?'✓ ':'○ ');
+          mark.setAttribute('aria-label',ready?'Pronto':'In attesa');
+          row.append(mark,window.cosmicAvatar.decorate(person,id));
+          if(p.role==='captain')row.append(ccNode('small',' · Master'));
+          if(ccHost(r)&&id!==cc.uid){
+            const kick=ccNode('button','✕','icon-btn');
+            kick.type='button';
+            kick.style.marginLeft='5px';kick.title='Espelli';kick.setAttribute('aria-label','Espelli '+p.name);
+            kick.onclick=()=>ccAction(()=>ccTx(old=>{
+              if(!ccHost(old)||old.state!=='lobby')throw Error('Lobby non disponibile.');
+              const players={...old.players};delete players[id];return {players};
+            }));
+            row.append(kick);
+          }
+          panel.append(row);
+        }
+        return panel;
+      });
+      M('cc-players').replaceChildren(...teams);
+      const select=M('cc-my-team');
+      if(select.options.length!==r.settings.teams){
+        select.replaceChildren(...CC_NAMES.slice(0,r.settings.teams).map((name,i)=>new Option(name,String(i))));
+      }
+      select.value=String(me.team);select.disabled=cc.busy;
+      M('cc-my-role').value=me.role;M('cc-my-role').disabled=cc.busy;
+      M('cc-ready').disabled=cc.busy;
+      M('cc-ready').textContent=me.ready===r.round+1?'✓ Pronto (annulla)':'Sono pronto';
+      hide('cc-start',!ccHost(r));
+      let valid=false;
+      try{ccCaptains(r);valid=Object.entries(r.players).every(([id,p])=>id===cc.uid||p.ready===r.round+1);}catch{}
+      M('cc-start').disabled=cc.busy||!valid;
+    }
+    function ccRenderScores(r){
+      const scores=CC_NAMES.slice(0,r.settings.teams).map((name,team)=>{
+        const panel=ccTeamPanel(team),header=ccNode('div',undefined,'cc-team-head');
+        const score=r.eliminated.includes(team)?'Eliminata':r.scores[team]+' / '+r.target;
+        header.append(ccNode('strong',CC_SYMBOLS[team]+' '+name),ccNode('span',score,'cc-team-header-score'));
+        const players=ccNode('div',undefined,'cc-team-players');
+        for(const [id,p] of Object.entries(r.players).filter(([,p])=>p.team===team)){
+          players.append(window.cosmicAvatar.decorate(ccNode('span',p.name,'cc-player-name'),id));
+        }
+        panel.append(header,players);
+        return panel;
+      });
+      M('cc-scores').replaceChildren(...scores);
+    }
+    function ccTick(){
+      const r=cc.room;
+      if(!r||r.state!=='running')return;
+      const sec=ccRemaining(r),timer=M('cc-timer');
+      timer.textContent=sec===Infinity?'Senza timer':Math.floor(sec/60)+':'+String(sec%60).padStart(2,'0');
+      if(sec===Infinity)timer.removeAttribute('datetime');
+      else timer.dateTime='PT'+sec+'S';
+      timer.classList.toggle('cc-urgent',sec<=10);
+      ccAudioTick(r,sec);
+      ccUpdateSound();
+      hide('cc-timeout',sec!==0);
+      const locked=cc.busy||Boolean(ccVisual.effect),enabled=!locked&&ccCanGuess(r);
+      M('cc-timeout').disabled=locked;
+      for(const {button} of ccVisual.cards){
+        button.disabled=locked||(button.classList.contains('cc-revealed')?button.dataset.turnable!=='true':!enabled);
+      }
+      M('cc-pass').disabled=!enabled;
+      M('cc-clue-form').querySelector('button').disabled=locked||sec===0;
+    }
+    function ccRender(){
+      const r=cc.room,box=M('cc-modal').querySelector('.cc-box');
+      box.classList.toggle('cc-in-play',Boolean(r&&r.state!=='lobby'));
+      if(!r){hide('cc-room',true);hide('cc-entry',!!cc.ref);return;}
+      const me=ccMine(r);
+      if(!me)return;
+      const lobby=r.state==='lobby',done=r.state==='finished',active=ccTeam(r)===r.turn,master=ccCaptain(r);
+      hide('cc-entry',true);hide('cc-room',false);hide('cc-lobby',!lobby);hide('cc-play',lobby);
+      M('cc-room-header').classList.toggle('cc-playing',!lobby);
+      M('cc-room-name').textContent=(r.locked===false?'🔓 ':'🔒 ')+r.name;
+      M('cc-room-code').textContent=r.code;
+      const rule=ccUnlimited(r)?'Scelte illimitate':'Scelte con limite';
+      const timer=r.settings.duration||r.settings.clueDuration||r.settings.firstClueDuration
+        ?'Master '+ccFormatTime(r.settings.firstClueDuration)+' / '+ccFormatTime(r.settings.clueDuration)+' · Esploratori '+ccFormatTime(r.settings.duration)
+        :'Senza timer';
+      const words=r.settings.wordMode==='custom'?'Solo parole personalizzate'
+        :CC_CUSTOM_LEVELS[r.settings.customPercent]
+          ?CC_CUSTOM_LEVELS[r.settings.customPercent]+' · '+r.settings.customPercent+'% ('+ccCustomQuota(r.settings)+'/'+r.settings.size**2+' parole personalizzate)'
+          :r.settings.customWords.length+' parole personalizzate + dizionario';
+      M('cc-room-settings').textContent=r.settings.size+'×'+r.settings.size+' · '+r.settings.teams+' squadre · '+Object.keys(r.players).length+'/'+r.settings.capacity+' giocatori · '+rule+' · '+timer+' · '+words;
+      hide('cc-room-settings',!lobby);
+      ccUpdateSound();
+      if(lobby){ccRenderLobby(r,me);return;}
+
+      ccRenderScores(r);
+      if(ccVisual.round!==r.round)ccBuildBoard(r);
+      const showMap=done||master;
+      M('cc-board-title').textContent=done?'Tabellone finale':master?'Mappa del Master':'Tabellone';
+      M('cc-legend').textContent=showMap?'Contorno: da trovare · Gradiente: rivelata':'';
+      for(const index of ccVisual.cards.keys())ccRenderCard(r,index,showMap);
+
+      M('cc-turn-panel').dataset.ccColor=String(done?r.winner:r.turn);
+      M('cc-turn-label').textContent=done?'Partita conclusa':'Tocca a '+CC_NAMES[r.turn];
+      const guessing=!done&&r.phase==='guess';
+      const canClue=!done&&r.phase==='clue'&&active&&master;
+      M('cc-turn').textContent=done?'Vince '+CC_NAMES[r.winner]
+        :canClue?'Inserisci l’indizio'
+        :!guessing?'In attesa dell’indizio'
+        :active&&!master?'Scegli una carta'
+          :active?'La tua squadra sta scegliendo':CC_NAMES[r.turn]+' sta scegliendo';
+      hide('cc-clue-display',!guessing);
+      M('cc-clue-display').textContent=guessing?r.clue+' · '+r.clueCount:'';
+      hide('cc-choices',!guessing);
+      M('cc-choices').textContent=ccUnlimited(r)?'Scelte illimitate':r.left+(r.left===1?' scelta rimasta':' scelte rimaste');
+      hide('cc-feedback',!ccVisual.feedback);
+      M('cc-feedback').textContent=ccVisual.feedback;
+      hide('cc-clue-form',!canClue);
+      if(canClue){
+        const counts=M('cc-clue-count'),max=r.target-r.scores[r.turn];
+        if(counts.options.length!==max)counts.replaceChildren(...Array.from({length:max},(_,i)=>new Option(String(i+1),String(i+1))));
+      }
+      hide('cc-pass',!guessing||!active||master);
+      hide('cc-rematch',!done||!ccHost(r));
+      M('cc-rematch').disabled=cc.busy||Boolean(ccVisual.effect);
+      hide('cc-timer',done);
+      if(done)hide('cc-timeout',true);
+      else ccTick();
     }
     let ccAutoKey='',ccAutoSince=0,ccAutoAttempt=0,ccAutoPending=false;
     setInterval(async()=>{ccTick();const r=cc.room;if(r?.state!=='running'||!ccExpired(r)||cc.busy||ccAutoPending)return;const key=ccPhaseKey(r),now=Date.now();if(ccAutoKey!==key){ccAutoKey=key;ccAutoSince=now;ccAutoAttempt=0;}const delay=r.captains[r.turn]===cc.uid?200:ccHost(r)?800:1800;if(now-ccAutoSince<delay+750||now-ccAutoAttempt<3000)return;ccAutoAttempt=now;ccAutoPending=true;try{await ccTx(old=>old.state==='running'&&ccPhaseKey(old)===key&&ccExpired(old)?ccTimeoutPatch(old):null);}catch(e){console.warn('Timeout, nuovo tentativo:',cloudError(e));}finally{ccAutoPending=false;}},250);
@@ -2399,11 +3167,11 @@ body.mind-playing #mp-game-panel {min-height:0;overflow:auto;}
     function partyAttach(ref,uid,kind){void syncClock();party.kind=kind;party.ref=ref;party.uid=uid;saveSession(PARTY_SESSION,{id:ref.id,uid,kind});hide('party-modal',false);hide('party-entry',true);party.unsub=onSnapshot(ref,{includeMetadataChanges:true},snap=>{if(party.ref!==ref||!observeRoom(party,snap,partySay))return;const r=snap.exists()?snap.data():null;if(roomExpired(r)){partyDetach('Stanza scaduta dopo 24 ore. Crea una nuova stanza.');return;}if(!r||!r.players[uid]||r.state==='closed'){partyDetach('Stanza chiusa o accesso revocato.');return;}party.room=r;partyRender();},e=>partySay(cloudError(e)));}
     function partyRestore(uid){const s=readSession(PARTY_SESSION);if(!mp.ref&&!cc.ref&&!party.ref&&s?.uid===uid&&/^[a-f0-9]{64}$/.test(s.id)&&PARTY_NAMES[s.kind])partyAttach(doc(db,...PARTY_PATH,s.id),uid,s.kind);}
     async function partyAction(fn){if(party.busy)return;party.busy=true;partySay('');try{await fn();}catch(e){partySay(cloudError(e));console.error('Party:',e);}finally{party.busy=false;partyRender();}}
-    async function partyTx(change){const ref=party.ref,uid=party.uid,old=party.room;if(!ref||uid!==requireOnline())throw Error('Stanza non disponibile.');await runTransaction(db,async t=>{const snap=await t.get(ref);if(!snap.exists())throw Error('Stanza non trovata.');const r=snap.data();assertRoomFresh(r);if(!r.players[uid]||r.state==='closed')throw Error('Stanza non disponibile.');if(old&&old.state==='running'&&(r.turnKey!==old.turnKey||r.card!==old.card||r.phase!==old.phase))throw Error('Il turno è cambiato, riprova.');const patch=change(r);if(patch)directoryUpdate(t,ref,r,patch);});}
+    async function partyTx(change){const ref=party.ref,uid=party.uid,old=party.room;if(!ref||uid!==requireOnline())throw Error('Stanza non disponibile.');await runTransaction(db,async t=>{const snap=await t.get(ref);if(!snap.exists())throw Error('Stanza non trovata.');const r=snap.data();assertRoomFresh(r);if(!r.players[uid]||r.state==='closed')throw Error('Stanza non disponibile.');if(old&&old.state==='running'&&(r.turnKey!==old.turnKey||r.card!==old.card||r.phase!==old.phase))throw Error('Il turno è cambiato, riprova.');const patch=await change(r,t,ref);if(patch)directoryUpdate(t,ref,r,patch);});}
     M('party-draw-open').onclick=()=>partyOpen('draw');M('party-taboo-open').onclick=()=>partyOpen('taboo');
     M('party-close').onclick=()=>{if(party.ref){partySay('Usa Esci dalla stanza.');return;}hide('party-create',true);hide('party-join',true);hide('party-modal',true);};
-    M('party-create').onsubmit=e=>{e.preventDefault();partyAction(async()=>{const uid=requireOnline();if(party.ref||mp.ref||cc.ref)throw Error('Sei già in una stanza.');const name=M('party-name').value.trim(),settings={capacity:+M('party-capacity').value,rounds:+M('party-rounds').value,duration:+M('party-duration').value};if(!name)throw Error('Inserisci il nome.');const code=bytesHex(crypto.getRandomValues(new Uint8Array(5))).toUpperCase(),password=M('party-password').value,id=await deriveRoom(code,password),ref=doc(db,...PARTY_PATH,id),kind=party.kind;await runTransaction(db,async t=>{if((await t.get(ref)).exists())throw Error('Codice già in uso.');directoryCreate(t,ref,{locked:password!=='',kind,code,name,hostUid:uid,settings,createdAt:serverTimestamp(),state:'lobby',players:{[uid]:partyNew(0)},order:[],deck:[],turn:0,card:0,turnKey:'',phase:'idle',startedAt:null,guessed:[],scores:{},teams:[0,0],chat:[],lastWord:''});});M('party-password').value='';partyAttach(ref,uid,kind);});};
-    M('party-join').onsubmit=e=>{e.preventDefault();partyAction(async()=>{const uid=requireOnline();if(party.ref||mp.ref||cc.ref)throw Error('Sei già in una stanza.');const id=await deriveRoom(M('party-code-input').value.trim().toUpperCase(),M('party-join-password').value),ref=doc(db,...PARTY_PATH,id);let kind=party.kind;await runTransaction(db,async t=>{const snap=await t.get(ref);if(!snap.exists())throw Error('Codice o password errati.');const r=snap.data();assertRoomFresh(r);if(r.kind!==kind||r.state==='closed')throw Error('Stanza non disponibile per questa modalità.');if(r.players[uid])return;if(r.state!=='lobby'||Object.keys(r.players).length>=r.settings.capacity)throw Error('Stanza piena o partita già iniziata.');const counts=[0,0];Object.values(r.players).forEach(p=>counts[p.team]++);directoryUpdate(t,ref,r,{players:{...r.players,[uid]:partyNew(counts[0]<=counts[1]?0:1)}});});M('party-join-password').value='';partyAttach(ref,uid,kind);});};
+    M('party-create').onsubmit=e=>{e.preventDefault();partyAction(async()=>{const uid=requireOnline();if(party.ref||mp.ref||cc.ref)throw Error('Sei già in una stanza.');const settings={capacity:+M('party-capacity').value,rounds:+M('party-rounds').value,duration:+M('party-duration').value};const code=bytesHex(crypto.getRandomValues(new Uint8Array(5))).toUpperCase(),name=M('party-name').value.trim()||code,password=M('party-password').value,id=await deriveRoom(code,password),ref=doc(db,...PARTY_PATH,id),kind=party.kind;await runTransaction(db,async t=>{if((await t.get(ref)).exists())throw Error('Codice già in uso.');directoryCreate(t,ref,{locked:password!=='',kind,code,name,hostUid:uid,settings,createdAt:serverTimestamp(),state:'lobby',players:{[uid]:partyNew(0)},order:[],deck:[],turn:0,card:0,turnKey:'',phase:'idle',startedAt:null,guessed:[],scores:{},teams:[0,0],chat:[],lastWord:'',...(kind==='taboo'?{taboo:tabooState(M('party-channel').value)}:{draw2:draw2New()})});});M('party-password').value='';partyAttach(ref,uid,kind);});};
+    M('party-join').onsubmit=e=>{e.preventDefault();partyAction(async()=>{const uid=requireOnline();if(party.ref||mp.ref||cc.ref)throw Error('Sei già in una stanza.');const id=await deriveRoom(M('party-code-input').value.trim().toUpperCase(),M('party-join-password').value),ref=doc(db,...PARTY_PATH,id);let kind=party.kind;await runTransaction(db,async t=>{const snap=await t.get(ref);if(!snap.exists())throw Error('Codice o password errati.');const r=snap.data();assertRoomFresh(r);if(r.kind!==kind||r.state==='closed')throw Error('Stanza non disponibile per questa modalità.');if(r.players[uid])return;if((kind==='taboo'&&!tabooRoom(r))||(kind==='draw'&&!draw2Room(r)))throw Error('Questa stanza usa una versione precedente. Crea una nuova stanza.');if(r.state!=='lobby'||Object.keys(r.players).length>=r.settings.capacity)throw Error('Stanza piena o partita già iniziata.');const counts=[0,0];Object.values(r.players).forEach(p=>counts[p.team]++);directoryUpdate(t,ref,r,{players:{...r.players,[uid]:partyNew(counts[0]<=counts[1]?0:1)}});});M('party-join-password').value='';partyAttach(ref,uid,kind);});};
     M('party-team').onchange=()=>partyAction(()=>partyTx(r=>{if(r.state!=='lobby'||r.kind!=='taboo')return null;return {players:{...r.players,[party.uid]:{...partyMember(r),team:+M('party-team').value}}};}));
     function partyOrder(r){const ids=Object.keys(r.players);if(r.kind==='draw')return ccShuffle(ids);const teams=[0,1].map(t=>ccShuffle(ids.filter(id=>r.players[id].team===t)));if(teams.some(a=>a.length<2))throw Error('Servono almeno due giocatori per squadra.');if(teams[0].length!==teams[1].length)throw Error('Le squadre devono avere lo stesso numero di giocatori.');return teams[0].flatMap((id,i)=>[id,teams[1][i]]);}
     function partyDeck(r){if(r.kind==='taboo')return ccShuffle(PARTY_CARDS);const pool=[...new Set([...PARTY_CARDS.map(c=>c.word),...CC_WORDS.map(partyNorm)].filter(w=>/^[A-Z]{3,18}$/.test(w)))];return ccShuffle(pool).slice(0,r.settings.rounds*Object.keys(r.players).length*3).map(word=>({word,banned:[]}));}
@@ -2435,9 +3203,968 @@ body.mind-playing #mp-game-panel {min-height:0;overflow:auto;}
     M('party-eraser').onclick=()=>{party.erase=!party.erase;M('party-eraser').textContent=party.erase?'Gomma attiva':'Gomma';};M('party-ink').oninput=()=>{party.erase=false;M('party-eraser').textContent='Gomma';};M('party-clear').onclick=()=>{if(partyCanDraw()){partySendStroke({points:[],color:'#ffffff',width:2,clear:true});ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);}};
     M('party-sound').onclick=()=>{M('btn-sound').click();partyRender();};
     let partyAudioKey='',partyAudioSec=-1,partyAutoAt=0;
-    function partyTick(){const r=party.room;if(!r||r.state!=='running')return;const sec=partyRemaining(r),key=r.turnKey+':'+r.phase;M('party-timer').textContent=sec===Infinity?'Nessun limite di tempo':`${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`;M('party-timer').classList.toggle('cc-urgent',sec<=10);if(partyAudioKey!==key){partyAudioKey=key;partyAudioSec=-1;}if(partyActor(r)===party.uid&&sec<=10&&sec!==partyAudioSec){partyAudioSec=sec;if(sec===0)window.cosmicGame.timerAlarm();else window.cosmicGame.timerTick();}if((partyExpiredForServer(r)||(r.kind==='draw'&&r.phase==='play'&&r.guessed.length===r.order.length-1))&&!party.busy&&Date.now()-partyAutoAt>2500){partyAutoAt=Date.now();partyAction(()=>partyTx(o=>{if(o.state!=='running'||o.turnKey!==r.turnKey)return null;if(o.phase==='choose'&&!partyOnTime(o))return {phase:'play',card:o.turn*3,startedAt:serverTimestamp()};if(o.phase==='play'&&(!partyOnTime(o)||(o.kind==='draw'&&o.guessed.length===o.order.length-1)))return partyNext(o);return null;}));}}
+    function partyTick(){const r=party.room;if(!r||r.state!=='running')return;if(tabooRoom(r)){tabooTick(r);return;}if(draw2Room(r)){draw2Tick(r);return;}const sec=partyRemaining(r),key=r.turnKey+':'+r.phase;M('party-timer').textContent=sec===Infinity?'Nessun limite di tempo':`${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`;M('party-timer').classList.toggle('cc-urgent',sec<=10);if(partyAudioKey!==key){partyAudioKey=key;partyAudioSec=-1;}if(partyActor(r)===party.uid&&sec<=10&&sec!==partyAudioSec){partyAudioSec=sec;if(sec===0)window.cosmicGame.timerAlarm();else window.cosmicGame.timerTick();}if((partyExpiredForServer(r)||(r.kind==='draw'&&r.phase==='play'&&r.guessed.length===r.order.length-1))&&!party.busy&&Date.now()-partyAutoAt>2500){partyAutoAt=Date.now();partyAction(()=>partyTx(o=>{if(o.state!=='running'||o.turnKey!==r.turnKey)return null;if(o.phase==='choose'&&!partyOnTime(o))return {phase:'play',card:o.turn*3,startedAt:serverTimestamp()};if(o.phase==='play'&&(!partyOnTime(o)||(o.kind==='draw'&&o.guessed.length===o.order.length-1)))return partyNext(o);return null;}));}}
     setInterval(partyTick,250);
-    function partyRender(){const r=party.room,kind=party.kind;M('party-title').textContent=PARTY_NAMES[kind];M('party-intro').textContent=kind==='draw'?'A turno, un giocatore sceglie una parola tra tre proposte e la disegna sulla lavagna. Gli altri provano a indovinarla nella chat. Ogni risposta esatta vale 100 punti per chi indovina e 50 per chi disegna. Vince chi totalizza più punti.':'Due squadre si alternano. Il suggeritore fa indovinare una parola senza dire la soluzione né le cinque parole vietate, usando la chat o una chiamata esterna. Ogni risposta corretta vale un punto, una violazione ne sottrae uno. È possibile passare senza penalità. Vince la squadra con più punti.';M('party-guide-text').textContent=M('party-intro').textContent;hide('party-entry',!!party.ref);hide('party-room',!r);if(!r)return;const host=partyHost(r),lobby=r.state==='lobby',done=r.state==='finished',running=r.state==='running',draw=r.kind==='draw',actor=running?partyActor(r):null,active=actor===party.uid,mine=partyMember(r),same=running&&mine.team===partyTeam(r);M('party-room-name').textContent=(r.locked===false?'🔓 ':'🔒 ')+r.name;M('party-code').textContent=r.code;M('party-status').textContent=lobby?`Lobby · ${Object.keys(r.players).length}/${r.settings.capacity}`:done?'Partita conclusa':`Turno ${r.turn+1}/${r.order.length*r.settings.rounds} · ${r.players[actor]?.name||'-'}${draw?' disegna':` · ${CC_NAMES[partyTeam(r)]}`}`;if(running&&actor)window.cosmicAvatar.decorate(M('party-status'),actor);const list=M('party-players');list.replaceChildren();const ids=Object.keys(r.players).sort((a,b)=>(r.scores[b]||0)-(r.scores[a]||0));if(!draw&&!lobby)list.append(ccNode('div',`Nebula ${r.teams[0]} · Nova ${r.teams[1]}`,'cc-turn'));for(const id of ids){const p=r.players[id],row=ccNode('div',undefined,'mp-player');row.append(window.cosmicAvatar.decorate(ccNode('div',`${p.name}${id===r.hostUid?' · Host':''}${id===party.uid?' · Tu':''}${draw?'':` · ${CC_NAMES[p.team]}`}${r.guessed.includes(id)?' · ✓':''}`),id));if(draw&&!lobby)row.append(ccNode('strong',`${r.scores[id]||0} pt`,'mp-score'));if(host&&lobby&&id!==party.uid){const b=ccNode('button','Espelli','icon-btn');b.onclick=()=>partyAction(()=>partyTx(o=>{if(o.state!=='lobby'||!partyHost(o))return null;const players={...o.players};delete players[id];return {players};}));row.append(b);}list.append(row);}hide('party-lobby',!lobby);hide('party-team-label',draw);M('party-team').value=String(mine.team);hide('party-start',!host);M('party-start').disabled=party.busy||ids.length<partyMin(r);hide('party-play',!running);hide('party-result',!done);hide('party-rematch',!done||!host);if(done){const best=draw?Math.max(...Object.values(r.scores)):Math.max(...r.teams);const winners=draw?ids.filter(id=>r.scores[id]===best).map(id=>r.players[id].name):[0,1].filter(t=>r.teams[t]===best).map(t=>CC_NAMES[t]);M('party-result').textContent=`🏆 ${winners.join(' e ')} · ${best} punti${winners.length>1?' · Pareggio':''}`;if(draw)for(const id of ids.filter(id=>r.scores[id]===best))window.cosmicAvatar.decorate(M('party-result'),id);}partyListenStrokes(r);if(!running)return;const choose=r.phase==='choose',card=partyCard(r),visible=active||(!draw&&!same);M('party-previous').textContent=draw&&r.lastWord?'Parola del turno precedente: '+r.lastWord:'';M('party-word').textContent=choose?(active?'Scegli una parola':'Il disegnatore sta scegliendo…'):visible?card.word:(draw?`Parola: ${card.word.replace(/[A-Z0-9]/g,'_ ').trim()}`:'Indovina la parola del suggeritore');const choices=M('party-choices');choices.replaceChildren();if(choose&&active)for(let i=0;i<3;i++){const b=ccNode('button',r.deck[r.turn*3+i].word,'icon-btn');b.onclick=()=>partyChoose(i);choices.append(b);}hide('party-choices',!choose||!active);hide('party-draw',!draw||choose);hide('party-tools',!active);hide('party-banned',draw||!visible||choose);M('party-banned').textContent=draw?'':`NON DIRE: ${card.banned.join(' · ')}`;hide('party-chat-form',choose||(draw?(active||r.guessed.includes(party.uid)):!same));M('party-text').placeholder=!draw&&active?'Scrivi un indizio':'Scrivi la risposta';hide('party-pass',draw||!active||choose);hide('party-correct',draw||!active||choose);hide('party-foul',draw||same||choose);hide('party-next',choose||!(active||host));M('party-sound').textContent=window.cosmicGame.soundEnabled()?'🔊 Audio':'🔇 Audio';const chat=M('party-chat');chat.replaceChildren();for(const m of r.chat)chat.append(window.cosmicAvatar.decorate(ccNode('div',`${r.players[m.uid]?.name||'-'}: ${m.text.replace(/\u2212/g,'-')}`,m.correct?'correct':''),m.uid));chat.scrollTop=chat.scrollHeight;partyTick();}
+    function partyRender(){const r=party.room,kind=party.kind;M('party-modal').dataset.partyKind=kind;M('party-title').textContent=PARTY_NAMES[kind];hide('party-channel-label',kind!=='taboo');M('party-modal').dataset.drawRules=r&&kind==='draw'&&!draw2Room(r)?'legacy':'modern';const duration=M('party-duration');duration.querySelector('option[value="80"]').disabled=kind!=='draw';duration.options[duration.options.length-1].disabled=true;if(duration.dataset.kind!==kind){duration.dataset.kind=kind;duration.value=kind==='draw'?'80':'60';}if(duration.value==='0')duration.value=kind==='draw'?'80':'60';M('party-intro').textContent=kind==='draw'?(r&&!draw2Room(r)?'A turno, un giocatore sceglie una parola tra tre proposte e la disegna sulla lavagna. Gli altri provano a indovinarla nella chat. Ogni risposta esatta vale 100 punti per chi indovina e 50 per chi disegna. Vince chi totalizza più punti.':'Disegna la parola scelta o prova a indovinarla prima che scada il tempo.'):'Fai indovinare la parola alla tua squadra, in chat o in chiamata, evitando le parole vietate.';M('party-guide-text').textContent=M('party-intro').textContent;hide('party-entry',!!party.ref);hide('taboo-table',!tabooRoom(r));hide('draw2-table',!draw2Room(r));hide('party-room',!r||tabooRoom(r)||draw2Room(r));if(!draw2Room(r)){draw2WatchBoard(null);draw2ReadWords(null);}if(tabooRoom(r)){tabooRender(r);return;}tabooSecrets(null);if(draw2Room(r)){draw2Render(r);return;}if(!r)return;const host=partyHost(r),lobby=r.state==='lobby',done=r.state==='finished',running=r.state==='running',draw=r.kind==='draw',actor=running?partyActor(r):null,active=actor===party.uid,mine=partyMember(r),same=running&&mine.team===partyTeam(r);const legacyRoomName=r.name!==r.code&&r.name!=='Sfida tra amici'?(r.locked===false?'🔓 ':'🔒 ')+r.name:'';M('party-room-name').textContent=legacyRoomName;hide('party-room-name',!legacyRoomName);M('party-code').textContent=r.code;M('party-status').textContent=lobby?`Lobby · ${Object.keys(r.players).length}/${r.settings.capacity}`:done?'Partita conclusa':`Turno ${r.turn+1}/${r.order.length*r.settings.rounds} · ${r.players[actor]?.name||'-'}${draw?' disegna':` · ${CC_NAMES[partyTeam(r)]}`}`;if(running&&actor)window.cosmicAvatar.decorate(M('party-status'),actor);const list=M('party-players');list.replaceChildren();const ids=Object.keys(r.players).sort((a,b)=>(r.scores[b]||0)-(r.scores[a]||0));if(!draw&&!lobby)list.append(ccNode('div',`Nebula ${r.teams[0]} · Nova ${r.teams[1]}`,'cc-turn'));for(const id of ids){const p=r.players[id],row=ccNode('div',undefined,'mp-player');row.append(window.cosmicAvatar.decorate(ccNode('div',`${p.name}${id===r.hostUid?' · Host':''}${id===party.uid?' · Tu':''}${draw?'':` · ${CC_NAMES[p.team]}`}${r.guessed.includes(id)?' · ✓':''}`),id));if(draw&&!lobby)row.append(ccNode('strong',`${r.scores[id]||0} pt`,'mp-score'));if(host&&lobby&&id!==party.uid){const b=ccNode('button','Espelli','icon-btn');b.onclick=()=>partyAction(()=>partyTx(o=>{if(o.state!=='lobby'||!partyHost(o))return null;const players={...o.players};delete players[id];return {players};}));row.append(b);}list.append(row);}hide('party-lobby',!lobby);hide('party-team-label',draw);M('party-team').value=String(mine.team);hide('party-start',!host);M('party-start').disabled=party.busy||ids.length<partyMin(r);hide('party-play',!running);hide('party-result',!done);hide('party-rematch',!done||!host);if(done){const best=draw?Math.max(...Object.values(r.scores)):Math.max(...r.teams);const winners=draw?ids.filter(id=>r.scores[id]===best).map(id=>r.players[id].name):[0,1].filter(t=>r.teams[t]===best).map(t=>CC_NAMES[t]);M('party-result').textContent=`🏆 ${winners.join(' e ')} · ${best} punti${winners.length>1?' · Pareggio':''}`;if(draw)for(const id of ids.filter(id=>r.scores[id]===best))window.cosmicAvatar.decorate(M('party-result'),id);}partyListenStrokes(r);if(!running)return;const choose=r.phase==='choose',card=partyCard(r),visible=active||(!draw&&!same);M('party-previous').textContent=draw&&r.lastWord?'Parola del turno precedente: '+r.lastWord:'';M('party-word').textContent=choose?(active?'Scegli una parola':'Il disegnatore sta scegliendo…'):visible?card.word:(draw?`Parola: ${card.word.replace(/[A-Z0-9]/g,'_ ').trim()}`:'Indovina la parola del suggeritore');const choices=M('party-choices');choices.replaceChildren();if(choose&&active)for(let i=0;i<3;i++){const b=ccNode('button',r.deck[r.turn*3+i].word,'icon-btn');b.onclick=()=>partyChoose(i);choices.append(b);}hide('party-choices',!choose||!active);hide('party-draw',!draw||choose);hide('party-tools',!active);hide('party-banned',draw||!visible||choose);M('party-banned').textContent=draw?'':`NON DIRE: ${card.banned.join(' · ')}`;hide('party-chat-form',choose||(draw?(active||r.guessed.includes(party.uid)):!same));M('party-text').placeholder=!draw&&active?'Scrivi un indizio':'Scrivi la risposta';hide('party-pass',draw||!active||choose);hide('party-correct',draw||!active||choose);hide('party-foul',draw||same||choose);hide('party-next',choose||!(active||host));M('party-sound').textContent=window.cosmicGame.soundEnabled()?'🔊 Audio':'🔇 Audio';const chat=M('party-chat');chat.replaceChildren();for(const m of r.chat)chat.append(window.cosmicAvatar.decorate(ccNode('div',`${r.players[m.uid]?.name||'-'}: ${m.text.replace(/\u2212/g,'-')}`,m.correct?'correct':''),m.uid));chat.scrollTop=chat.scrollHeight;partyTick();}
+    // Parole Proibite v2: public state and turn-scoped private cards.
+    const TABOO_TEAMS=['Nebula','Nova'];
+    const TABOO_PACK_SIZE=32;
+    const TABOO_REASON_MS=15000, TABOO_RESPONSE_MS=10000;
+    const TABOO_REASONS=['Parola vietata o soluzione','Parte di una parola','Plurale o variante','Rima o somiglianza','Abbreviazione','Gesto','Altro'];
+    const tabooRoom=r=>r?.kind==='taboo'&&Boolean(r.taboo);
+    const tabooState=(channel,left=0)=>({channel,left,runningAt:null,pausedAt:null,reason:'',reportId:'',pending:[],event:''});
+    const tabooChecker=r=>r.order[(r.turn+1)%r.order.length];
+    const tabooCardsRef=(ref,r)=>doc(ref,'turns',r.turnKey,'taboo','cards');
+    const tabooDetailRef=(ref,r,id=r.taboo.reportId)=>doc(ref,'turns',r.turnKey,'tabooDetails',id);
+    const tabooElapsed=r=>r.startedAt ? Math.max(0,serverNow()-r.startedAt.toMillis()) : 0;
+    const tabooReviewMs=r=>r.phase==='reason' ? TABOO_REASON_MS :
+      r.phase==='decision'&&r.taboo.channel==='chat' ? TABOO_RESPONSE_MS : null;
+    const tabooIsPaused=r=>r.phase==='reason'||r.phase==='decision';
+    function tabooLeft(r) {
+      const {left,runningAt,pausedAt}=r.taboo;
+      if(r.phase==='play') return Math.max(0,left-tabooElapsed(r));
+      if(tabooIsPaused(r)) return Math.max(0,left-(Math.floor(pausedAt.toMillis())-Math.floor(runningAt.toMillis())));
+      return left;
+    }
+    const tabooBalance=r=>{
+      const totals=[0,0];
+      for(const player of Object.values(r.players)) totals[player.team]++;
+      return totals;
+    };
+    const tabooCanStart=totals=>totals[0]>=2&&totals[0]===totals[1];
+    const tabooOwnTeam=r=>r.players[party.uid]?.team;
+    const tabooScore=(r,team)=>r.teams.map((score,index)=>score+Number(index===team));
+    const tabooNextCard=r=>(r.card+1)%TABOO_PACK_SIZE;
+
+    let tabooPack={key:'',cards:null,request:false,retry:0};
+    let tabooNote={key:'',text:null,request:false,retry:0};
+    let tabooAutoAt=0;
+    let tabooChatRendered='';
+    let tabooRosterRendered=['',''];
+
+    function tabooLoadSecret(slot,key,ref,parse) {
+      if(slot.key!==key) {
+        Object.assign(slot,{key,cards:null,text:null,request:false,retry:0});
+      }
+      if(!key||slot.request||slot.cards!==null||slot.text!==null||Date.now()<slot.retry) return;
+      slot.request=true;
+      const roomRef=party.ref;
+      getDocFromServer(ref).then(snapshot=>{
+        if(slot.key===key&&party.ref===roomRef&&snapshot.exists()) parse(snapshot.data());
+      }).catch(()=>{}).finally(()=>{
+        if(slot.key!==key||party.ref!==roomRef) return;
+        slot.request=false;
+        slot.retry=Date.now()+3000;
+        tabooRender(party.room);
+      });
+    }
+
+    function tabooSecrets(r) {
+      const active=tabooRoom(r)&&r.state==='running'&&r.phase!=='prepare';
+      const canRead=active&&(partyActor(r)===party.uid||tabooChecker(r)===party.uid);
+      const packKey=canRead ? party.ref.id+'/'+r.turnKey : '';
+      const noteKey=canRead&&r.phase==='decision'&&r.taboo.channel==='chat' ? packKey+'/'+r.taboo.reportId : '';
+      tabooLoadSecret(tabooPack,packKey,packKey?tabooCardsRef(party.ref,r):null,data=>{tabooPack.cards=data.cards;});
+      tabooLoadSecret(tabooNote,noteKey,noteKey?tabooDetailRef(party.ref,r):null,data=>{tabooNote.text=data.detail;});
+    }
+
+    function tabooEvent(r,event) {
+      return {...r.taboo,event};
+    }
+
+    function tabooContinue(r,event,contest=false) {
+      const pending=contest ? [...r.taboo.pending,{id:r.taboo.reportId,reason:r.taboo.reason||'Chiamata'}] : r.taboo.pending;
+      const confirmed=event==='foul';
+      return {
+        phase:'play', startedAt:serverTimestamp(),
+        card:confirmed||contest ? tabooNextCard(r) : r.card,
+        teams:confirmed ? tabooScore(r,1-partyTeam(r)) : r.teams,
+        taboo:{...r.taboo,left:tabooLeft(r),runningAt:null,pausedAt:null,reason:'',reportId:'',pending,event}
+      };
+    }
+
+    function tabooNextTurn(r) {
+      const turn=r.turn+1;
+      if(turn>=r.order.length*r.settings.rounds) return {state:'finished',phase:'done'};
+      return {
+        turn, turnKey:partyKey(), card:0, phase:'prepare', startedAt:null, chat:[],
+        taboo:tabooState(r.taboo.channel,r.settings.duration*1000)
+      };
+    }
+
+    function tabooAllowedPlay(r) {
+      return tabooRoom(r)&&r.state==='running'&&r.phase==='play'&&tabooLeft(r)>0;
+    }
+
+    function tabooName(r,uid) {
+      const player=r.players[uid];
+      const span=ccNode('span',player?.name||'Giocatore','taboo-name');
+      if(player) span.dataset.team=player.team;
+      return span;
+    }
+
+    function tabooSetText(id,...parts) {
+      M(id).replaceChildren(...parts);
+    }
+
+    function tabooRoster(r,team,actor,checker) {
+      const members=Object.entries(r.players).filter(([,player])=>player.team===team);
+      const canKick=r.state==='lobby'&&partyHost(r);
+      const signature=JSON.stringify([party.ref.id,party.uid,canKick,actor,checker,members]);
+      if(tabooRosterRendered[team]===signature) return;
+      tabooRosterRendered[team]=signature;
+      M('taboo-team-'+team).replaceChildren(...members.map(([uid,player])=>{
+        const row=document.createElement('li'), name=tabooName(r,uid);
+        if(uid===party.uid) row.setAttribute('aria-current','true');
+        if(uid===actor||uid===checker) {
+          row.setAttribute('aria-label',player.name+(uid===actor?' · Suggeritore':' · Controllore'));
+        }
+        row.append(window.cosmicAvatar.decorate(name,uid));
+        if(canKick&&uid!==party.uid) {
+          const remove=ccNode('button','Espelli','icon-btn');
+          remove.type='button';
+          remove.setAttribute('aria-label','Espelli '+player.name);
+          remove.onclick=()=>partyAction(()=>partyTx(current=>{
+            if(current.state!=='lobby'||!partyHost(current)||!current.players[uid]) return null;
+            const players={...current.players};
+            delete players[uid];
+            return {players};
+          }));
+          row.append(remove);
+        }
+        return row;
+      }));
+    }
+
+    function tabooChat(r) {
+      const signature=JSON.stringify([party.ref.id,r.turnKey,r.chat]);
+      if(tabooChatRendered===signature) return;
+      tabooChatRendered=signature;
+      M('taboo-chat').replaceChildren(...r.chat.slice(-4).map(message=>{
+        const row=document.createElement('li');
+        row.append(tabooName(r,message.uid),' · '+(message.correct?'Indovinata':message.text));
+        return row;
+      }));
+    }
+
+    function tabooClocks(r) {
+      const show=r.state==='running'&&r.phase!=='prepare';
+      hide('taboo-clock',!show);
+      const seconds=Math.ceil(tabooLeft(r)/1000);
+      if(show) {
+        M('taboo-clock').textContent=Math.floor(seconds/60)+':'+String(seconds%60).padStart(2,'0');
+        M('taboo-clock').setAttribute('datetime','PT'+seconds+'S');
+      }
+      const review=tabooReviewMs(r);
+      hide('taboo-review-clock',review===null);
+      if(review!==null) {
+        const left=Math.max(0,Math.ceil((review-tabooElapsed(r))/1000));
+        M('taboo-review-clock').textContent=left+' s';
+        M('taboo-review-clock').setAttribute('datetime','PT'+left+'S');
+      }
+    }
+
+    function tabooRender(r) {
+      if(!tabooRoom(r)||party.room!==r) return;
+      tabooSecrets(r);
+      const lobby=r.state==='lobby', live=r.state==='running', done=r.state==='finished';
+      const actor=live?partyActor(r):null, checker=live?tabooChecker(r):null;
+      const activeTeam=actor?r.players[actor].team:null;
+      const clue=actor===party.uid, check=checker===party.uid;
+      const canGuess=live&&!clue&&tabooOwnTeam(r)===activeTeam;
+      const paused=live&&tabooIsPaused(r), play=tabooAllowedPlay(r);
+      const voice=r.taboo.channel==='voice';
+      const waiting=live&&r.phase==='prepare'&&r.turn>0;
+      const totals=tabooBalance(r);
+      const pending=r.taboo.pending.length;
+      const showCard=live&&(clue||check)&&r.phase!=='prepare';
+      const enabled=!party.busy;
+      const roomName=lobby&&r.name!==r.code&&r.name!=='Sfida tra amici'?r.name:'';
+      M('taboo-room-name').textContent=roomName;
+      hide('taboo-room-name',!roomName);
+      M('taboo-code').textContent=r.code;
+      hide('taboo-code',!lobby);
+      M('taboo-channel-status').textContent=voice?'Chiamata esterna':'Chat di gioco';
+      M('taboo-sound').textContent=window.cosmicGame.soundEnabled()?'🔊 Audio':'🔇 Audio';
+      M('taboo-clock-row').dataset.paused=String(paused);
+      M('taboo-clock-row').dataset.team=String(activeTeam??'');
+      M('taboo-phase').textContent=lobby?'Lobby · '+(totals[0]+totals[1])+'/'+r.settings.capacity
+        :done?'Partita conclusa'
+        :paused?'Timer in pausa'
+        :waiting?'Cambio turno'
+        :play||r.phase==='prepare'?'Tocca a '+TABOO_TEAMS[activeTeam]:'Tempo scaduto';
+      for(const team of [0,1]) {
+        const pendingText=live&&team!==activeTeam&&pending?' · '+pending+' in sospeso':'';
+        M('taboo-score-'+team).textContent=(lobby?totals[team]:r.teams[team])+pendingText;
+        tabooRoster(r,team,actor,checker);
+      }
+      if(lobby) {
+        tabooSetText('taboo-title',tabooCanStart(totals)?'Squadre pronte':totals[0]===totals[1]?'Servono almeno due giocatori per squadra':'Da completare: '+TABOO_TEAMS[totals[0]<totals[1]?0:1]);
+        tabooSetText('taboo-context','Le squadre devono avere lo stesso numero di giocatori.');
+      } else if(done) {
+        tabooSetText('taboo-title',r.teams[0]===r.teams[1]?'Pareggio':'Ha vinto '+TABOO_TEAMS[r.teams[0]>r.teams[1]?0:1]);
+        tabooSetText('taboo-context');
+      } else if(live) {
+        let title;
+        if(paused) title='Verifica della segnalazione';
+        else if(r.phase==='prepare') title=clue?'Preparati a dare gli indizi':'Prossimo turno: '+TABOO_TEAMS[activeTeam]+' indovina';
+        else if(!play) title=pending?'Chiudete le contestazioni':'Fine del turno';
+        else if(clue) title=voice?'Dai un indizio in chiamata':'Scrivi un indizio';
+        else if(check) title='Controlla gli indizi';
+        else if(canGuess) title=voice?'Indovina in chiamata':'Indovina la parola';
+        else title='Aspetta il turno di '+TABOO_TEAMS[tabooOwnTeam(r)];
+        tabooSetText('taboo-title',title);
+        tabooSetText('taboo-context',tabooName(r,actor),' dà gli indizi · ',tabooName(r,checker),' controlla');
+      }
+      hide('taboo-lobby',!lobby);
+      M('taboo-team-select').value=String(tabooOwnTeam(r)??0);
+      M('taboo-team-select').disabled=!enabled;
+      hide('taboo-start',!partyHost(r));
+      M('taboo-start').disabled=!enabled||!tabooCanStart(totals);
+      hide('taboo-ready',!live||r.phase!=='prepare'||!clue);
+      M('taboo-ready').disabled=!enabled;
+      const card=showCard?tabooPack.cards?.[r.card]:null;
+      hide('taboo-card',!showCard);
+      M('taboo-word').textContent=showCard?(card?.word||'Caricamento carta…'):'';
+      M('taboo-terms').replaceChildren(...(card?.banned||[]).map(word=>ccNode('li',word)));
+      hide('taboo-chat',!live||voice||!r.chat.length);
+      if(live&&!voice) tabooChat(r);
+      hide('taboo-chat-form',!play||voice||(!clue&&!canGuess));
+      M('taboo-input').placeholder=clue?'Scrivi un indizio…':'Scrivi la risposta…';
+      M('taboo-input').setAttribute('aria-label',clue?'Il tuo indizio':'La tua risposta');
+      M('taboo-input').disabled=!enabled;
+      hide('taboo-clue-actions',!play||!clue);
+      hide('taboo-correct',!voice);
+      M('taboo-correct').disabled=M('taboo-pass').disabled=!enabled||!card;
+      hide('taboo-buzz',!play||!check);
+      M('taboo-buzz').disabled=!enabled||!card;
+      hide('taboo-review',!paused);
+      hide('taboo-reason-form',!paused||r.phase!=='reason'||!check);
+      hide('taboo-decision',!paused||r.phase!=='decision'||!clue);
+      hide('taboo-withdraw-row',!paused||!check);
+      for(const id of ['taboo-continue','taboo-contest','taboo-withdraw','taboo-reason','taboo-detail','taboo-confirm-point','taboo-dismiss-point']) M(id).disabled=!enabled;
+      if(paused) {
+        if(M('taboo-reason-form').dataset.report!==r.taboo.reportId) {
+          M('taboo-reason-form').dataset.report=r.taboo.reportId;
+          M('taboo-reason-form').reset();
+          M('taboo-detail').required=false;
+        }
+        M('taboo-review-title').textContent=voice?'Spiegazione a voce':r.phase==='reason'?'Motivo della segnalazione':'Risposta del suggeritore';
+        if(voice&&check) tabooSetText('taboo-review-reason','Spiega in chiamata la regola che ritieni violata.');
+        else if(voice) tabooSetText('taboo-review-reason',tabooName(r,checker),' spiega il motivo in chiamata.');
+        else if(r.phase==='reason') tabooSetText('taboo-review-reason',tabooName(r,checker),' sta indicando la regola.');
+        else tabooSetText('taboo-review-reason',r.taboo.reason);
+      }
+      const detail=showCard&&paused&&r.phase==='decision'&&!voice?tabooNote.text:'';
+      hide('taboo-review-detail',!detail);
+      M('taboo-review-detail').textContent=detail||'';
+      hide('taboo-dispute',!live||!check||!pending||paused);
+      M('taboo-dispute-reason').textContent=r.taboo.pending[0]?.reason||'';
+      const events={correct:'Indovinata · +1 ',pass:'Parola passata · +1 ',foul:'Violazione · +1 ',cancel:'Segnalazione annullata.',timeout:'Tempo per il motivo scaduto. Stessa carta.',contest:'Contestazione aperta. Punto in sospeso.'};
+      const event=r.taboo.event;
+      const message=live&&events[event] ? events[event]+(['correct','pass','foul'].includes(event)?TABOO_TEAMS[event==='correct'?activeTeam:1-activeTeam]:'') : '';
+      hide('taboo-event',!message);
+      M('taboo-event').textContent=message;
+      hide('taboo-rematch',!done||!partyHost(r));
+      tabooClocks(r);
+    }
+
+    function tabooTransaction(change) {
+      return partyAction(()=>partyTx((r,t,ref)=>{
+        if(!tabooRoom(r)) throw Error('Crea una stanza di Parole Proibite aggiornata.');
+        return change(r,t,ref);
+      }));
+    }
+
+    M('taboo-team-select').onchange=()=>{
+      const team=Number(M('taboo-team-select').value);
+      tabooTransaction(r=>r.state==='lobby'?{players:{...r.players,[party.uid]:{...partyMember(r),team}}}:null);
+    };
+    M('taboo-start').onclick=()=>tabooTransaction(r=>{
+      if(!partyHost(r)||r.state!=='lobby'||!tabooCanStart(tabooBalance(r))) return null;
+      const order=partyOrder(r);
+      return {
+        state:'running',order,turn:0,turnKey:partyKey(),phase:'prepare',startedAt:null,card:0,
+        chat:[],teams:[0,0],taboo:tabooState(r.taboo.channel,r.settings.duration*1000)
+      };
+    });
+    M('taboo-ready').onclick=()=>tabooTransaction((r,t,ref)=>{
+      if(r.state!=='running'||r.phase!=='prepare'||partyActor(r)!==party.uid) return null;
+      const cards=ccShuffle(PARTY_CARDS).slice(0,TABOO_PACK_SIZE);
+      t.set(tabooCardsRef(ref,r),{cards});
+      return {phase:'play',startedAt:serverTimestamp()};
+    });
+    function tabooCluePoint(event) {
+      return tabooTransaction(r=>{
+        if(!tabooAllowedPlay(r)||partyActor(r)!==party.uid||(event==='correct'&&r.taboo.channel!=='voice')) return null;
+        return {teams:tabooScore(r,event==='correct'?partyTeam(r):1-partyTeam(r)),card:tabooNextCard(r),taboo:tabooEvent(r,event)};
+      });
+    }
+    M('taboo-pass').onclick=()=>tabooCluePoint('pass');
+    M('taboo-correct').onclick=()=>tabooCluePoint('correct');
+    M('taboo-buzz').onclick=()=>tabooTransaction(r=>{
+      if(!tabooAllowedPlay(r)||tabooChecker(r)!==party.uid) return null;
+      if(r.taboo.pending.length>=TABOO_PACK_SIZE) throw Error('Chiudi una contestazione prima di segnalarne un’altra.');
+      return {
+        phase:r.taboo.channel==='chat'?'reason':'decision',startedAt:serverTimestamp(),
+        taboo:{...r.taboo,runningAt:r.startedAt,pausedAt:serverTimestamp(),reportId:partyKey(),reason:'',event:''}
+      };
+    });
+    M('taboo-reason').onchange=()=>{M('taboo-detail').required=M('taboo-reason').value==='Altro';};
+    M('taboo-reason-form').onsubmit=e=>{
+      e.preventDefault();
+      const reason=M('taboo-reason').value, detail=M('taboo-detail').value.trim();
+      if(!TABOO_REASONS.includes(reason)||(reason==='Altro'&&!detail)) return;
+      tabooTransaction((r,t,ref)=>{
+        if(r.state!=='running'||r.phase!=='reason'||tabooChecker(r)!==party.uid||tabooElapsed(r)>=TABOO_REASON_MS) return null;
+        t.set(tabooDetailRef(ref,r),{detail});
+        return {phase:'decision',startedAt:serverTimestamp(),taboo:{...r.taboo,reason}};
+      });
+    };
+    function tabooAnswerReport(contest) {
+      return tabooTransaction(r=>{
+        const limit=tabooReviewMs(r);
+        if(r.state!=='running'||r.phase!=='decision'||partyActor(r)!==party.uid||(limit!==null&&tabooElapsed(r)>=limit)) return null;
+        return tabooContinue(r,contest?'contest':'foul',contest);
+      });
+    }
+    M('taboo-continue').onclick=()=>tabooAnswerReport(false);
+    M('taboo-contest').onclick=()=>tabooAnswerReport(true);
+    M('taboo-withdraw').onclick=()=>tabooTransaction(r=>
+      r.state==='running'&&tabooIsPaused(r)&&tabooChecker(r)===party.uid?tabooContinue(r,'cancel'):null
+    );
+    function tabooResolve(confirmed) {
+      const initial=party.room;
+      return tabooTransaction(r=>{
+        if(r.state!=='running'||r.phase!=='play'||tabooChecker(r)!==party.uid||!r.taboo.pending.length||
+           r.turnKey!==initial?.turnKey||r.taboo.pending[0].id!==initial.taboo.pending[0]?.id) return null;
+        return {
+          teams:confirmed?tabooScore(r,1-partyTeam(r)):r.teams,
+          taboo:{...r.taboo,pending:r.taboo.pending.slice(1),event:confirmed?'foul':'cancel'}
+        };
+      });
+    }
+    M('taboo-confirm-point').onclick=()=>tabooResolve(true);
+    M('taboo-dismiss-point').onclick=()=>tabooResolve(false);
+    M('taboo-rematch').onclick=()=>M('party-rematch').click();
+    M('taboo-invite').onclick=()=>M('party-invite').click();
+    M('taboo-leave').onclick=()=>M('party-leave').click();
+    M('taboo-sound').onclick=()=>{M('btn-sound').click();tabooRender(party.room);};
+
+    function tabooTypedMessage(text,expected,markGuess) {
+      return partyTx(r=>{
+        if(!tabooAllowedPlay(r)||r.taboo.channel!=='chat'||tabooOwnTeam(r)!==partyTeam(r)||
+           r.turnKey!==expected.turnKey||r.card!==expected.card) return null;
+        if(markGuess) {
+          // Firestore checks the answer against the private turn card without revealing the card.
+          return {chat:partyMessage(r,text,true),teams:tabooScore(r,partyTeam(r)),
+            card:tabooNextCard(r),taboo:tabooEvent(r,'correct')};
+        }
+        return {chat:partyMessage(r,text)};
+      });
+    }
+
+    M('taboo-chat-form').onsubmit=e=>{
+      e.preventDefault();
+      const input=M('taboo-input'), text=partyNorm(input.value);
+      const initial=party.room;
+      if(!text||!tabooRoom(initial)||!tabooAllowedPlay(initial)) return;
+      partyAction(async()=>{
+        if(partyActor(initial)===party.uid) {
+          const card=tabooPack.cards?.[initial.card];
+          if(!card) throw Error('Attendi il caricamento della carta.');
+          const tokens=text.replace(/[^A-Z0-9 ]/g,' ').split(/\s+/);
+          if([card.word,...card.banned].some(word=>tokens.includes(word))) throw Error('L’indizio contiene una parola vietata.');
+          await tabooTypedMessage(text,initial,false);
+        } else {
+          try { await tabooTypedMessage(text,initial,true); }
+          catch(error) {
+            if(error.code!=='permission-denied') throw error;
+            await tabooTypedMessage(text,initial,false);
+          }
+        }
+        input.value='';
+      });
+    };
+
+    function tabooTick(r) {
+      tabooClocks(r);
+      tabooSecrets(r);
+      if(r.phase==='play'&&tabooLeft(r)===0&&M('taboo-phase').textContent.startsWith('Tocca a ')) tabooRender(r);
+      const review=tabooReviewMs(r);
+      const reportExpired=review!==null&&tabooElapsed(r)>=review+750;
+      const turnExpired=r.phase==='play'&&tabooElapsed(r)>=r.taboo.left+750&&r.taboo.pending.length===0;
+      if(party.busy||!navigator.onLine||(!reportExpired&&!turnExpired)||Date.now()-tabooAutoAt<2300) return;
+      tabooAutoAt=Date.now();
+      tabooTransaction(current=>{
+        if(current.state!=='running'||current.turnKey!==r.turnKey||current.phase!==r.phase) return null;
+        if(reportExpired&&current.taboo.reportId===r.taboo.reportId) {
+          const limit=tabooReviewMs(current);
+          if(limit!==null&&tabooElapsed(current)>=limit) return tabooContinue(current,current.phase==='reason'?'timeout':'foul');
+        }
+        if(turnExpired&&tabooLeft(current)===0&&current.taboo.pending.length===0) return tabooNextTurn(current);
+        return null;
+      });
+    }
+
+    // Tratti Stellari v2. Scores are derived from the confirmed server timestamps.
+    const DRAW2_CHOICE_MS=15000, DRAW2_FINAL_MS=30000, DRAW2_REVIEW_MS=4500;
+    const DRAW2_TARGETS=[[2,265],[4,335],[5,375],[8,515],[12,780]];
+    const DRAW2_LIMIT=180, DRAW2_MAX_COORDS=320;
+    const draw2Room=r=>r?.kind==='draw'&&Boolean(r.draw2);
+    const draw2New=history=>({history:history||[],hits:{},lengths:[],reviewAt:null});
+    const draw2BlankBoard=()=>({seq:0,cursor:0,ops:[],draft:null});
+    const draw2Private=(ref,key)=>doc(ref,'turns',key,'drawPrivate','choices');
+    const draw2BoardRef=(ref,key)=>doc(ref,'turns',key,'drawBoard','canvas');
+    const draw2Proof=(ref,key,uid)=>doc(ref,'turns',key,'drawCorrect',uid);
+    const draw2Started=r=>r.startedAt?.toMillis()??0;
+    const draw2Hit=(r,uid)=>r.draw2.hits[uid]?.toMillis();
+    function draw2EndTime(r) {
+      const first=draw2Hit(r,r.guessed[0]);
+      const natural=draw2Started(r)+r.settings.duration*1000;
+      return first===undefined ? natural : Math.min(natural,first+DRAW2_FINAL_MS);
+    }
+    function draw2Remaining(r,now=serverNow()) {
+      if(r.phase==='play') return Math.max(0,draw2EndTime(r)-now);
+      if(r.phase==='prepare'||r.phase==='choose') return Math.max(0,draw2Started(r)+DRAW2_CHOICE_MS-now);
+      return 0;
+    }
+    function draw2GuessPoints(ms, duration, first) {
+      const time=Math.max(0,Math.min(duration,ms/1000));
+      if(duration<=30&&first) return Math.round(75+425*Math.min(1,time/(duration-2.5)));
+      if(time<=30) return Math.round(75+250*time/30);
+      return Math.round(325+175*Math.min(1,(time-30)/(duration-32.5)));
+    }
+    function draw2DrawerCap(total) {
+      const next=DRAW2_TARGETS.findIndex(([count])=>count>=total);
+      if(next===0) return DRAW2_TARGETS[0][1];
+      const upper=next<0?DRAW2_TARGETS.length-1:next;
+      const [[a,low],[b,high]]=DRAW2_TARGETS.slice(upper-1,upper+1);
+      return low+(high-low)*(total-a)/(b-a);
+    }
+    function draw2Ledger(r) {
+      return {drawer:partyActor(r),startedAt:r.startedAt,guessed:r.guessed,hits:r.draw2.hits,skipped:r.phase==='prepare'};
+    }
+    function draw2RoundScores(r,entry,final) {
+      const totals={};
+      const duration=r.settings.duration;
+      const start=entry.startedAt.toMillis();
+      const natural=start+duration*1000;
+      const first=entry.hits[entry.guessed[0]]?.toMillis();
+      const end=first===undefined?natural:Math.min(natural,first+DRAW2_FINAL_MS);
+      for(const [index,uid] of entry.guessed.entries()) {
+        totals[uid]=draw2GuessPoints((index===0?natural:end)-entry.hits[uid].toMillis(),duration,index===0);
+      }
+      if(final&&entry.guessed.length) {
+        const last=entry.hits[entry.guessed.at(-1)].toMillis();
+        const share=entry.guessed.length/(r.order.length-1);
+        totals[entry.drawer]=Math.round(draw2DrawerCap(r.order.length)*share*Math.max(0,Math.min(DRAW2_FINAL_MS,end-last))/DRAW2_FINAL_MS);
+      }
+      return totals;
+    }
+    function draw2Scores(r) {
+      const result={};
+      if(r.state==='lobby') return result;
+      for(const entry of r.draw2.history) {
+        for(const [uid,points] of Object.entries(draw2RoundScores(r,entry,true))) result[uid]=(result[uid]||0)+points;
+      }
+      if(r.phase==='play') {
+        for(const [uid,points] of Object.entries(draw2RoundScores(r,draw2Ledger(r),false))) result[uid]=(result[uid]||0)+points;
+      }
+      return result;
+    }
+    const draw2Playable=r=>draw2Room(r)&&r.state==='running'&&r.phase==='play'&&draw2Remaining(r)>0&&r.guessed.length<r.order.length-1;
+    const draw2Canvas=M('draw2-canvas'), draw2Ctx=draw2Canvas.getContext('2d',{willReadFrequently:true});
+    let draw2Tool='brush';
+    let draw2CanvasKey='';
+    let draw2Unsub=null;
+    let draw2Board=null, draw2Frame=null, draw2FrameKey='', draw2FrameSource=null, draw2FrameOps=[];
+    const draw2Frames=new Map();
+    let draw2Gesture=null, draw2Overlay=null;
+    let draw2CommitBusy=false, draw2DraftBusy=false, draw2DraftAt=0;
+    let draw2WordsKey='', draw2Words=null, draw2WordsLoading=false, draw2WordsRetry=0;
+    let draw2AutoAt=0;
+    let draw2RosterKey='', draw2LogKey='', draw2ChoicesKey='';
+
+    function draw2ResetCanvas() {
+      draw2Unsub?.();
+      draw2Unsub=null;
+      draw2CanvasKey='';
+      draw2Board=null;
+      draw2Frame=null;
+      draw2FrameKey='';
+      draw2FrameSource=null;
+      draw2FrameOps=[];
+      draw2Frames.clear();
+      draw2Gesture=null;
+      draw2Overlay=null;
+      draw2CommitBusy=false;
+      draw2DraftBusy=false;
+      draw2DraftAt=0;
+      draw2Tool='brush';
+      draw2Ctx.clearRect(0,0,draw2Canvas.width,draw2Canvas.height);
+    }
+    function draw2ReadWords(r) {
+      const permitted=draw2Room(r)&&r.state!=='lobby'&&r.phase!=='prepare'
+        && (partyActor(r)===party.uid||r.phase==='review'||r.phase==='done')
+        && !((r.phase==='review'||r.phase==='done')&&r.draw2.history.at(-1)?.skipped);
+      const key=permitted?party.ref.id+'/'+r.turnKey:'';
+      if(draw2WordsKey!==key) {
+        draw2WordsKey=key;draw2Words=null;draw2WordsLoading=false;draw2WordsRetry=0;
+      }
+      if(!key||draw2Words||draw2WordsLoading||Date.now()<draw2WordsRetry) return;
+      draw2WordsLoading=true;
+      getDocFromServer(draw2Private(party.ref,r.turnKey)).then(snapshot=>{
+        if(draw2WordsKey===key&&snapshot.exists()) draw2Words=snapshot.data().words;
+      }).catch(()=>{}).finally(()=>{
+        if(draw2WordsKey!==key) return;
+        draw2WordsLoading=false;
+        draw2WordsRetry=Date.now()+3000;
+        draw2Render(party.room);
+      });
+    }
+    function draw2WatchBoard(r) {
+      const relevant=draw2Room(r)&&r.state!=='lobby'&&r.phase!=='prepare'
+        && !((r.phase==='review'||r.phase==='done')&&r.draw2.history.at(-1)?.skipped);
+      const key=relevant?party.ref.id+'/'+r.turnKey:'';
+      if(draw2CanvasKey===key) return;
+      draw2ResetCanvas();
+      if(!key) return;
+      draw2CanvasKey=key;
+      draw2Unsub=onSnapshot(draw2BoardRef(party.ref,r.turnKey),{includeMetadataChanges:true},snapshot=>{
+        if(draw2CanvasKey!==key||snapshot.metadata.fromCache||snapshot.metadata.hasPendingWrites||!snapshot.exists()) return;
+        draw2Board=snapshot.data();
+        if(draw2Overlay?.seq!==undefined&&draw2Board.seq>=draw2Overlay.seq) draw2Overlay=null;
+        draw2Paint();
+        draw2RenderTools(party.room);
+      },error=>{if(draw2CanvasKey===key) partySay('Lavagna: '+cloudError(error));});
+    }
+    function draw2Fill(x,y,hex) {
+      const {width,height}=draw2Canvas;
+      const image=draw2Ctx.getImageData(0,0,width,height);
+      const {data}=image;
+      const origin=y*width+x, offset=origin*4;
+      const source=data.slice(offset,offset+4);
+      const value=Number.parseInt(hex.slice(1),16);
+      const fill=[value>>16,(value>>8)&255,value&255,255];
+      if(fill.every((channel,index)=>channel===source[index])) return;
+      const seen=new Uint8Array(width*height), queue=new Uint32Array(seen.length);
+      let head=0,tail=0;
+      function enqueue(pixel) {
+        if(seen[pixel]) return;
+        seen[pixel]=1;
+        for(let c=0;c<4;c++) if(Math.abs(data[pixel*4+c]-source[c])>20) return;
+        queue[tail++]=pixel;
+      }
+      enqueue(origin);
+      while(head<tail) {
+        const pixel=queue[head++], col=pixel%width;
+        data.set(fill,pixel*4);
+        if(col>0) enqueue(pixel-1);
+        if(col<width-1) enqueue(pixel+1);
+        if(pixel>=width) enqueue(pixel-width);
+        if(pixel+width<seen.length) enqueue(pixel+width);
+      }
+      draw2Ctx.putImageData(image,0,0);
+    }
+    function draw2Apply(action) {
+      const {width,height}=draw2Canvas;
+      if(!action||!['brush','eraser','fill','clear'].includes(action.tool)||!Array.isArray(action.points)||
+         action.points.length>DRAW2_MAX_COORDS||action.points.some(n=>!Number.isInteger(n)||n<0||n>9999)) return;
+      function point(i) {
+        return [Math.min(width-1,Math.floor(action.points[i]*width/10000)),
+          Math.min(height-1,Math.floor(action.points[i+1]*height/10000))];
+      }
+      if(action.tool==='clear') {draw2Ctx.clearRect(0,0,width,height);return;}
+      if(action.points.length<2||action.points.length%2||!/^#[0-9a-f]{6}$/i.test(action.color)) return;
+      if(action.tool==='fill') {draw2Fill(...point(0),action.color);return;}
+      draw2Ctx.save();
+      draw2Ctx.globalCompositeOperation=action.tool==='eraser'?'destination-out':'source-over';
+      draw2Ctx.strokeStyle=action.color;
+      draw2Ctx.lineWidth=action.width*(action.tool==='eraser'?2.6:1);
+      draw2Ctx.lineCap='round';draw2Ctx.lineJoin='round';
+      draw2Ctx.beginPath();
+      const [x,y]=point(0);
+      draw2Ctx.moveTo(x,y);
+      for(let i=2;i<action.points.length;i+=2) draw2Ctx.lineTo(...point(i));
+      if(action.points.length===2) draw2Ctx.lineTo(x+.01,y);
+      draw2Ctx.stroke();draw2Ctx.restore();
+    }
+    const draw2OpKey=op=>JSON.stringify([op.tool,op.color,op.width,op.points]);
+    function draw2Paint() {
+      if(!draw2Board) return;
+      if(draw2FrameSource!==draw2Board||!draw2Frame) {
+        const ops=draw2Board.ops.slice(0,draw2Board.cursor);
+        const keys=ops.map(draw2OpKey), frameKey=keys.join('\n');
+        if(frameKey!==draw2FrameKey||!draw2Frame) {
+          const remembered=draw2Frames.get(frameKey);
+          if(remembered) draw2Frame=remembered;
+          else {
+            const appending=draw2Frame&&draw2FrameOps.length<keys.length&&draw2FrameOps.every((key,index)=>key===keys[index]);
+            if(appending) draw2Ctx.putImageData(draw2Frame,0,0);
+            else draw2Ctx.clearRect(0,0,draw2Canvas.width,draw2Canvas.height);
+            for(const action of appending?ops.slice(draw2FrameOps.length):ops) draw2Apply(action);
+            draw2Frame=draw2Ctx.getImageData(0,0,draw2Canvas.width,draw2Canvas.height);
+            draw2Frames.set(frameKey,draw2Frame);
+            if(draw2Frames.size>8) draw2Frames.delete(draw2Frames.keys().next().value);
+          }
+          draw2FrameKey=frameKey;
+          draw2FrameOps=keys;
+        }
+        draw2FrameSource=draw2Board;
+      }
+      draw2Ctx.putImageData(draw2Frame,0,0);
+      const commitPainted=draw2Overlay&&draw2Board.cursor>draw2Overlay.cursor
+        &&draw2OpKey(draw2Board.ops[draw2Board.cursor-1])===draw2OpKey(draw2Overlay.action);
+      const overlay=draw2Playable(party.room)?(draw2Gesture?.action||draw2Overlay?.action||
+        (partyActor(party.room)===party.uid?null:draw2Board.draft)):null;
+      if(overlay&&!commitPainted) draw2Apply(overlay);
+    }
+    function draw2CanEdit(r=party.room) {
+      return draw2Playable(r)&&partyActor(r)===party.uid&&!!draw2Board&&navigator.onLine;
+    }
+    function draw2RenderTools(r) {
+      if(!draw2Room(r)) return;
+      const visible=r.state==='running'&&r.phase==='play'&&partyActor(r)===party.uid;
+      const available=draw2CanEdit(r)&&!draw2CommitBusy;
+      hide('draw2-tools',!visible);
+      draw2Canvas.dataset.editable=String(available);
+      for(const tool of ['brush','fill','eraser']) {
+        const button=M('draw2-'+tool);
+        button.disabled=!available;
+        button.setAttribute('aria-pressed',String(draw2Tool===tool));
+      }
+      M('draw2-undo').disabled=!available||!draw2Board.cursor;
+      M('draw2-redo').disabled=!available||draw2Board.cursor>=draw2Board.ops.length;
+      M('draw2-clear').disabled=!available||draw2Board.cursor>=DRAW2_LIMIT;
+    }
+    function draw2WriteBoard(mode,action) {
+      const key=draw2CanvasKey, roomRef=party.ref, turn=party.room.turnKey;
+      return runTransaction(db,async transaction=>{
+        const ref=draw2BoardRef(roomRef,turn);
+        const snap=await transaction.get(ref);
+        if(!snap.exists()||draw2CanvasKey!==key) return null;
+        const old=snap.data();
+        const next={...old,seq:old.seq+1,draft:null};
+        if(mode==='preview') next.draft=action;
+        else if(mode==='add') {
+          if(old.cursor>=DRAW2_LIMIT) throw Error('Limite di azioni raggiunto. Annullane una per continuare.');
+          next.ops=[...old.ops.slice(0,old.cursor),action];
+          next.cursor=old.cursor+1;
+        } else if(mode==='undo'&&old.cursor>0) next.cursor--;
+        else if(mode==='redo'&&old.cursor<old.ops.length) next.cursor++;
+        else return null;
+        transaction.set(ref,next);
+        return next;
+      });
+    }
+    function draw2Commit(mode,action) {
+      if(!draw2CanEdit()||draw2CommitBusy||draw2Gesture||(mode==='add'&&draw2Board.cursor>=DRAW2_LIMIT)) return;
+      const key=draw2CanvasKey;
+      draw2CommitBusy=true;
+      draw2Overlay=mode==='add'?{action,cursor:draw2Board.cursor}:null;
+      draw2Paint();
+      draw2RenderTools(party.room);
+      const pendingDraft=draw2DraftBusy||Promise.resolve();
+      pendingDraft.then(()=>draw2CanvasKey===key?draw2WriteBoard(mode,action):null).then(state=>{
+        if(draw2CanvasKey!==key) return;
+        // Wait for the confirmed serial, without flashing the previous canvas.
+        if(state&&draw2Board.seq<state.seq) draw2Board=state;
+        draw2Overlay=null;
+        draw2Paint();
+      }).catch(error=>{
+        if(draw2CanvasKey!==key) return;
+        draw2Overlay=null;draw2Paint();
+        if(draw2CanEdit()) partySay('Lavagna: '+cloudError(error));
+      }).finally(()=>{
+        if(draw2CanvasKey!==key) return;
+        draw2CommitBusy=false;
+        draw2RenderTools(party.room);
+      });
+    }
+    function draw2Point(event) {
+      const rect=draw2Canvas.getBoundingClientRect();
+      const bounded=(value,length)=>Math.min(9999,Math.max(0,Math.floor(value/length*10000)));
+      return [bounded(event.clientX-rect.left,rect.width),bounded(event.clientY-rect.top,rect.height)];
+    }
+    function draw2Action(tool,points=[]) {
+      return {tool,points,color:M('draw2-ink').value,width:Number(M('draw2-size').value)};
+    }
+    draw2Canvas.addEventListener('pointerdown',event=>{
+      if(event.button!==0||!draw2CanEdit()||draw2CommitBusy||draw2Gesture||draw2Board.cursor>=DRAW2_LIMIT) return;
+      const action=draw2Action(draw2Tool,draw2Point(event));
+      if(draw2Tool==='fill') {draw2Commit('add',action);return;}
+      draw2Gesture={id:event.pointerId,action};
+      draw2Canvas.setPointerCapture(event.pointerId);
+      draw2Paint();
+    });
+    draw2Canvas.addEventListener('pointermove',event=>{
+      if(!draw2CanEdit()||draw2Gesture?.id!==event.pointerId) return;
+      const {action}=draw2Gesture, next=draw2Point(event);
+      const points=action.points;
+      if(next[0]===points.at(-2)&&next[1]===points.at(-1)) return;
+      if(points.length>=DRAW2_MAX_COORDS) action.points=points.filter((_,index)=>Math.floor(index/2)%2===0);
+      action.points.push(...next);
+      draw2Paint();
+      if(draw2DraftBusy||Date.now()-draw2DraftAt<280) return;
+      draw2DraftAt=Date.now();
+      const key=draw2CanvasKey;
+      draw2DraftBusy=draw2WriteBoard('preview',{...action,points:[...action.points]}).catch(()=>{}).finally(()=>{
+        if(draw2CanvasKey===key) draw2DraftBusy=false;
+      });
+    });
+    function draw2FinishStroke(event) {
+      if(draw2Gesture?.id!==event.pointerId) return;
+      const {action}=draw2Gesture;
+      draw2Gesture=null;
+      if(draw2CanEdit()) draw2Commit('add',action);
+      else draw2Paint();
+    }
+    for(const type of ['pointerup','pointercancel','lostpointercapture']) draw2Canvas.addEventListener(type,draw2FinishStroke);
+    for(const tool of ['brush','fill','eraser']) M('draw2-'+tool).onclick=()=>{
+      if(!draw2CanEdit()||draw2Gesture) return;
+      draw2Tool=tool;draw2RenderTools(party.room);
+    };
+    M('draw2-undo').onclick=()=>draw2Commit('undo');
+    M('draw2-redo').onclick=()=>draw2Commit('redo');
+    M('draw2-clear').onclick=()=>draw2Commit('add',draw2Action('clear'));
+
+    function draw2Transaction(change) {
+      return partyAction(()=>partyTx((r,t,ref)=>{
+        if(!draw2Room(r)) throw Error('Apri una nuova stanza di Tratti Stellari.');
+        return change(r,t,ref);
+      }));
+    }
+    function draw2Kick(uid) {
+      return draw2Transaction(r=>{
+        if(r.state!=='lobby'||!partyHost(r)||uid===party.uid||!r.players[uid]) return null;
+        const players={...r.players};delete players[uid];
+        return {players};
+      });
+    }
+    function draw2Roster(r,scores,lobby,actor) {
+      const members=Object.entries(r.players);
+      const key=JSON.stringify([party.ref.id,party.uid,lobby,members,actor,r.guessed,scores]);
+      if(key===draw2RosterKey) return;
+      draw2RosterKey=key;
+      const list=M(lobby?'draw2-lobby-players':'draw2-players');
+      list.dataset.many=String(members.length>=8);
+      if(!lobby) members.sort((a,b)=>(scores[b[0]]||0)-(scores[a[0]]||0));
+      list.replaceChildren(...members.map(([uid,player])=>{
+        const row=document.createElement('li');
+        const solved=!lobby&&r.guessed.includes(uid);
+        const name=ccNode('span',player.name,uid===actor?'draw2-artist':solved?'draw2-solved':'');
+        row.append(window.cosmicAvatar.decorate(name,uid));
+        if(uid===actor) name.append(ccNode('small',' · Disegna'));
+        if(solved) {
+          name.append(' ✓');
+          name.setAttribute('aria-label',player.name+', ha indovinato');
+        }
+        if(lobby&&partyHost(r)&&uid!==party.uid) {
+          const kick=ccNode('button','Espelli','icon-btn');
+          kick.type='button';kick.setAttribute('aria-label','Espelli '+player.name);
+          kick.onclick=()=>draw2Kick(uid);row.append(kick);
+        }
+        if(!lobby) row.append(ccNode('strong',String(scores[uid]||0)));
+        return row;
+      }));
+    }
+    function draw2Chat(r,currentPoints) {
+      const key=JSON.stringify([party.ref.id,r.turnKey,r.chat]);
+      if(key===draw2LogKey) return;
+      draw2LogKey=key;
+      M('draw2-log').replaceChildren(...r.chat.slice(-3).map(message=>{
+        const row=document.createElement('li');
+        if(message.correct) row.dataset.correct='';
+        const label=r.players[message.uid]?.name||'Giocatore';
+        const points=currentPoints[message.uid]||0;
+        row.append(ccNode('strong',label),message.correct?' ha indovinato · +'+points:' · '+message.text);
+        return row;
+      }));
+    }
+    function draw2Clock(r) {
+      const seconds=Math.ceil(draw2Remaining(r)/1000);
+      const stamp=M('draw2-time');
+      stamp.textContent=Math.floor(seconds/60)+':'+String(seconds%60).padStart(2,'0');
+      stamp.setAttribute('datetime','PT'+seconds+'S');
+      stamp.classList.toggle('cc-urgent',r.phase==='play'&&seconds<=10);
+      if(r.phase==='play'&&partyActor(r)===party.uid) {
+        const key=r.turnKey+':draw2';
+        if(partyAudioKey!==key) {partyAudioKey=key;partyAudioSec=-1;}
+        if(seconds<=10&&seconds!==partyAudioSec) {
+          partyAudioSec=seconds;
+          if(seconds===0) window.cosmicGame.timerAlarm();
+          else window.cosmicGame.timerTick();
+        }
+      }
+    }
+    function draw2Render(r) {
+      if(!draw2Room(r)||party.room!==r) return;
+      draw2WatchBoard(r);
+      draw2ReadWords(r);
+      const lobby=r.state==='lobby', live=r.state==='running', done=r.state==='finished';
+      const reviewing=r.phase==='review'||done, choosing=r.phase==='choose', preparing=r.phase==='prepare';
+      if(reviewing) {draw2Gesture=null;draw2Overlay=null;draw2Paint();}
+      const active=live&&r.phase==='play';
+      const actor=lobby?null:partyActor(r), artist=actor===party.uid;
+      const name=r.players[actor]?.name||'Il disegnatore';
+      const solved=r.guessed.includes(party.uid), playable=draw2Playable(r);
+      const players=Object.keys(r.players).length;
+      const roomName=lobby&&r.name!==r.code&&r.name!=='Sfida tra amici'?r.name:'';
+      M('draw2-room-name').textContent=roomName;
+      hide('draw2-room-name',!roomName);
+      M('draw2-code').textContent=r.code;hide('draw2-code',!lobby);hide('draw2-invite',!lobby);
+      M('draw2-sound').textContent=window.cosmicGame.soundEnabled()?'🔊 Audio':'🔇 Audio';
+      hide('draw2-clock',lobby);
+      M('draw2-phase').textContent=done?'Partita conclusa':reviewing?'Fine turno':preparing?'Preparazione':choosing?'Scelta della parola':!playable?'Fine turno':'In gioco';
+      M('draw2-turn').textContent=lobby?'':'Turno '+(r.turn+1)+' di '+(r.order.length*r.settings.rounds);
+      hide('draw2-time',lobby||reviewing);
+      if(!lobby) draw2Clock(r);
+      hide('draw2-lobby',!lobby);hide('draw2-board',lobby);hide('draw2-side',lobby);
+      const scores=draw2Scores(r);
+      draw2Roster(r,scores,lobby,actor);
+      if(lobby) {
+        M('draw2-lobby-title').textContent='Lobby · '+players+'/'+r.settings.capacity+' giocatori';
+        hide('draw2-start',!partyHost(r));
+        M('draw2-start').disabled=party.busy||players<2;
+        M('draw2-waiting').textContent=players<2?'Serve almeno un altro giocatore.':partyHost(r)?'':'In attesa dell’avvio.';
+        return;
+      }
+      const skipped=reviewing&&r.draw2.history.at(-1)?.skipped;
+      M('draw2-board-title').textContent='Lavagna di '+name;
+      const count=r.guessed.length;
+      M('draw2-progress').textContent=active||reviewing?count+' su '+(r.order.length-1)+(count===1?' ha':' hanno')+' indovinato':'';
+      hide('draw2-choice',!preparing&&!choosing&&!skipped);
+      M('draw2-choice-title').textContent=skipped?'Turno saltato':preparing?'Preparazione della lavagna…':artist?'Scegli cosa disegnare':name+' sta scegliendo';
+      const words=choosing&&artist?(draw2Words||[]):[];
+      const choicesKey=JSON.stringify([r.turnKey,words,party.busy,draw2Remaining(r)>0]);
+      if(draw2ChoicesKey!==choicesKey) {
+        draw2ChoicesKey=choicesKey;
+        M('draw2-words').replaceChildren(...words.map((word,index)=>{
+          const button=ccNode('button',word,'icon-btn');
+          button.type='button';button.disabled=party.busy||draw2Remaining(r)<=0;
+          button.onclick=()=>draw2Choose(index);return button;
+        }));
+      }
+      let title, note='';
+      if(done) {
+        const best=Math.max(...r.order.map(uid=>scores[uid]||0));
+        const winners=r.order.filter(uid=>(scores[uid]||0)===best);
+        title=winners.length===1?'Ha vinto '+r.players[winners[0]].name:'Pareggio';
+        note=winners.length===1?best+' punti':winners.map(uid=>r.players[uid].name).join(', ')+' · '+best+' punti';
+      } else if(reviewing) {
+        title='Turno concluso';
+        const last=r.turn+1>=r.order.length*r.settings.rounds;
+        if(!last) note='Nel prossimo turno disegna '+r.players[r.order[(r.turn+1)%r.order.length]].name+'.';
+      } else if(preparing||choosing) title=artist?'Tocca a te disegnare':'Preparati a indovinare';
+      else if(artist) title='Disegna la parola';
+      else if(solved) {title='Hai indovinato';note='Aspetta il prossimo turno.';}
+      else {title='Indovina il disegno';note=r.draw2.lengths[r.card]+' lettere';}
+      M('draw2-role-title').textContent=title;
+      M('draw2-role-note').textContent=note;hide('draw2-role-note',!note);
+      const word=(reviewing||active&&artist)?draw2Words?.[r.card]:null;
+      M('draw2-word').textContent=word||'';hide('draw2-word',!word);
+      hide('draw2-guess',!playable||artist||solved);
+      M('draw2-answer').disabled=party.busy||!playable;
+      const entry=reviewing?r.draw2.history.at(-1):active?draw2Ledger(r):null;
+      const round=entry?draw2RoundScores(r,entry,reviewing):{};
+      const feedback=reviewing&&entry&&!entry.skipped?name+' · +'+(round[actor]||0)+' punti per il disegno'
+        :active&&solved?'+'+(round[party.uid]||0)+' punti':'';
+      M('draw2-feedback').textContent=feedback;hide('draw2-feedback',!feedback);
+      hide('draw2-log-section',!active||!r.chat.length);if(active) draw2Chat(r,round);
+      const end=active&&(artist||partyHost(r));
+      const rematch=done&&partyHost(r);
+      hide('draw2-end-actions',!end&&!rematch);
+      hide('draw2-end',!end);M('draw2-end').disabled=party.busy;
+      hide('draw2-rematch',!rematch);M('draw2-rematch').disabled=party.busy;
+      draw2RenderTools(r);
+    }
+
+    M('draw2-start').onclick=()=>draw2Transaction(r=>{
+      if(r.state!=='lobby'||!partyHost(r)||Object.keys(r.players).length<2) return null;
+      return {state:'running',phase:'prepare',order:partyOrder(r),turn:0,turnKey:partyKey(),card:0,
+        startedAt:serverTimestamp(),guessed:[],chat:[],draw2:draw2New()};
+    });
+    function draw2Prepare(r,t,ref) {
+      if(r.state!=='running'||r.phase!=='prepare'||partyActor(r)!==party.uid||draw2Remaining(r)<=0) return null;
+      const pool=[...new Set([...PARTY_CARDS.map(card=>card.word),...CC_WORDS.map(partyNorm)].filter(word=>/^[A-Z]{3,18}$/.test(word)))];
+      const words=ccShuffle(pool).slice(0,3);
+      t.set(draw2Private(ref,r.turnKey),{words});
+      t.set(draw2BoardRef(ref,r.turnKey),draw2BlankBoard());
+      return {phase:'choose',startedAt:serverTimestamp(),draw2:{...r.draw2,lengths:words.map(word=>word.length)}};
+    }
+    function draw2ChoosePatch(r,index) {
+      if(r.state!=='running'||r.phase!=='choose') return null;
+      if(draw2Remaining(r)>0&&partyActor(r)!==party.uid) return null;
+      return {phase:'play',card:draw2Remaining(r)>0?index:0,startedAt:serverTimestamp()};
+    }
+    function draw2Choose(index) { return draw2Transaction(r=>draw2ChoosePatch(r,index)); }
+    function draw2Finish(r) {
+      if(r.state!=='running'||!['play','prepare'].includes(r.phase)) return null;
+      if(r.phase==='prepare'&&draw2Remaining(r)>0) return null;
+      const entry=draw2Ledger(r);
+      return {phase:'review',draw2:{...r.draw2,reviewAt:serverTimestamp(),history:[...r.draw2.history,entry]}};
+    }
+    function draw2Next(r) {
+      if(r.state!=='running'||r.phase!=='review') return null;
+      if(r.turn+1>=r.order.length*r.settings.rounds) return {state:'finished',phase:'done'};
+      return {turn:r.turn+1,turnKey:partyKey(),card:0,phase:'prepare',startedAt:serverTimestamp(),
+        guessed:[],chat:[],draw2:draw2New(r.draw2.history)};
+    }
+    M('draw2-end').onclick=()=>draw2Transaction(r=>{
+      if(r.phase!=='play'||(!partyHost(r)&&partyActor(r)!==party.uid)) return null;
+      return draw2Finish(r);
+    });
+    M('draw2-rematch').onclick=()=>M('party-rematch').click();
+    M('draw2-invite').onclick=()=>M('party-invite').click();
+    M('draw2-leave').onclick=()=>M('party-leave').click();
+    M('draw2-sound').onclick=()=>{M('btn-sound').click();draw2Render(party.room);};
+
+    function draw2SendGuess(value,expected,correct) {
+      return partyTx((r,t,ref)=>{
+        if(!draw2Playable(r)||partyActor(r)===party.uid||r.guessed.includes(party.uid)
+          ||r.turnKey!==expected.turnKey||r.card!==expected.card) return null;
+        if(!correct) return {chat:partyMessage(r,value)};
+        t.set(draw2Proof(ref,r.turnKey,party.uid),{word:value});
+        return {guessed:[...r.guessed,party.uid],chat:partyMessage(r,'HA INDOVINATO!',true),
+          draw2:{...r.draw2,hits:{...r.draw2.hits,[party.uid]:serverTimestamp()}}};
+      });
+    }
+    M('draw2-guess').onsubmit=event=>{
+      event.preventDefault();
+      const input=M('draw2-answer'), value=partyNorm(input.value), expected=party.room;
+      if(!value||!draw2Playable(expected)) return;
+      partyAction(async()=>{
+        try {await draw2SendGuess(value,expected,true);}
+        catch(error) {
+          if(error.code!=='permission-denied') throw error;
+          await draw2SendGuess(value,expected,false);
+        }
+        input.value='';
+      });
+    };
+    function draw2Tick(r) {
+      if(r.state!=='running') return;
+      draw2Clock(r);draw2ReadWords(r);
+      if(r.phase==='play'&&draw2Remaining(r)===0&&M('draw2-phase').textContent==='In gioco') draw2Render(r);
+      if(!navigator.onLine||party.busy||Date.now()-draw2AutoAt<1600) return;
+      const expired=(r.phase==='play'?draw2EndTime(r):draw2Started(r)+DRAW2_CHOICE_MS)+550<=serverNow();
+      const prepare=r.phase==='prepare'&&partyActor(r)===party.uid&&!expired;
+      const choose=r.phase==='choose'&&expired;
+      const finish=(r.phase==='play'&&(expired||r.guessed.length===r.order.length-1))
+        ||(r.phase==='prepare'&&expired);
+      const next=r.phase==='review'&&serverNow()>=r.draw2.reviewAt.toMillis()+DRAW2_REVIEW_MS+550;
+      if(!prepare&&!choose&&!finish&&!next) return;
+      draw2AutoAt=Date.now();
+      draw2Transaction((current,t,ref)=>{
+        if(current.turnKey!==r.turnKey||current.phase!==r.phase) return null;
+        if(prepare) return draw2Prepare(current,t,ref);
+        if(choose) return draw2ChoosePatch(current,0);
+        if(finish) return draw2Finish(current);
+        return draw2Next(current);
+      });
+    }
+
     const partyInvite=new URL(location.href).searchParams.get('party');if(!inviteCode&&!ccInvite&&PARTY_NAMES[partyInvite]){party.kind=partyInvite;M('party-code-input').value=(new URL(location.href).searchParams.get('code')||'').slice(0,10);hide('party-create',true);hide('party-join',false);hide('party-modal',false);switchMenu('multi');partyRender();}
 
     // Board games: isolated room collection; fleets are in owner-only documents.
@@ -2546,9 +4273,10 @@ body.mind-playing #mp-game-panel {min-height:0;overflow:auto;}
         list.replaceChildren(...entries.map(r=>{
             const row=document.createElement('div');row.className='mp-player directory-row';
             const left=document.createElement('div'),name=document.createElement('strong'),info=document.createElement('div');
-            name.textContent=(r.locked?'🔒 ':'🔓 ')+r.name;info.className='mode-desc';
+            const roomName=pre==='party'&&r.name==='Sfida tra amici'?r.code:r.name;
+            name.textContent=(r.locked?'🔒 ':'🔓 ')+roomName;info.className='mode-desc';
             const full=r.count>=r.capacity,status=r.state==='lobby'?(full?'Completa':'In attesa'):r.state==='finished'?'In attesa di rivincita':r.state==='setup'?'Preparazione':'Partita in corso';
-            info.textContent=`${r.count}/${r.capacity} giocatori · ${status} · ${r.code}`;left.append(name,info);
+            info.textContent=`${r.count}/${r.capacity} giocatori · ${status}`+(roomName===r.code?'':' · '+r.code);left.append(name,info);
             const b=document.createElement('button');b.type='button';b.className='icon-btn';b.disabled=full||r.state!=='lobby';b.textContent=r.locked?'🔒 Unisciti':'Unisciti';
             b.onclick=()=>{if(directoryActive?.kind!==kind)return;const form=M(pre+'-join'),pw=M(pre+'-join-password');if(M(pre+'-show-join'))M(pre+'-show-join').click();M(pre+'-code-input').value=r.code;pw.value='';if(r.locked){form.scrollIntoView({block:'nearest'});pw.focus();}else form.requestSubmit();};
             row.append(left,b);return row;
@@ -2784,7 +4512,7 @@ body.mind-playing #mp-game-panel {min-height:0;overflow:auto;}
        5. SINTETIZZATORE AUDIO WEB AUDIO API (AUTONOMO)
        ========================================================================== */
     let audioCtx = null;
-    function beep(freq, type = "sine", dur = 0.11, vol = 0.08) {
+    function beep(freq, type = "sine", dur = 0.11, vol = 0.08, endFreq = freq) {
         if (!store.sound) return;
         try {
             if (!audioCtx) {
@@ -2792,17 +4520,19 @@ body.mind-playing #mp-game-panel {min-height:0;overflow:auto;}
                 if (AC) audioCtx = new AC();
             }
             if (!audioCtx) return;
-            if (audioCtx.state === "suspended") audioCtx.resume();
+            if (audioCtx.state === "suspended") audioCtx.resume().catch(()=>{});
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
+            const start = audioCtx.currentTime;
             osc.type = type;
-            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-            gain.gain.setValueAtTime(vol, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + dur);
+            osc.frequency.setValueAtTime(freq, start);
+            if(endFreq!==freq)osc.frequency.exponentialRampToValueAtTime(endFreq,start+dur);
+            gain.gain.setValueAtTime(vol, start);
+            gain.gain.exponentialRampToValueAtTime(0.0001, start + dur);
             osc.connect(gain);
             gain.connect(audioCtx.destination);
             osc.start();
-            osc.stop(audioCtx.currentTime + dur);
+            osc.stop(start + dur);
         } catch (e) {}
     }
 
@@ -3699,6 +5429,20 @@ body.mind-playing #mp-game-panel {min-height:0;overflow:auto;}
         soundEnabled: () => store.sound,
         timerTick: () => beep(1350, 'triangle', 0.035, 0.10),
         timerAlarm: () => [660,440,660,330].forEach((f,i)=>setTimeout(()=>beep(f,'square',0.19,0.055),i*210)),
+        connectionsCue(outcome) {
+            if(!store.sound)return;
+            if(outcome==='victory')soundFX.win();
+            else if(outcome==='ally'){
+                [440,554,659].forEach((note,i)=>setTimeout(()=>beep(note,'sine',.24,.067),i*55));
+            }else if(outcome==='neutral')beep(190,'triangle',.11,.052,142);
+            else if(outcome==='rival'){
+                beep(405,'triangle',.18,.06,276);
+                setTimeout(()=>beep(259,'sine',.24,.058,184),100);
+            }else if(outcome==='void'){
+                beep(159,'triangle',1.09,.09,34);
+                setTimeout(()=>beep(382,'sine',.84,.047,56),40);
+            }
+        },
         username: getUsername,
         colorName: id => COLOR_PALETTE[id]?.name || "?",
         isSingleActive: () => game.active && !game.multiplayer,
